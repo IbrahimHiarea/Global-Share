@@ -1,0 +1,27 @@
+.submit{
+    /* outer */
+    background-color: var(--primary-main);
+    border-radius: 12px;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    -ms-border-radius: 12px;
+    -o-border-radius: 12px;
+    padding: 14px 45px;
+    border: none;
+    cursor: pointer;
+    width: 350px;
+    height: 55px;
+
+    /* inner */
+    color: white;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 20px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.submit:disabled{
+    pointer-events: none;
+    opacity: .6;
+}
