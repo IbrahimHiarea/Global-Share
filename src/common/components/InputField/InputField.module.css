@@ -7,25 +7,25 @@
 
 .label{
   color: var(--natural-alpha-2);
-  font-weight: 400;
-  font-size: 16px; 
+  font-weight: 500;
+  font-size: 14px; 
 }
 
 .input{
   border: 1px solid var(--natural-alpha-2);
-  border-radius: 8px;
-  width: 350px;
-  height: 50px;
+  width: 333px;
+  height: 45px;
   color: var(--natural-alpha-2);
   outline: none;
   padding-left: 15px;
-  font-size: 16px;
-  font-weight: 400;
+  font-size: 14px;
+  font-weight: 500;
   margin-top: 10px;
-  -webkit-border-radius: 8px;
-  -moz-border-radius: 8px;
-  -ms-border-radius: 8px;
-  -o-border-radius: 8px;
+  border-radius: 9px;
+  -webkit-border-radius: 9px;
+  -moz-border-radius: 9px;
+  -ms-border-radius: 9px;
+  -o-border-radius: 9px;
 }
 
 .input:focus{
@@ -49,6 +49,7 @@
 
 input::placeholder {
   color: var(--natural-alpha-3);
+  font-weight: 300;
 } 
 
 .input:read-only::placeholder{
@@ -57,5 +58,7 @@ input::placeholder {
 
 .error{
   color: red;
-  font-weight: 300;
+  font-weight: 400;
+  font-size: 14px;
+  margin-top: 2px;
 }

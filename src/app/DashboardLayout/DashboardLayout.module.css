@@ -1,3 +1,98 @@
 .dashboard-layout{
     width: 100%;
+    min-height: 100vh;
+    background-color: var(--background-color);
+    padding-left: 80px;
+    padding-top: 55px;
+}
+
+.header{
+    background-color: white;
+    height: 55px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+
+.header-profile-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin-right: 35px;
+}
+
+.header-profile-info{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color:black;
+    text-transform: none;
+    font-weight: 500;
+    font-size: 14px;
+    margin-left: 20px;
+    line-height: 18px;
+    align-items: normal;
+}
+
+.header-profile-info span{
+    color: var(--natural-4);
+    font-weight: 400;
+}
+
+.navbar{
+    height: 100%;
+    width: 80px;
+    background-color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    z-index: 150;
+}
+
+.nav-logo{
+    width: 80px;
+    height: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 4px;
+}
+
+.nav-list{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.nav-link{
+    width: 45px;
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 14px;
+    -webkit-border-radius: 14px;
+    -moz-border-radius: 14px;
+    -ms-border-radius: 14px;
+    -o-border-radius: 14px;
+    margin-bottom: 35px;
+}
+
+.nav-link svg{
+    width: 20px;
+    height: 20px;
 }

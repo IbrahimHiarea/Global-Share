@@ -1,6 +1,7 @@
 //import react
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 //import components
 import InputField from '../../../common/components/InputField/InputField';
@@ -25,15 +26,16 @@ function LoginPage (){
         }
     });
 
+    const nav = useNavigate();
     const dispatch = useDispatch();
-    const {status , error , token} = useSelector(selectAllAuth);
+    const {status} = useSelector(selectAllAuth);
 
     const onError  = (data) => console.log(data);
     const onSubmit = async (data) => {
         console.log(data);
         try{
             await dispatch(login({...data})).unwrap();
-            //nav to task
+            nav('/dashboard');
         }catch(e){
             //show error massage
         }
@@ -79,11 +81,8 @@ function LoginPage (){
                 >
                     Password
                 </InputField>
-                <p>
-                    Forget your password? <span>Click here</span>
-                </p>
                 <SubmitButton disabled={status==='loading'}>
-                    sign in
+                    Login
                 </SubmitButton>
             </form>
         </div>

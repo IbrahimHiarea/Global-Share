@@ -22,14 +22,10 @@ function AllRoute () {
 
             {/* dashboard page */}
             <Route path='/dashboard/' element = { <DashboardLayout /> }>
-                
+                <Route path='home' element={ <></> }/>
+                <Route path='profile' element = { <ProfilePage /> } />
+                <Route  path='task' element = { <ProfilePage /> } />
             </Route>
-            
-            {/* 
-            <Route path='/dashboard/' element = {<DashboardLayout />} > 
-                <Route path='profile' element = {<ProfilePage />} />
-            </Route> 
-            */}
         </Routes>
     );
 }
