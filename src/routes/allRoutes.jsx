@@ -7,7 +7,7 @@ import ProfilePage from '../features/profile/profile page/ProfilePage';
 import LoginPage from '../features/auth/login page/LoginPage';
 import HomePage from '../app/HomePage/HomePage';
 import DashboardLayout from '../app/DashboardLayout/DashboardLayout';
-
+import TaskPage from '../features/tasks/Task page/TaskPage';
 
 function AllRoute () {
     return (
@@ -24,7 +24,7 @@ function AllRoute () {
             <Route path='/dashboard/' element = { <DashboardLayout /> }>
                 <Route path='home' element={ <></> }/>
                 <Route path='profile' element = { <ProfilePage /> } />
-                <Route  path='task' element = { <ProfilePage /> } />
+                <Route path='task' element = { <TaskPage /> } />
             </Route>
         </Routes>
     );
