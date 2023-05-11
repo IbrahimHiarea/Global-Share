@@ -1,0 +1,66 @@
+.task-page{
+  width: 100%;
+  min-height: 100vh;
+}
+
+.task-page-header{
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.search ,
+.filter{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.search input{
+  border: none;
+  outline: none;
+  display: flex;
+  align-items: center;
+  padding-left: 16px;
+  padding-right: 30px;
+  height: 40px;
+  border-radius: 9px;
+  width: 277px;
+}
+
+.search input:focus{
+  border: 2px solid var(--primary-main);
+}
+
+.search input:focus + svg{
+  stroke: var(--primary-main);
+}
+
+.filter > div{
+  width: 200px;
+  height: 40px;
+  padding-left: 16px;
+  height: 40px;
+  border-radius: 9px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  color: #768396;
+}
+
+.search svg,
+.filter svg{
+    margin-left: -30px;
+}
+
+.task-page-body{
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.task-page-body .task-col{
+  display: flex;
+  flex-direction: column;
+}
