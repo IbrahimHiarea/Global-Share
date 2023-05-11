@@ -20,50 +20,42 @@
   position: relative;
 }
 
-.icons .delete{
-  background-color: white;
+.icons span{
+  width: 24px;
+  height: 24px;
   display: flex;
-  border-radius: 4px;
-  padding: 5px 40px 5px 10px;
-  gap: 10px;
+  justify-content: center;
   align-items: center;
-  cursor: pointer;
-  color: #232360;
-  position: absolute;
-  bottom: -30px;
-  right: 0;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
 }
 
-.icons .delete:hover{
-  background-color: var(--natural-7);
+.icons .delete-icon{
+  background-color: rgba(234, 84, 85, 0.16);
 }
 
 .icons .add-icon{
   background-color: #E8EAFF;
-  border-radius: 4px;
 }
 
 .icons .add-icon path{
   stroke: #6772FE;
 }
 
+.icons .delete-icon path{
+  color: rgba(234, 84, 85, 1);
+}
+
 .icons svg{
   cursor: pointer;
+  width: 15px;
+  height: 15px;
 }
 
 .add-task{
-  width: 233px;
-  height: 54px;
-  background-color: white;
-  border-radius: 10px;
-  display: flex;
   justify-content: center;
-  align-items: center;
-  margin-bottom: 15px;
-  padding: 15px;
-  font-size: 15px;
-  font-weight: 500;
-  color: #232360;
-  gap: 11px;
-  cursor: pointer;
+  gap:10px
 }

@@ -19,11 +19,13 @@ function InputField ({
             }){
     return (
         <div className={style['input-field']}>
-            <ErrorMessage 
-                errors={errors} 
-                name={name}
-                render={({ message }) => <span className={style.error}>{message}</span>}
-            />
+            {errors && 
+                <ErrorMessage 
+                    errors={errors} 
+                    name={name}
+                    render={({ message }) => <span className={style.error}>{message}</span>}
+                />
+            }
             <input 
                 id={name}
                 className={style.input}

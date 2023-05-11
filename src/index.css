@@ -41,6 +41,9 @@
 
 	/* background color */
 	--background-color: #FCF6FF;
+
+  /* error */
+  --error-main: #FC2947;
 }
 
 html {
