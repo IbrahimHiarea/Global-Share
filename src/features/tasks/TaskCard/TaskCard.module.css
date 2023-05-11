@@ -44,7 +44,7 @@
 .description{
   color: #768396;
   margin-bottom: 16px;
-  height: 55px;
+  max-height: 55px;
   width: 195px;
   overflow: hidden;
   text-overflow: ellipsis;

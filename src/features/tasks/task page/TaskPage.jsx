@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 
 // import components 
-import TaskHeader  from '../../../common/components/TaskHeader/TaskHeader';
+import TaskHeader  from '../TaskHeader/TaskHeader';
 import TaskCard  from '../../../common/components/TaskCard/TaskCard';
 
 // import Icons 

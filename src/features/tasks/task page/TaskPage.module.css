@@ -1,6 +1,7 @@
 .task-page{
   width: 100%;
   min-height: 100vh;
+  padding: 45px 0 0 45px;
 }
 
 .task-page-header{
@@ -12,9 +13,9 @@
 
 .search ,
 .filter{
-    display: flex;
-    align-items: center;
-    cursor: pointer;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 }
 
 .search input{
