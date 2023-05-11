@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 //import route
 import AllRoute from '../routes/allRoutes';
 import SplashScreen from './SplashScreen/SplashScreen';
+import SnackBar from '../features/snackBar/snackBar message/SnackBar'
 
 // import style
 import style from './App.module.css'
@@ -17,6 +18,7 @@ function App() {
 				flag ?	<SplashScreen />
 				: <AllRoute />
 			}
+			<SnackBar />
 		</div>
 	);
 }
