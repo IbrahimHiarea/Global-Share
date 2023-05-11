@@ -7,7 +7,7 @@ import ProfilePage from '../features/profile/profile page/ProfilePage';
 import LoginPage from '../features/auth/login page/LoginPage';
 import HomePage from '../app/HomePage/HomePage';
 import DashboardLayout from '../app/DashboardLayout/DashboardLayout';
-import TaskPage from '../features/tasks/task page/TaskPage';
+import TaskPage from '../features/tasks/Task page/TaskPage';
 
 function AllRoute () {
     return (

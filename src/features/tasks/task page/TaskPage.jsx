@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 // import components 
 import TaskHeader  from '../TaskHeader/TaskHeader';
-import TaskCard  from '../../../common/components/TaskCard/TaskCard';
+import TaskCard  from '../TaskCard/TaskCard';
 
 // import Icons 
 import { FiSearch } from "react-icons/fi";
