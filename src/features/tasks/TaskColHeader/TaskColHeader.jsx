@@ -2,6 +2,9 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 
+// import Component 
+import AddStatus from '../Add Status/AddStatus';
+
 // import Icons 
 import { GrFormAdd } from 'react-icons/gr';
 import { BsTrash } from 'react-icons/bs';
@@ -10,6 +13,8 @@ import { BsTrash } from 'react-icons/bs';
 import style from './TaskColHeader.module.css';
 
 function TaskColHeader ({ children , isAdd }){
+
+    const [addStatus,setAddStatus] = useState(false);
 
     if(!isAdd){
         return(
@@ -24,12 +29,21 @@ function TaskColHeader ({ children , isAdd }){
     }
     else{
         return (
-            <div className={clsx(style['task-header'] , style['add-task'])}>
-                <div>{children}</div>
-                <div className={style.icons}>
-                    <span className={style['add-icon']} ><GrFormAdd/></span>
-                </div>
-            </div>
+            <>
+                { addStatus  &&
+                    <AddStatus
+                        setAddStatus={setAddStatus}
+                    ></AddStatus>
+                }
+                {
+                    <div className={clsx(style['task-header'] , style['add-task'])}>
+                        <div>{children}</div>
+                        <div className={style.icons}>
+                            <span className={style['add-icon']} onClick={() => setAddStatus(true)} ><GrFormAdd/></span>
+                        </div>
+                    </div>
+                }
+            </>
         );
     }
 }

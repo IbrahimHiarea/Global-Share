@@ -27,7 +27,11 @@ const initialState = {
                 "difficulty": "MEDIUM",
                 "priority": "Urgent",
                 "url": "https://en.wikipedia.org/wiki/ISO_8601",
-                "comments": []
+                "comments": [
+                    "We'll store your personal information so that we can pick up the conversation if we talk later. We may send you emails about our upcoming services",
+                    "We'll store your personal information so that we can pick up the conversation if we talk later. We may send you emails about our upcoming services",
+                    "We may send you emails to follow up on our discussion here."
+                ]
             },
             {
                 "id": 4,
@@ -125,7 +129,9 @@ const initialState = {
                 "difficulty": "MEDIUM",
                 "priority": "Normal",
                 "url": "https://en.wikipedia.org/wiki/ISO_8601",
-                "comments": [],
+                "comments": [
+                    "We may send you emails to follow up on our discussion here.",
+                ],
             }
         ],
     },

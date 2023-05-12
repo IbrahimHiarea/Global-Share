@@ -39,6 +39,7 @@
 
 .icons .add-icon{
   background-color: #E8EAFF;
+  cursor: pointer;
 }
 
 .icons .add-icon path{
