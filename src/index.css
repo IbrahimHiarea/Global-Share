@@ -43,7 +43,7 @@
 	--background-color: #FCF6FF;
 
   /* error */
-  --error-main: #FC2947;
+  --error-main: rgba(234, 84, 85, 1);
 }
 
 html {
@@ -62,6 +62,11 @@ ul {
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+.te__dropdown-indicator svg{
+	width: 15px;
+	height: 15px;
 }
 
 .container {

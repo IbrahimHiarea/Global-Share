@@ -2,8 +2,8 @@
 import React from "react";
 
 //import components
-import InputField from '../../../common/components/InputField/InputField';
-import SelectInputField from "../../../common/components/SelectInputField/SelectInputField";
+import InputField from '../../../common/components/Inputs/InputField/InputField';
+import SelectInputField from "../../../common/components/Inputs/SelectInputField/SelectInputField";
 
 //import style
 import style from './TaskFilterBar.module.css';
@@ -14,9 +14,9 @@ const filterOptions ={
     complexities: ['Easy' , 'Medium' , 'Hard']
 }
 
-function TaskFilterBar ({register , formState , reset}){
+function TaskFilterBar ({register , formState , reset , control}){
     return (
-        <form className={style['filter-bar']} >
+        <form className={style['filter-bar']} onSubmit={(e) => e.preventDefault()} >
             <legend>Filters :</legend>
             <InputField 
                 type='text'
@@ -32,7 +32,7 @@ function TaskFilterBar ({register , formState , reset}){
                 name='member'
                 placeholder='Radioactive'
                 options={filterOptions.member}
-                control={register('member')}
+                control={control}
             />
             <SelectInputField
                 width='200px'
@@ -40,7 +40,7 @@ function TaskFilterBar ({register , formState , reset}){
                 name='priorities'
                 placeholder='All Priorities'
                 options={filterOptions.priorities}
-                control={register('priorities')}
+                control={control}
             />
             <SelectInputField
                 width='200px'
@@ -48,7 +48,7 @@ function TaskFilterBar ({register , formState , reset}){
                 name='complexities'
                 placeholder='All Complexities'
                 options={filterOptions.complexities}
-                control={register('complexities')}
+                control={control}
             />
             <span className={style.reset} onClick={() => reset(formState.defaultValues)}>
                 Clear
