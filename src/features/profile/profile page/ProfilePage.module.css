@@ -44,7 +44,6 @@
 }
 
 .header-info h2{
-  font-size: 30px;
   color: #232360;
   font-weight: 700;
   margin: 0;
@@ -113,6 +112,10 @@
   font-size: 18px;
   color: #768396;
   line-height: 23px;
+}
+
+.log > div{
+  margin-bottom: 30px;
 }
 
 .work-time{

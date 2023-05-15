@@ -53,8 +53,30 @@ function ProfilePage (){
                                     Short paragraphs are easier to read and understand. Writing experts recommend paragraphs of no more than 150 words in three to eight sentences. Paragraphs should never be longer than 250 words. Vary the lengths of your paragraphs to make them more interesting.
                                 </p>
                             </div>
-                            <div>
+                            <div className={style.log}>
                                 <h4>This week</h4>
+                                <div className={style['work-time']}>
+                                    <div className={style.hour}>
+                                        <div>Working Hours</div>
+                                        <div>17H</div>
+                                    </div>
+                                    <div className={style.task}>
+                                        <div>Tasks</div>
+                                        <div>14</div>
+                                    </div>
+                                </div>
+                                <h4>This Month</h4>
+                                <div className={style['work-time']}>
+                                    <div className={style.hour}>
+                                        <div>Working Hours</div>
+                                        <div>17H</div>
+                                    </div>
+                                    <div className={style.task}>
+                                        <div>Tasks</div>
+                                        <div>14</div>
+                                    </div>
+                                </div>
+                                <h4>This Year</h4>
                                 <div className={style['work-time']}>
                                     <div className={style.hour}>
                                         <div>Working Hours</div>
