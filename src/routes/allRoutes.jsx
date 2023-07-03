@@ -24,8 +24,9 @@ function AllRoute () {
             {/* dashboard page */}
             <Route path='/dashboard/' element = { <DashboardLayout /> }>
                 <Route path='home' element={ <></> }/>
-                <Route path='profile' element = { <ProfilePage /> } />
-                <Route path='edit-profile' element = { <EditProfile /> } />
+                <Route path='profile' element = { <ProfilePage /> } >
+                    <Route path='edit' element = { <EditProfile /> } />
+                </Route>
                 <Route path='task' element = { <TaskPage /> } />
             </Route>
         </Routes>

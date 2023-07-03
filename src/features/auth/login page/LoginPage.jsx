@@ -9,7 +9,8 @@ import SubmitButton from '../../../common/components/Inputs/SubmitButton/SubmitB
 
 //import redux state
 import { useDispatch , useSelector } from 'react-redux';
-import { selectAllAuth  , login} from '../AuthSlice';
+import { selectAllAuth  , login } from '../AuthSlice';
+import { showMessage } from '../../snackBar/snackBarSlice'
 
 //import svg
 import {ReactComponent as MainLogo } from '../../../assets/icons/mainLogo.svg';
@@ -32,13 +33,12 @@ function LoginPage (){
 
     const onError  = (data) => console.log(data);
     const onSubmit = async (data) => {
-        console.log(data);
         try{
-            await dispatch(login({...data})).unwrap();
-            nav('/dashboard');
-        }catch(e){
-            // TODO::
-            //show error massage
+            const response = await dispatch(login({...data})).unwrap();
+            localStorage.setItem("token" , response);
+            nav('/dashboard/home');
+        }catch(error){
+            dispatch(showMessage({message: error , severity: 2}));
         }
     }
 
@@ -56,10 +56,10 @@ function LoginPage (){
                     autoFocus
                     control={register('username' , {
                             required: 'Please enter your name',
-                            pattern: {
-                                value: /^[a-zA-Z]+([',.-][a-zA-Z]+)*$/,
-                                message: "Please enter a valid name"
-                            } 
+                            // pattern: {
+                            //     value: /^[a-zA-Z]+([',.-][a-zA-Z]+)*$/,
+                            //     message: "Please enter a valid name"
+                            // } 
                         }
                     )}
                     errors={errors}
@@ -72,10 +72,10 @@ function LoginPage (){
                     name='password'
                     control={register('password' , {
                             required: 'Please enter your password',
-                            pattern: {
-                                value: /^(?!\s)(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,10}$/,
-                                message: 'Please enter a valid password'
-                            }
+                            // pattern: {
+                            //     value: /^(?!\s)(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,10}$/,
+                            //     message: 'Please enter a valid password'
+                            // }
                         }
                     )}
                     errors={errors}

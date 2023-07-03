@@ -1,6 +1,9 @@
 //import redux
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
+//import API
+import { loginRequest } from "./AuthAPI";
+
 // init state
 const status = {
     idle: 'idle',
@@ -17,10 +20,26 @@ const initialState = {
 
 
 // thunks actions
-export const login = createAsyncThunk('auth/login' , async ({username , password}) => {
-    await new Promise(resolve => setTimeout(() => resolve() , 5000));
-    return 'fsgwg%gfdl';
-});
+export const login = createAsyncThunk(
+    'auth/login', 
+    async (data , thunkAPI) => {
+        try{
+            const response = await loginRequest(data , thunkAPI.signal);
+            return response.data.token;
+        } catch(e){
+            return thunkAPI.rejectWithValue(e.response.data.message[0]);
+        }
+    }, 
+    {
+        condition: (data, {getState}) => {
+            const { auth } = getState()
+            const authStatus = auth.status;
+            if (authStatus === 'succeeded' || authStatus === 'loading') {
+                return false
+            }
+        },
+    }
+); 
 
 
 //creating auth slice
@@ -43,6 +62,7 @@ const authSlice = createSlice({
                 state.token = action.payload;
             })
             .addCase(login.rejected , (state , action) => {
+                console.log(action);
                 state.status = status.failed;
                 state.error = action.payload;
             })

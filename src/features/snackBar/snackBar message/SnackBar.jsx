@@ -12,6 +12,10 @@ const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
+function formatString(message){
+    return message.charAt(0).toUpperCase() + message.slice(1);
+}
+
 function SnackBar (){
     const dispatch = useDispatch();
     const {isOpen , message , severity} = useSelector(selectAllSnackbar);
@@ -34,9 +38,9 @@ function SnackBar (){
                 <Alert 
                     onClose={handleClose} 
                     severity={severity}
-                    sx={{ width: '300px' , maxWidth: '400px' }}
+                    sx={{width: '300px' , maxWidth: '400px' , fontFamily: 'DM Sans, sans-serif'}}
                 >
-                    {message}
+                    {formatString(message)}
                 </Alert>
             </Snackbar>
     );
