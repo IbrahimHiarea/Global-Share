@@ -17,7 +17,6 @@
 .input:focus{
   color: var(--primary-main);
   border-color: var(--primary-main);
-  background-color: #FCF2FF;
 }
 
 .input::placeholder {

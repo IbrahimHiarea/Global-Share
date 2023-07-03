@@ -17,7 +17,6 @@ const filterOptions ={
 function TaskFilterBar ({register , formState , reset , control}){
     return (
         <form className={style['filter-bar']} onSubmit={(e) => e.preventDefault()} >
-            <legend>Filters :</legend>
             <InputField 
                 type='text'
                 name='search'
@@ -53,6 +52,7 @@ function TaskFilterBar ({register , formState , reset , control}){
             <span className={style.reset} onClick={() => reset(formState.defaultValues)}>
                 Clear
             </span>
+            <span className={style['inner-border']}></span>
         </form>
     );
 }

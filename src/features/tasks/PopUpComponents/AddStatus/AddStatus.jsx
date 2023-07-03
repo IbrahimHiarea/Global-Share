@@ -3,7 +3,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 
 // import components 
-import SubmitButton from '../../../../common/components/SubmitButton/SubmitButton';
+import SubmitButton from '../../../../common/components/Inputs/SubmitButton/SubmitButton';
 import InputField from '../../../../common/components/Inputs/InputField/InputField';
 
 //import style
