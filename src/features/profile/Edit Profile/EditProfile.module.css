@@ -41,11 +41,11 @@
 }
 
 
-.button input{
+.buttons input{
   padding: 11px 16px;
 }
 
-.button input:first-child{
+.buttons input:first-child{
   background-color: white;
   color: black;
 }
@@ -74,10 +74,19 @@
   align-items: center;
 }
 
-.button{
+.buttons{
   display: flex;
   gap: 10px;
   position: absolute;
   right: 40px;
   top: -112px;
+}
+
+.buttons input:first-child{
+  background-color: var(--primary-main);
+  color: white;
+}
+
+.buttons button:first-child{
+  margin: 0;
 }

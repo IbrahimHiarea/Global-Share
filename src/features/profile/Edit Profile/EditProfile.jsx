@@ -1,11 +1,14 @@
 //import react
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 //import components
-import SubmitButton from '../../../common/components/SubmitButton/SubmitButton';
-import InputField from '../../../common/components/InputField/InputField';
+import SubmitButton from '../../../common/components/Inputs/SubmitButton/SubmitButton';
+import InputField from '../../../common/components/Inputs/InputField/InputField';
 import Loader from '../../../common/components/Loader/Loader';
+import Button from '../../../common/components/Inputs/Button/Button';
+import TextAreaField from '../../../common/components/Inputs/TextAreaField/TextAreaField';
 
 //import icon
 
@@ -19,6 +22,8 @@ import { Avatar } from '@mui/material';
 function EditProfile (){
 
     const [loading , setLoading] = useState(false);
+
+    const nav = useNavigate();
 
     const {register , formState: {errors} , handleSubmit} = useForm({
         defaultValues:{
@@ -37,10 +42,11 @@ function EditProfile (){
     })
 
     const onSubmit = async (data) => {
+        // TODO: Save Request
         console.log(data);
         
     }
-    
+
     return (
         <div className={style['profile-page']}>
             { loading  &&  <Loader></Loader> }
@@ -174,7 +180,6 @@ function EditProfile (){
                                     }
                                 )}
                                 errors={errors}
-                                style={{padding: '15px 0px'}}
                             >
                                 Birth date
                             </InputField>
@@ -213,50 +218,33 @@ function EditProfile (){
                                 Appointlet
                             </InputField>
                         </div>
-                        {/* <div className={style.box}>
-                            <InputField
-                                type='text'
-                                name='firstName'
-                                value=''
-                                placeholder='First Name'
-                                width='233px'
-                                height='45px'   
-                                control={register('firstName' , {
-                                        required: 'Please enter your first name',
-                                        pattern: {
-                                            value: /^[A-Z][a-z]{1,20}$/,
-                                            message: 'The max length of the first name 20 and should contain of English characters'
-                                        }
-                                    }
-                                )}
+                        <div className={style.box}>
+                            <TextAreaField
+                                id='bio'
+                                placeholder='Bio'
+                                width='495px'
+                                height='126px'
+                                control={register('bio')}
                                 errors={errors}
-                                autoFocus
                             >
-                                First Name
-                            </InputField>
-                            <InputField
-                                type='text'
-                                name='firstName'
-                                value=''
-                                placeholder='First Name'
-                                width='233px'
-                                height='45px'   
-                                control={register('firstName' , {
-                                        required: 'Please enter your first name',
-                                        pattern: {
-                                            value: /^[A-Z][a-z]{1,20}$/,
-                                            message: 'The max length of the first name 20 and should contain of English characters'
-                                        }
-                                    }
-                                )}
+                                Bio
+                            </TextAreaField>
+
+                            {/* // TODO: upload file Component  */}
+                            <TextAreaField
+                                id='resume'
+                                placeholder='resume'
+                                width='495px'
+                                height='126px'
+                                control={register('resume')}
                                 errors={errors}
-                                autoFocus
                             >
-                                First Name
-                            </InputField>
-                        </div> */}
-                        <div className={style.button}>
-                            <SubmitButton width='80px' height='40px'>Cancel</SubmitButton>
+                                Resume
+                            </TextAreaField>
+
+                        </div>
+                        <div className={style.buttons}>
+                            <Button width='80px' height='40px' color='black' backgroundColor='white' onClick={() => nav('/dashboard/profile')}>Cancel</Button>
                             <SubmitButton width='80px' height='40px'>Save</SubmitButton>
                         </div>
                     </form>

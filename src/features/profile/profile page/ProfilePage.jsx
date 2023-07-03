@@ -1,10 +1,12 @@
 //import react
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 //import components
 import SubmitButton from '../../../common/components/Inputs/SubmitButton/SubmitButton';
 import TextField from '../../../common/components/TextField/TextField';
 import Loader from '../../../common/components/Loader/Loader';
+import Button from '../../../common/components/Inputs/Button/Button'
 
 //import icon
 import { HiOutlineMail } from "react-icons/hi";
@@ -21,6 +23,8 @@ import { Avatar } from '@mui/material';
 function ProfilePage (){
 
     const [loading , setLoading] = useState(false);
+
+    const nav = useNavigate();
 
     return (
         <div className={style['profile-page']}>
@@ -42,7 +46,7 @@ function ProfilePage (){
                                 </div>
                             </div>
                         </div>
-                        <SubmitButton width='80px' height='40px'>Edit</SubmitButton>
+                        <Button width='80px' height='40px' onClick={() => nav('/dashboard/edit-profile')}>Edit</Button>
                     </div>
                     <div className={style['profile-body']}>
                         <div className={style['first-body']}>

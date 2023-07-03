@@ -4,6 +4,7 @@ import { Route , Routes } from 'react-router-dom'
 
 //import pages
 import ProfilePage from '../features/profile/profile page/ProfilePage';
+import EditProfile from '../features/profile/Edit Profile/EditProfile';
 import LoginPage from '../features/auth/login page/LoginPage';
 import HomePage from '../app/HomePage/HomePage';
 import DashboardLayout from '../app/DashboardLayout/DashboardLayout';
@@ -24,6 +25,7 @@ function AllRoute () {
             <Route path='/dashboard/' element = { <DashboardLayout /> }>
                 <Route path='home' element={ <></> }/>
                 <Route path='profile' element = { <ProfilePage /> } />
+                <Route path='edit-profile' element = { <EditProfile /> } />
                 <Route path='task' element = { <TaskPage /> } />
             </Route>
         </Routes>
