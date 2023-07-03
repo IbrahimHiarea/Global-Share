@@ -1,5 +1,5 @@
 //import react
-import React, { useEffect , useState } from 'react';
+import React, { useEffect , useReducer} from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { DragDropContext } from 'react-beautiful-dnd';
@@ -10,12 +10,33 @@ import { selectTaskStatus , selectTasks} from '../taskSlice';
 // import components 
 import TaskFilterBar from '../TaskFilterBar/TaskFilterBar';
 import TaskColumn from '../TaskColumn/TaskColumn';
+import PopUp from '../../../common/components/PopUp/PopUp';
+import { AddStatusButton } from '../TaskColHeader/TaskColHeader';
 
 //import style
 import style from './TaskPage.module.css';
 
+const initPopup = {open: false , node: <></>};
+const popUpReducer = (oldState , action) =>{
+    switch(action.type){
+        case 'open':
+            return {
+                ...oldState,
+                open: true,
+                node: action.payload
+            }
+        case 'close': 
+            return {
+                ...oldState,
+                open: false
+            }
+        default:
+            return oldState;
+    }
+}
+
 function TaskPage (){
-    const { register , watch , formState , reset} = useForm({
+    const {control ,register , watch , formState , reset} = useForm({
         defaultValues:{
             search: '',
             member: '',
@@ -24,9 +45,11 @@ function TaskPage (){
         }
     })
 
+    const [showPopUp , dispatchPopUp] = useReducer(popUpReducer , initPopup);
+    
     const taskStatus = useSelector(selectTaskStatus);
     const tasks = useSelector(selectTasks);
-
+    
     useEffect(() => {
         const temp =  watch(values => {
             console.log(values);    
@@ -40,6 +63,7 @@ function TaskPage (){
                 register={register}
                 formState={formState}
                 reset={reset}
+                control={control}
             />
 
             <div className={style['task-page-body']}>
@@ -51,15 +75,21 @@ function TaskPage (){
                                 statusId={id}
                                 statusName={name}
                                 tasks={tasks[name]}
+                                dispatchPopUp={dispatchPopUp}
                             />
                         ))
                     }
                 </DragDropContext>
-                <TaskColumn 
-                    statusName='Add New'
-                    isAdd
-                />
+                <AddStatusButton 
+                    dispatchPopUp={dispatchPopUp}
+                >
+                    Add New
+                </AddStatusButton>
             </div>
+
+            <PopUp open={showPopUp.open} close={dispatchPopUp}>
+                {showPopUp.node}
+            </PopUp>
         </div>
     );
 }
