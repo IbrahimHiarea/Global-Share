@@ -4,8 +4,8 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 //import components
-import InputField from '../../../common/components/InputField/InputField';
-import SubmitButton from '../../../common/components/SubmitButton/SubmitButton';
+import InputField from '../../../common/components/Inputs/InputField/InputField';
+import SubmitButton from '../../../common/components/Inputs/SubmitButton/SubmitButton';
 
 //import redux state
 import { useDispatch , useSelector } from 'react-redux';

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 
 //import components
-import SubmitButton from '../../../common/components/SubmitButton/SubmitButton';
+import SubmitButton from '../../../common/components/Inputs/SubmitButton/SubmitButton';
 import TextField from '../../../common/components/TextField/TextField';
 import Loader from '../../../common/components/Loader/Loader';
 

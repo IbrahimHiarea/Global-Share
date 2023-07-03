@@ -1,0 +1,40 @@
+.input-wrapper{
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	flex-direction: column-reverse;
+	margin: 0;
+	margin-bottom: 5px;
+}
+
+.error{
+	color: var(--error-main);
+	font-weight: 400;
+	font-size: 14px;
+  margin-left: 5px;
+	min-height: 20px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.label{
+  color: var(--natural-alpha-2);
+  font-weight: 500;
+  font-size: 14px; 
+  margin-bottom: 10px;
+}
+
+.input-wrapper input:focus + .label,
+.input-wrapper select:focus + .label{
+	color: var(--primary-main);
+}
+
+.input-wrapper input:disabled + .label,
+.input-wrapper select:disabled + .label{
+	color: var(--natural-alpha-4);
+}
+
+.input-wrapper input:disabled::placeholder{
+	color: var(--natural-alpha-4);
+}

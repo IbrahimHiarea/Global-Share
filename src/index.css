@@ -43,7 +43,7 @@
 	--background-color: #FCF6FF;
 
   /* error */
-  --error-main: #FC2947;
+  --error-main: rgba(234, 84, 85, 1);
 }
 
 html {
