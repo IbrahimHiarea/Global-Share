@@ -11,7 +11,7 @@ import Button from '../../../common/components/Inputs/Button/Button';
 import TextAreaField from '../../../common/components/Inputs/TextAreaField/TextAreaField';
 
 //import icon
-
+import { AiOutlineCloudUpload } from "react-icons/ai";
 
 //import style
 import style from './EditProfile.module.css';
@@ -229,19 +229,24 @@ function EditProfile (){
                             >
                                 Bio
                             </TextAreaField>
-
-                            {/* // TODO: upload file Component  */}
-                            <TextAreaField
-                                id='resume'
-                                placeholder='resume'
-                                width='495px'
-                                height='126px'
-                                control={register('resume')}
-                                errors={errors}
-                            >
-                                Resume
-                            </TextAreaField>
-
+                            <div className={style.upload}>
+                                <InputField
+                                    type='file'
+                                    name='resume'
+                                    placeholder='Click to upload or drag and drop PDF (max, 32MB)'
+                                    width='495px'
+                                    height='126px'
+                                    control={register('resume')}
+                                    accept=".pdf"
+                                    errors={errors}
+                                >
+                                    Resume
+                                </InputField>
+                                <div className={style["upload-content"]}>
+                                    <AiOutlineCloudUpload size={'35px'} color="#232360"></AiOutlineCloudUpload>
+                                    <div className={style["file-name"]}>Click to upload or drag and drop PDF (max, 32MB)</div>
+                                </div>
+                            </div>
                         </div>
                         <div className={style.buttons}>
                             <Button width='80px' height='40px' color='black' backgroundColor='white' onClick={() => nav('/dashboard/profile')}>Cancel</Button>

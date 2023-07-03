@@ -10,7 +10,7 @@ import style from './InputField.module.css'
 function InputField ({
                 children, type, name,
                 placeholder, autoFocus, width, 
-                height, control, errors
+                height, control, errors , accept
             }){
     return(
         <InputWrapper name={name} label={children} errors={errors}>
@@ -20,6 +20,7 @@ function InputField ({
                 type={type}
                 placeholder={placeholder}
                 autoFocus={autoFocus}
+                accept={accept}
                 style={{
                     width, 
                     height,

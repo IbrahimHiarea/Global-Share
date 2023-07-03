@@ -26,6 +26,11 @@ function ProfilePage (){
 
     const nav = useNavigate();
 
+    const resumeDownload = () => {
+        // TODO : Downlaod resume
+        console.log("Download");
+    }
+
     return (
         <div className={style['profile-page']}>
             { loading  &&  <Loader></Loader> }
@@ -125,7 +130,7 @@ function ProfilePage (){
                                 </div>
                                 <div className={style.resume}>
                                     <h4><BsPen color='#232360'></BsPen> Resume</h4>
-                                    <SubmitButton>Click here to downlaod</SubmitButton>
+                                    <Button onClick={resumeDownload}>Click here to downlaod</Button>
                                 </div>
                             </div>
                             <div className={style['last-section']}>
