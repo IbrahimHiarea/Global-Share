@@ -14,6 +14,7 @@ import {CgProfile} from 'react-icons/cg'
 
 //import style
 import style from './DashboardLayout.module.css';
+import Loader from '../../common/components/Loader/Loader';
 
 //static data
 const drawerList = [

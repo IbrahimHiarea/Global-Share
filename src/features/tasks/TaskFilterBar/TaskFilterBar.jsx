@@ -58,3 +58,15 @@ function TaskFilterBar ({register , formState , reset , control}){
 }
 
 export default TaskFilterBar;
+
+
+/* <form onSubmit={handleSubmit(onSubmit)}>
+                <MultiSelectInputField
+                    width='240px'
+                    height='40px'
+                    name='member'
+                    placeholder='Member'
+                    options={['twfek' , 'ibrahim' , 'ahmad' , 'zed' , 'ossama' , 'bader' , 'hiba' , 'boshra']}
+                    control={control}
+                />
+            </form> */

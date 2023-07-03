@@ -1,34 +1,22 @@
 // import react
-import React, { useRef } from "react";
+import React from "react";
+
+//import components
+import Dialog from '@mui/material/Dialog';
 
 //import style
 import style from './PopUp.module.css';
 
-function PopUp ({children , open , close}){
-    const divRef = useRef();
-
-    const handleClose = () => {
-        close({type: 'close'})
-    }
-
-    // const handleWindow = (e) => {
-    //     if(e.target===divRef.current) close(false);
-    // }
-
+function PopUp ({children , open , handleClose}){
+    
     return (
-            open &&
-            <div 
-                className={style['pop-up']} 
-                // onClick={handleWindow} 
-                ref={divRef}
-            >   
-                {
-                    React.cloneElement(
-                        children , 
-                        {close:handleClose},
-                    )
-                }
-            </div>
+        <Dialog
+            open={open}
+            onClose={handleClose}
+            fullScreen
+        >
+            {children}
+        </Dialog>
     );
 }
 
