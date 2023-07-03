@@ -18,6 +18,7 @@ function SelectInputField({
     const selectOptions = [].concat( options.map((item) => {
             return {'value': item , "label": item}
         }));
+        
     return(
         <InputWrapper name={name} label={children} errors={errors}>
             <Controller 
