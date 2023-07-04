@@ -1,6 +1,7 @@
 //import react
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 
 //import components
 import SubmitButton from '../../../common/components/Inputs/SubmitButton/SubmitButton';
@@ -26,11 +27,6 @@ function ProfilePage (){
 
     const nav = useNavigate();
 
-    const resumeDownload = () => {
-        // TODO : Downlaod resume
-        console.log("Download");
-    }
-
     return (
         <div className={style['profile-page']}>
             { loading  &&  <Loader></Loader> }
@@ -51,7 +47,7 @@ function ProfilePage (){
                                 </div>
                             </div>
                         </div>
-                        <Button width='80px' height='40px' onClick={() => nav('/dashboard/edit-profile')}>Edit</Button>
+                        <Button width='80px' height='40px' onClick={() => nav('/dashboard/edit')}>Edit</Button>
                     </div>
                     <div className={style['profile-body']}>
                         <div className={style['first-body']}>
@@ -130,7 +126,9 @@ function ProfilePage (){
                                 </div>
                                 <div className={style.resume}>
                                     <h4><BsPen color='#232360'></BsPen> Resume</h4>
-                                    <Button onClick={resumeDownload}>Click here to downlaod</Button>
+                                    <a href="https://drive.google.com/u/0/uc?id=0Bx3C5sQdyet7a2dRZTlQSTFmT3RONmhNalZvX04xOC1pd2tj&export=download&resourcekey=0-DhYYRgMXbNKPUEpAh6ZNeQ" target="_blank" download rel="noreferrer">
+                                        <Button>Click here to downlaod</Button>
+                                    </a>
                                 </div>
                             </div>
                             <div className={style['last-section']}>

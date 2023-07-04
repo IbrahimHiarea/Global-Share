@@ -71,7 +71,7 @@
 .profile-body .box{
   display: flex;
   gap: 30px;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .buttons{

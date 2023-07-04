@@ -37,7 +37,7 @@ function EditProfile (){
             phoneNumber: '',
             appointlet: '',
             bio: '',
-            resume: '',
+            resume: null,
         }
     })
 
@@ -67,15 +67,14 @@ function EditProfile (){
                             <InputField
                                 type='text'
                                 name='firstName'
-                                value=''
                                 placeholder='First Name'
                                 width='233px'
                                 height='45px'   
                                 control={register('firstName' , {
                                         required: 'Please enter your first name',
                                         pattern: {
-                                            value: /^[A-Z][a-z]{1,20}$/,
-                                            message: 'The max length of the first name 20 and should contain of English characters'
+                                            value: /^[A-Z][a-z]{2,20}$/,
+                                            message: 'The max length of the first name 20 and should contain of English characters and start with UpperCase'
                                         }
                                     }
                                 )}
@@ -87,7 +86,6 @@ function EditProfile (){
                             <InputField
                                 type='text'
                                 name='middleName'
-                                // value=''
                                 placeholder='Middle name'
                                 width='233px'
                                 height='45px'   
@@ -99,15 +97,14 @@ function EditProfile (){
                             <InputField
                                 type='text'
                                 name='lastName'
-                                // value=''
                                 placeholder='Last name'
                                 width='233px'
                                 height='45px'   
                                 control={register('lastName' , {
                                         required: 'Please enter your last name',
                                         pattern: {
-                                            value: /^[A-Z][a-z]{1,20}$/,
-                                            message: 'The max length of the last name 20 and should contain of English characters'
+                                            value: /^[A-Z][a-z]{2,20}$/,
+                                            message: 'The max length of the last name 20 and should contain of English characters and start with UpperCase'
                                         }
                                     }
                                 )}
@@ -118,7 +115,6 @@ function EditProfile (){
                             <InputField
                                 type='email'
                                 name='email'
-                                // value=''
                                 placeholder='Email'
                                 width='233px'
                                 height='45px'   
@@ -140,7 +136,6 @@ function EditProfile (){
                             <InputField
                                 type='email'
                                 name='additionalEmail'
-                                // value=''
                                 placeholder='Additional Email'
                                 width='233px'
                                 height='45px'   
@@ -159,7 +154,6 @@ function EditProfile (){
                             <InputField
                                 type='text'
                                 name='arabicName'
-                                // value=''
                                 placeholder='Full arabic name'
                                 width='233px'
                                 height='45px'   
@@ -171,8 +165,6 @@ function EditProfile (){
                             <InputField
                                 type='date'
                                 name='birthDate'
-                                // value=''
-                                // placeholder='Last name'
                                 width='233px'
                                 height='45px'   
                                 control={register('birthDate' , {
@@ -186,7 +178,6 @@ function EditProfile (){
                             <InputField
                                 type='text'
                                 name='phoneNumber'
-                                // value=''
                                 placeholder='Phone number'
                                 width='233px'
                                 height='45px'   

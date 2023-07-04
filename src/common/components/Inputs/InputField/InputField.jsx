@@ -13,7 +13,7 @@ function InputField ({
                 height, control, errors , accept
             }){
     return(
-        <InputWrapper name={name} label={children} errors={errors}>
+        <InputWrapper name={name} label={children} errors={errors} maxWidth={width}>
             <input 
                 id={name}
                 className={style.input}
