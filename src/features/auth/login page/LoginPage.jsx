@@ -9,7 +9,7 @@ import SubmitButton from '../../../common/components/Inputs/SubmitButton/SubmitB
 
 //import redux state
 import { useDispatch , useSelector } from 'react-redux';
-import { selectAllAuth  , login } from '../AuthSlice';
+import { login, selectAuthStatus } from '../AuthSlice';
 import { showMessage } from '../../snackBar/snackBarSlice'
 
 //import svg
@@ -29,7 +29,7 @@ function LoginPage (){
 
     const nav = useNavigate();
     const dispatch = useDispatch();
-    const {status} = useSelector(selectAllAuth);
+    const status = useSelector(selectAuthStatus);
 
     const onError  = (data) => console.log(data);
     const onSubmit = async (data) => {

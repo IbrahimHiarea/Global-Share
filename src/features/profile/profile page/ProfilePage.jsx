@@ -1,145 +1,222 @@
 //import react
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Outlet } from 'react-router-dom';
+
+//import redux
+import { useSelector , useDispatch} from 'react-redux';
+import {selectProfileStatus , fetchProfileDetails, selectProfileData} from '../ProfileSlice';
 
 //import components
-import SubmitButton from '../../../common/components/Inputs/SubmitButton/SubmitButton';
-import TextField from '../../../common/components/TextField/TextField';
 import Loader from '../../../common/components/Loader/Loader';
+import Error from '../../../common/components/Error/Error';
 import Button from '../../../common/components/Inputs/Button/Button'
+import { Avatar } from '@mui/material';
 
 //import icon
 import { HiOutlineMail } from "react-icons/hi";
 import { IoIosNuclear } from "react-icons/io";
-import { AiOutlineThunderbolt } from "react-icons/ai";
-import { BsSend , BsTelephone , BsGift , BsPeople , BsPen } from "react-icons/bs";
+import { BsSend , BsTelephone , BsGift , BsPeople , BsPen , BsYinYang } from "react-icons/bs";
+import profileImage from '../../../assets/images/profileImage/profile.png';
+
+//import utils
+import { format } from 'date-fns';
 
 //import style
 import style from './ProfilePage.module.css';
 
-// import MUI
-import { Avatar } from '@mui/material';
+//static data
+const period = ['day' , 'week'];
 
 function ProfilePage (){
-
-    const [loading , setLoading] = useState(false);
-
     const nav = useNavigate();
+    const dispatch = useDispatch();
 
-    return (
-        <div className={style['profile-page']}>
-            { loading  &&  <Loader></Loader> }
-            { !loading  &&
-                <>
-                    <div className={style['profile-header']}>
+    const status = useSelector(selectProfileStatus);
+    const data = useSelector(selectProfileData);
+
+    useEffect(() => {
+        const promise  = dispatch(fetchProfileDetails());
+
+        return () => {
+            promise.abort()
+        }
+    }, []);
+    
+
+    if(status === 'idle' || status === 'loading'){
+        return (
+            <div className={style['profile-page']}>
+                <Loader />
+            </div>
+        );
+    }
+
+    else if(status === 'failed'){
+        return (
+            <div className={style['profile-page']}>
+                <Error />
+            </div>
+        );
+    }
+
+    else{
+        return (
+            <div className={style['profile-page']}>
+                <div className={style['profile-header']}>
+                    <div className={style['header-background']}></div>
+                    <div className={style['header-content']}>
+                        <div className={style.image}>
+                            <Avatar 
+                                src={profileImage}
+                                alt='Ahmad Alshahal' 
+                                sx={{
+                                    width: '137px', 
+                                    height: '137px'
+                                }} 
+                            />
+                        </div>
+
+                        <div className={style['header-info']}>
+                            <div className={style['header-name']}>
+                                <h2>{`${data.firstName} ${data.middleName} ${data.lastName}`} <span>• {data.arabicFullName}</span></h2>
+                                <div 
+                                    style={{
+                                        color: data.gsStatus.toLowerCase() !== "active" ? 'var(--error-main)' : null,
+                                        backgroundColor: data.gsStatus.toLowerCase() !== "active" ? '#FFEADD' : null
+                                    }}
+                                >
+                                    {data.gsStatus}
+                                </div>
+                            </div>
+                            <h3>Specialist Android Developer <span>• {data.email}</span></h3>
+                        </div>
+
+                        <Button 
+                            width='80px' 
+                            height='40px' 
+                            onClick={() => nav('edit')}
+                        >
+                            edit
+                        </Button>
+                    </div>
+                </div>
+                <div className={style['profile-body']}>
+                    <div className={style['first-body']}>
+                        <BoxInfo
+                            title="about"
+                            info={data.bio}
+                            isLink={false}
+                            icon={<></>}
+                        />
+                        <div className={style.log}>
+                            {period.map((item) => (
+                                <WorkTimeCard 
+                                    key={item}
+                                    periodic= {item}
+                                    hours={17}
+                                    tasks={14}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                    <div className={style['second-body']}>
                         <div>
-                            <div className={style['header-content']}>
-                                <div className={style.image}>
-                                    <Avatar src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRij6dtiHizH96qpCOe8WeXXP3yLyQJkPdGVg&usqp=CAU' alt='Profile Photo' sx={{width: '137px' , height: '137px'}}></Avatar>
-                                </div>
-                                <div className={style['header-info']}>
-                                    <div className={style['header-name']}>
-                                        <h2>Abdulkader Attoura <span>• أحمد الشَّهَّال</span></h2>
-                                        <div>Active</div>
-                                    </div>
-                                    <h3>Specialist Android Developer <span>• ahmad.alshahal2@gmail.com</span></h3>
-                                </div>
-                            </div>
+                            <BoxInfo
+                                title="additional email"
+                                info={data.additionalEmail}
+                                isLink={false}
+                                icon={<HiOutlineMail />}
+                            />
+                            <BoxInfo
+                                title="appointlet"
+                                info={data.appointlet}
+                                isLink={true}
+                                icon={<BsSend/>}
+                            />
                         </div>
-                        <Button width='80px' height='40px' onClick={() => nav('/dashboard/edit')}>Edit</Button>
-                    </div>
-                    <div className={style['profile-body']}>
-                        <div className={style['first-body']}>
-                            <div className={style.about}>
-                                <h4>About</h4>
-                                <p>
-                                    Short paragraphs are easier to read and understand. Writing experts recommend paragraphs of no more than 150 words in three to eight sentences. Paragraphs should never be longer than 250 words. Vary the lengths of your paragraphs to make them more interesting.
-                                    Short paragraphs are easier to read and understand. Writing experts recommend paragraphs of no more than 150 words in three to eight sentences. Paragraphs should never be longer than 250 words. Vary the lengths of your paragraphs to make them more interesting.
-                                </p>
-                            </div>
-                            <div className={style.log}>
-                                <h4>This week</h4>
-                                <div className={style['work-time']}>
-                                    <div className={style.hour}>
-                                        <div>Working Hours</div>
-                                        <div>17H</div>
-                                    </div>
-                                    <div className={style.task}>
-                                        <div>Tasks</div>
-                                        <div>14</div>
-                                    </div>
-                                </div>
-                                <h4>This Month</h4>
-                                <div className={style['work-time']}>
-                                    <div className={style.hour}>
-                                        <div>Working Hours</div>
-                                        <div>17H</div>
-                                    </div>
-                                    <div className={style.task}>
-                                        <div>Tasks</div>
-                                        <div>14</div>
-                                    </div>
-                                </div>
-                                <h4>This Year</h4>
-                                <div className={style['work-time']}>
-                                    <div className={style.hour}>
-                                        <div>Working Hours</div>
-                                        <div>17H</div>
-                                    </div>
-                                    <div className={style.task}>
-                                        <div>Tasks</div>
-                                        <div>14</div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div>
+                            <BoxInfo
+                                title="phone number"
+                                info={data.phoneNumber}
+                                isLink={false}
+                                icon={<BsTelephone/>}
+                            />
+                            <BoxInfo
+                                title="birth date"
+                                info={format(new Date(data.joinDate) , 'MMM dd, yyyy')}
+                                isLink={false}
+                                icon={<BsGift/>}
+                            />
                         </div>
-                        <div className={style['second-body']}>
-                            <div>
-                                <div className={style.email}>
-                                    <h4><HiOutlineMail color='#232360'></HiOutlineMail> Additional Email</h4>
-                                    <div>ahmad.alshahal@gmail.com</div>
-                                </div>
-                                <div className={style.appointlet}>
-                                    <h4><BsSend color='#232360'></BsSend> Appointlet</h4>
-                                    <a href=''>https://www.figma.com/file/</a>
-                                </div>
-                            </div>
-                            <div>
-                                <div className={style.number}>
-                                    <h4><BsTelephone color='#232360'></BsTelephone> Phone Number</h4>
-                                    <div>+963951737433</div>
-                                </div>
-                                <div className={style.date}>
-                                    <h4><BsGift color='#232360'></BsGift> Birth Date</h4>
-                                    <div>Nov 26, 2001</div>
-                                </div>
-                            </div>
-                            <div>
-                                <div className={style.squad}>
-                                    <h4><BsPeople color='#232360'></BsPeople> Squads</h4>
-                                    <div>
+                        <div>
+                            <BoxInfo
+                                title="squads"
+                                info={
+                                    <div className={style.squads}>
                                         <IoIosNuclear size={'30px'}></IoIosNuclear>
                                         <IoIosNuclear size={'30px'}></IoIosNuclear>
                                         <IoIosNuclear size={'30px'}></IoIosNuclear>
                                     </div>
-                                </div>
-                                <div className={style.resume}>
-                                    <h4><BsPen color='#232360'></BsPen> Resume</h4>
-                                    <a href="https://drive.google.com/u/0/uc?id=0Bx3C5sQdyet7a2dRZTlQSTFmT3RONmhNalZvX04xOC1pd2tj&export=download&resourcekey=0-DhYYRgMXbNKPUEpAh6ZNeQ" target="_blank" download rel="noreferrer">
-                                        <Button>Click here to downlaod</Button>
+                                }
+                                isLink={false}
+                                icon={<BsPeople/>}
+                            />
+                            <BoxInfo
+                                title="resume"
+                                info={
+                                    <a 
+                                        className={style.resume} 
+                                        href="https://drive.google.com/u/0/uc?id=0Bx3C5sQdyet7a2dRZTlQSTFmT3RONmhNalZvX04xOC1pd2tj&export=download&resourcekey=0-DhYYRgMXbNKPUEpAh6ZNeQ" 
+                                        target="_blank" 
+                                        download 
+                                        rel="noreferrer"
+                                    >
+                                        <Button>Click here to download</Button>
                                     </a>
-                                </div>
-                            </div>
-                            <div className={style['last-section']}>
-                                <h4><AiOutlineThunderbolt color='#232360' size='20px'></AiOutlineThunderbolt> Other Positions</h4>
-                                <div>
-                                    Specialist UI Designer • Specialist Coordinator • Intern Analysist
-                                </div>
-                            </div>
+                                }
+                                isLink={false}
+                                icon={<BsPen/>}
+                            />
                         </div>
+                        <BoxInfo
+                            title="other positions"
+                            info={"Specialist UI Designer • Specialist Coordinator • Intern Analysist"}
+                            isLink={false}
+                            icon={<BsYinYang />}
+                        />
                     </div>
-                </>
+                </div>
+            </div>
+        );
+    }
+}
+
+function WorkTimeCard({periodic , hours , tasks}){
+    return (
+        <>
+            <h4>This {periodic}</h4>
+            <div className={style['work-time']}>
+                <div className={style.hour}>
+                    <div>Working Hours</div>
+                    <div>{hours}H</div>
+                </div>
+                <div className={style.task}>
+                    <div>Tasks</div>
+                    <div>{tasks}</div>
+                </div>
+            </div>
+        </>
+    );
+}
+
+function BoxInfo({title , info , isLink , icon}){
+    return(
+        <div className={style['box-info']}>
+            <h4>{icon} {title}</h4>
+            {
+                isLink ? 
+                <a href={info} className={style.about}>{info}</a> :
+                <div className={style.about} >{info}</div>
             }
         </div>
     );

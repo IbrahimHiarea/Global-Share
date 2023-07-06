@@ -38,7 +38,7 @@ function SnackBar (){
                 <Alert 
                     onClose={handleClose} 
                     severity={severity}
-                    sx={{width: '300px' , maxWidth: '400px' , fontFamily: 'DM Sans, sans-serif'}}
+                    sx={{minWidth: '300px', maxWidth: '600px' , fontFamily: 'DM Sans, sans-serif'}}
                 >
                     {formatString(message)}
                 </Alert>

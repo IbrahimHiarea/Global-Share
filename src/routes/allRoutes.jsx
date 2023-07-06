@@ -1,6 +1,6 @@
 // import react
 import React from 'react';
-import { Route , Routes } from 'react-router-dom'
+import { Outlet, Route , Routes } from 'react-router-dom'
 
 //import pages
 import ProfilePage from '../features/profile/profile page/ProfilePage';
@@ -23,10 +23,16 @@ function AllRoute () {
 
             {/* dashboard page */}
             <Route path='/dashboard/' element = { <DashboardLayout /> }>
+                {/* home section */}
                 <Route path='home' element={ <></> }/>
-                <Route path='profile' element = { <ProfilePage /> } >
+                
+                {/* profile sections  */}
+                <Route path='profile/' element={<Outlet />}>
+                    <Route index element={<ProfilePage />} />
                     <Route path='edit' element = { <EditProfile /> } />
                 </Route>
+
+                {/* task sections */}
                 <Route path='task' element = { <TaskPage /> } />
             </Route>
         </Routes>

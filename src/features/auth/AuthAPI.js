@@ -9,6 +9,7 @@ const axiosApi = axios.create({
     },
 });
 
+//auth api
 export async function loginRequest({username: email , password} , signal){
     return axiosApi.post( 
         '/auth/login', 

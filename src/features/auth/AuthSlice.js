@@ -26,15 +26,17 @@ export const login = createAsyncThunk(
         try{
             const response = await loginRequest(data , thunkAPI.signal);
             return response.data.token;
-        } catch(e){
-            return thunkAPI.rejectWithValue(e.response.data.message[0]);
+        } catch(error){
+            let message = "Network connection error"
+            if(error?.response?.data?.message) message = error.response.data.message[0]
+            return thunkAPI.rejectWithValue(message);
         }
     }, 
     {
         condition: (data, {getState}) => {
             const { auth } = getState()
             const authStatus = auth.status;
-            if (authStatus === 'succeeded' || authStatus === 'loading') {
+            if (authStatus === status.succeeded || authStatus === status.loading) {
                 return false
             }
         },
@@ -48,10 +50,11 @@ const authSlice = createSlice({
     initialState,
     reducers:{
         tokenAdded: (state , action) => {
+            state.status = status.succeeded;
             state.token = action.payload;
         }
     },
-    extraReducers: (builder) =>{
+    extraReducers: (builder) => {
         builder
             .addCase(login.pending , (state , action) => {
                 state.status = status.loading;
@@ -71,9 +74,9 @@ const authSlice = createSlice({
 
 // selectors
 export const selectAllAuth = state => state.auth;
-export const selectStatus = state => state.auth.status;
-export const selectToken = state => state.auth.token;
-export const selectError = state => state.auth.error;
+export const selectAuthStatus = state => state.auth.status;
+export const selectAuthToken = state => state.auth.token;
+export const selectAuthError = state => state.auth.error;
 
 // actions
 export const { tokenAdded } = authSlice.actions;

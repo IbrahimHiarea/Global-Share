@@ -1,19 +1,17 @@
 .submit{
-    /* outer */
+    /*outer*/
     background-color: var(--primary-main);
-    border-radius: 12px;
-    -webkit-border-radius: 12px;
-    -moz-border-radius: 12px;
-    -ms-border-radius: 12px;
-    -o-border-radius: 12px;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
     padding: 14px 45px;
     border: none;
     cursor: pointer;
     width: 300px;
     height: 45px;
-
-    /* inner */
-    color: white;
+    /*inner*/color: white;
     font-weight: 700;
     font-style: normal;
     font-size: 14px;

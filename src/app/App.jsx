@@ -1,5 +1,9 @@
 //import react
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
+//import redux
+import { useDispatch } from 'react-redux';
+import {tokenAdded} from '../features/auth/AuthSlice';
 
 //import route
 import AllRoute from '../routes/allRoutes';
@@ -11,6 +15,13 @@ import style from './App.module.css'
 
 function App() {
 	const [flag , setFlag] = useState(false);
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		if(localStorage.length)
+			dispatch(tokenAdded(localStorage.getItem('token')));
+	} , []);
+
 
 	return (
 		<div className={style.app}>
