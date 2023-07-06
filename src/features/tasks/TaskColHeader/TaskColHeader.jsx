@@ -4,6 +4,7 @@ import clsx from 'clsx';
 
 //import components
 import AddStatus from '../PopUpComponents/AddStatus/AddStatus';
+import AddTasks from '../PopUpComponents/AddTasks/AddTasks';
 
 // import Icons 
 import { GrFormAdd } from 'react-icons/gr';
@@ -12,13 +13,21 @@ import { BsTrash } from 'react-icons/bs';
 //import style
 import style from './TaskColHeader.module.css';
 
-function TaskColHeader ({ children }){
+function TaskColHeader ({ children , dispatchPopUp}){
+
+    const handleClick = () => {
+        dispatchPopUp({
+            type: 'open', 
+            payload: <AddTasks />
+        });
+    }
+
     return(
         <div className={style['task-header']}>
             <div>{children}</div>
             <div className={style.icons}>
                 <span className={style['delete-icon']} ><BsTrash/></span>
-                <span className={style['add-icon']} ><GrFormAdd/></span>
+                <span className={style['add-icon']} onClick={handleClick} ><GrFormAdd/></span>
             </div>
         </div>
     );
