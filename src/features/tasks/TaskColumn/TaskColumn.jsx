@@ -12,7 +12,7 @@ import TaskCard from "../TaskCard/TaskCard";
 function TaskColumn({statusId , statusName , tasks , dispatchPopUp}){
     return (
         <div className={style['task-column']}>
-            <TaskColHeader>{statusName}</TaskColHeader>
+            <TaskColHeader dispatchPopUp={dispatchPopUp} >{statusName}</TaskColHeader>
             <Droppable isDropDisabled={false} droppableId={statusId+''} type="tasks">
                 {(provided) => 
                     <div    
