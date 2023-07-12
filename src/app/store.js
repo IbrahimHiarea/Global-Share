@@ -5,7 +5,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import authReducer from '../features/auth/AuthSlice';
 import snackBarReducer from '../features/snackBar/snackBarSlice';
 import taskReducer from '../features/tasks/taskSlice';
-import profileReducer from '../features/profile/ProfileSlice';
+import profileReducer from '../features/profile/profileSlice';
 
 export const store = configureStore({
 	reducer: {

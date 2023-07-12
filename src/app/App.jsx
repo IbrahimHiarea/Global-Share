@@ -17,11 +17,10 @@ function App() {
 	const [flag , setFlag] = useState(false);
 	const dispatch = useDispatch();
 
-	useEffect(() => {
-		if(localStorage.length)
-			dispatch(tokenAdded(localStorage.getItem('token')));
-	} , []);
-
+	// useEffect(() => {
+	// 	if(localStorage.length)
+	// 		dispatch(tokenAdded(localStorage.getItem('token')));
+	// } , []);
 
 	return (
 		<div className={style.app}>

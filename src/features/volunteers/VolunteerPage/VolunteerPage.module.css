@@ -1,0 +1,9 @@
+.volunteer-page{
+    width: 100%;
+	height: calc(100vh - 55px);
+	overflow: auto;
+	background-color: var(--background-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

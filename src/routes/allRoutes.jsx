@@ -9,6 +9,7 @@ import LoginPage from '../features/auth/login page/LoginPage';
 import HomePage from '../app/HomePage/HomePage';
 import DashboardLayout from '../app/DashboardLayout/DashboardLayout';
 import TaskPage from '../features/tasks/Task page/TaskPage';
+import VolunteerPage from '../features/volunteers/VolunteerPage/VolunteerPage';
 
 function AllRoute () {
     return (
@@ -34,9 +35,12 @@ function AllRoute () {
 
                 {/* task sections */}
                 <Route path='task' element = { <TaskPage /> } />
+
+                {/* Volunteers section */}
+                <Route path='volunteer' element={<VolunteerPage />} />
             </Route>
         </Routes>
-    );
+    );  
 }
 
 export default AllRoute;

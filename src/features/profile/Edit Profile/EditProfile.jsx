@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 //import redux
 import { useSelector , useDispatch} from 'react-redux';
-import {fetchProfileDetails, selectProfileData, selectProfileStatus , updateProfileDetails} from '../ProfileSlice';
+import {fetchProfileDetails, selectProfileData, selectProfileStatus , updateProfileDetails} from '../profileSlice';
 import {showMessage} from '../../snackBar/snackBarSlice';
 
 //import components

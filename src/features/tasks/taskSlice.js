@@ -1,4 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit"
+//import redux
+import { 
+    createSlice ,
+    createAsyncThunk,
+    createEntityAdapter
+} from "@reduxjs/toolkit"
+
+//import API
+import * as taskAPI from './TaskAPI';
 
 // init state
 const status = {
@@ -8,169 +16,86 @@ const status = {
     failed: "failed"
 }
 
+const taskStatusAdapter = createEntityAdapter({
+    selectId: (taskStatus) => taskStatus.id,
+    sortComparer: (taskStatusA , taskStatusB) => taskStatusA.id - taskStatusB.id
+});
+
+const taskAdapter = createEntityAdapter({
+    selectId: (task) => task.id,
+    sortComparer: (taskA , taskB) => new Date(taskA.date) - new Date(taskB.date)
+});
+
+const commentAdapter = createEntityAdapter({
+    selectId: (comment) => comment.id,
+    sortComparer: (commentA , commentB) => new Date(commentA.date) - new Date(commentB.date)
+});
+
 const initialState = {
-    tasks: {
-        Approved : [],
-        Done: [],
-        Ongoing: [
-            {
-                "id": 3,
-                "title": "Task management Design Updated",
-                "assignedBy": {
-                    "email": "ahmad.alshahal2@gmail.com",
-                    "firstName": "Ahmad",
-                    "lastName": "AlShahal",
-                    "arabicFullName": null
-                },
-                "deadline": "Aug 20, 2021",
-                "description": "Task management system for global share",
-                "difficulty": "MEDIUM",
-                "priority": "Urgent",
-                "url": "https://en.wikipedia.org/wiki/ISO_8601",
-                "comments": [
-                    "We'll store your personal information so that we can pick up the conversation if we talk later. We may send you emails about our upcoming services",
-                    "We'll store your personal information so that we can pick up the conversation if we talk later. We may send you emails about our upcoming services",
-                    "We may send you emails to follow up on our discussion here."
-                ]
-            },
-            {
-                "id": 4,
-                "title": "Task management Design Updated",
-                "assignedBy": {
-                    "email": "ahmad.alshahal2@gmail.com",
-                    "firstName": "Ahmad",
-                    "lastName": "AlShahal",
-                    "arabicFullName": null
-                },
-                "deadline": "Aug 20, 2021",
-                "description": "Task management system for global share",
-                "difficulty": "MEDIUM",
-                "priority": "important",
-                "url": "https://en.wikipedia.org/wiki/ISO_8601",
-                "comments": []
-            },
-            {
-                "id": 5,
-                "title": "Task management Design Updated",
-                "assignedBy": {
-                    "email": "ahmad.alshahal2@gmail.com",
-                    "firstName": "Ahmad",
-                    "lastName": "AlShahal",
-                    "arabicFullName": null
-                },
-                "deadline": "Aug 20, 2021",
-                "description": "Task management system for global share",
-                "difficulty": "MEDIUM",
-                "priority": "NORMAL",
-                "url": "https://en.wikipedia.org/wiki/ISO_8601",
-                "comments": []
-            },
-            {
-                "id": 6,
-                "title": "Task management Design Updated",
-                "assignedBy": {
-                    "email": "ahmad.alshahal2@gmail.com",
-                    "firstName": "Ahmad",
-                    "lastName": "AlShahal",
-                    "arabicFullName": null
-                },
-                "deadline": "Aug 20, 2021",
-                "description": "Task management system for global share",
-                "difficulty": "MEDIUM",
-                "priority": "NORMAL",
-                "url": "https://en.wikipedia.org/wiki/ISO_8601",
-                "comments": []
-            },
-            {
-                "id": 7,
-                "title": "Task management Design Updated",
-                "assignedBy": {
-                    "email": "ahmad.alshahal2@gmail.com",
-                    "firstName": "Ahmad",
-                    "lastName": "AlShahal",
-                    "arabicFullName": null
-                },
-                "deadline": "Aug 20, 2021",
-                "description": "Task management system for global share",
-                "difficulty": "MEDIUM",
-                "priority": "NORMAL",
-                "url": "https://en.wikipedia.org/wiki/ISO_8601",
-                "comments": []
-            },
-            {
-                "id": 8,
-                "title": "Task management Design Updated",
-                "assignedBy": {
-                    "email": "ahmad.alshahal2@gmail.com",
-                    "firstName": "Ahmad",
-                    "lastName": "AlShahal",
-                    "arabicFullName": null
-                },
-                "deadline": "Aug 20, 2021",
-                "description": "Task mansdfsdfsdgsdgdgsgdgsdfsdgsdgsagsdgsgsgsgsagement system for global share",
-                "difficulty": "MEDIUM",
-                "priority": "NORMAL",
-                "url": "https://en.wikipedia.org/wiki/ISO_8601",
-                "comments": []
-            },
-        ],
-        ToDo: [
-            {
-                "id": 2,
-                "title": "Task management Design",
-                "assignedBy": {
-                    "email": "ahmad.alshahal2@gmail.com",
-                    "firstName": "Ahmad",
-                    "lastName": "AlShahal",
-                    "arabicFullName": null
-                },
-                "deadline": "Aug 20, 2021",
-                "description": "Task management system for global share Task management system for global share Task management system for global share Task management system for global share Task management system for global share",
-                "difficulty": "MEDIUM",
-                "priority": "Normal",
-                "url": "https://en.wikipedia.org/wiki/ISO_8601",
-                "comments": [
-                    "We may send you emails to follow up on our discussion here.",
-                ],
-            }
-        ],
-    },
-    taskStatus: [
-        {
-            "id": 1,
-            "name": "ToDo"
-        },
-        {
-            "id": 2,
-            "name": "Ongoing"
-        },
-        {
-            "id": 3,
-            "name": "Done"
-        },
-        {
-            "id": 4,
-            "name": "Approved"
-        },
-    ],
+    taskStatuses: taskStatusAdapter.getInitialState(),
+    tasks: taskAdapter.getInitialState(),
+    comments: commentAdapter.getInitialState(),
     status: status.idle,
     error: null,
 }
 
+//thunks actions
+export const fetchTasksBySquad = createAsyncThunk(
+    'task/fetchTasksBySquad',
+    async (squadId , {rejectWithValue , signal , getState}) => {   
+        try{
+            // const token = selectAuthToken(getState());
+            const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImVtYWlsIjoiYWhtYWQuYWxzaGFoYWwyQGdtYWlsLmNvbSIsImlhdCI6MTY4OTE4MzMwNywiZXhwIjoxNjg5Nzg4MTA3fQ.7tII2KAksYX_GbBGfIYmUkKNIEG_VFKjYoos1qNf27g";
+            const response = await taskAPI.fetchTasksBySquad(squadId , token , signal);
+            console.log(response.data);
+
+            const taskStatuses = [] , tasks = [] , comments = [];
+            return {taskStatuses , tasks , comments}
+        }
+        catch(error){
+            console.log(error);
+            let message = "Network connection error";
+            if(error?.response?.data?.message) message = error.response.data.message
+            return rejectWithValue(message);
+        }
+    },
+    {
+        condition: (_, {getState}) => {
+            const { task } = getState()
+            const taskStatus = task.status;
+            if (taskStatus === status.succeeded || taskStatus === status.loading) {
+                return false
+            }
+        },
+    }
+);
+
+
+//creating tasks slice
 const tasksSlice = createSlice({
     name: 'task',
     initialState,
-    reducers: {
-        
+    reducers: {},
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchTasksBySquad.pending , (state , action) => {
+                state.status = status.loading;
+            })
+            .addCase(fetchTasksBySquad.fulfilled , (state , action) => {
+                const {taskStatuses , tasks , comments} = action.payload;
+                taskStatusAdapter.setAll(state.status , taskStatuses);
+                taskAdapter.setAll(state.tasks , tasks);
+                commentAdapter.setAll(state.comments , comments);
+                state.status = status.succeeded;
+            })
+            .addCase(fetchTasksBySquad.rejected , (state , action) =>{
+                state.error = action.payload;
+                state.status = status.failed;
+            })
     }
 });
 
 // selectors
-export const selectAllTask = state => state.task;
-export const selectTasks = state => state.task.tasks;
-export const selectTaskStatus = state => state.task.taskStatus;
-export const selectTaskError = state => state.task.error;
-export const selectStatus = state => state.task.status;
 
 // actions
 export const {} = tasksSlice.actions;

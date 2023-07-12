@@ -1,11 +1,11 @@
 //import react
 import React, { useEffect , useReducer} from 'react';
 import { useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
 import { DragDropContext } from 'react-beautiful-dnd';
 
-//import task Slice
-import { selectTaskStatus , selectTasks} from '../taskSlice';
+//import redux
+import { useSelector , useDispatch} from 'react-redux';
+import { selectTaskStatus , selectTasks , fetchTasksBySquad } from '../taskSlice';
 
 // import components 
 import TaskFilterBar from '../TaskFilterBar/TaskFilterBar';
@@ -16,25 +16,6 @@ import { AddStatusButton } from '../TaskColHeader/TaskColHeader';
 //import style
 import style from './TaskPage.module.css';
 
-const initPopup = {open: false , node: <></>};
-const popUpReducer = (oldState , action) =>{
-    switch(action.type){
-        case 'open':
-            return {
-                ...oldState,
-                open: true,
-                node: action.payload
-            }
-        case 'close': 
-            return {
-                ...oldState,
-                open: false
-            }
-        default:
-            return oldState;
-    }
-}
-
 function TaskPage (){
     const {control ,register , watch , formState , reset} = useForm({
         defaultValues:{
@@ -43,19 +24,13 @@ function TaskPage (){
             priorities: '',
             complexities: '',
         }
-    })
-
-    const [showPopUp , dispatchPopUp] = useReducer(popUpReducer , initPopup);
+    });
     
-    const taskStatus = useSelector(selectTaskStatus);
-    const tasks = useSelector(selectTasks);
+    const dispatch = useDispatch();
     
     useEffect(() => {
-        const temp =  watch(values => {
-            console.log(values);    
-        });
-        return () => temp.unsubscribe();
-    } , [watch]);
+        dispatch(fetchTasksBySquad(1));
+    } , []);
 
     return (
         <div className={style['task-page']}>
@@ -66,7 +41,7 @@ function TaskPage (){
                 control={control}
             />
 
-            <div className={style['task-page-body']}>
+            {/* <div className={style['task-page-body']}>
                 <DragDropContext>
                     {
                         taskStatus.map(({id , name}) => (
@@ -75,21 +50,14 @@ function TaskPage (){
                                 statusId={id}
                                 statusName={name}
                                 tasks={tasks[name]}
-                                dispatchPopUp={dispatchPopUp}
                             />
                         ))
                     }
                 </DragDropContext>
-                <AddStatusButton 
-                    dispatchPopUp={dispatchPopUp}
-                >
+                <AddStatusButton>
                     Add New
                 </AddStatusButton>
-            </div>
-
-            <PopUp open={showPopUp.open} close={dispatchPopUp}>
-                {showPopUp.node}
-            </PopUp>
+            </div> */}
         </div>
     );
 }
