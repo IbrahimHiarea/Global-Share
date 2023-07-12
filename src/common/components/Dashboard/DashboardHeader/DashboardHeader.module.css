@@ -1,0 +1,22 @@
+.dashboard-header{
+  /* width: 100%; */
+  width: 1060px;
+  min-height: 58px;
+  padding: 0 142px 0 16px;
+  display: flex;
+  gap: 24px;
+  justify-content: space-between;
+  background-color: white;
+  align-items: center;
+  color: #768396;
+  font-size: 15px;
+  font-weight: 500;
+  border-bottom: 1px solid #E9E7FD;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.dashboard-header > div{
+  padding: 13px 10px;
+  width: 125px;
+}
