@@ -10,11 +10,11 @@ import profileImage from '../../assets/images/profileImage/profile.png';
 import {ReactComponent as MainLogo} from '../../assets/icons/mainLogo.svg';
 import {BiHomeAlt2} from 'react-icons/bi';
 import {FaTasks} from 'react-icons/fa';
-import {CgProfile} from 'react-icons/cg'
+import {CgProfile} from 'react-icons/cg';
+import {BsBookHalf} from 'react-icons/bs';
 
 //import style
 import style from './DashboardLayout.module.css';
-import Loader from '../../common/components/Loader/Loader';
 
 //static data
 const drawerList = [
@@ -32,6 +32,11 @@ const drawerList = [
         title: 'profile',
         path: 'profile',
         icon: <CgProfile />
+    },
+    {
+        title: 'Volunteer',
+        path: 'volunteer',
+        icon: <BsBookHalf />
     }
 ];
 
