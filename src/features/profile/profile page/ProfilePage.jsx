@@ -82,7 +82,7 @@ function ProfilePage (){
                                 <div 
                                     style={{
                                         color: data.gsStatus.toLowerCase() !== "active" ? 'var(--error-main)' : null,
-                                        backgroundColor: data.gsStatus.toLowerCase() !== "active" ? '#FFEADD' : null
+                                        backgroundColor: data.gsStatus.toLowerCase() !== "active" ? 'var(--error-background)' : null
                                     }}
                                 >
                                     {data.gsStatus}

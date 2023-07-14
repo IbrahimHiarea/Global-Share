@@ -48,7 +48,10 @@ function DashboardTable ({
             name: <HeaderCell title={col.name}/>,
             sortable: true,
             selector: row => row[col.key],
-            format: (row) => formatCell(row[col.key] , col.type)
+            format: (row) => {
+                if(col.key==='firstName') return formatCell(row.firstName+" "+row.lastName , col.type);
+                return formatCell(row[col.key] , col.type)
+            }
         }
         return {
             selector: (row) => row[col.key],
@@ -67,6 +70,7 @@ function DashboardTable ({
             pointerOnHover
             noDataComponent = {<EmptyTable />}
             // disabled
+            // keyField
             onRowClicked={rowClick}
             progressPending={pending}
             progressComponent={<ProgressTable />}

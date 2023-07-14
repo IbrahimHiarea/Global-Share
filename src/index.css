@@ -133,7 +133,7 @@ ul {
 }
 
 .rdt_Pagination button:disabled{
-  opacity: .7 !important;
+  opacity: .5 !important;
 }
 
 .rdt_Pagination button:last-of-type,

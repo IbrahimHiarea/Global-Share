@@ -4,9 +4,11 @@ import { createAsyncThunk , createSlice } from "@reduxjs/toolkit";
 //import API
 import * as profileAPI from "./ProfileAPI";
 
+// import utils
+import { format } from "date-fns";
+
 //import selectors
 import { selectAuthToken } from "../auth/AuthSlice";
-import { format } from "date-fns";
 
 //init slice
 const status = {
@@ -20,20 +22,20 @@ const initialState = {
     status: status.idle,
     error: null,
     data : {
-        "id": "",
-        "email": "",
-        "phoneNumber": "",
-        "firstName": "",
-        "lastName": "",
-        "additionalEmail": "",
-        "middleName": "",
-        "arabicFullName": "",
-        "appointlet": "",
-        "bio": "",
-        "gsStatus": "",
-        "joinDate": "2000-1-1",
-        "positionId": "",
-        "position": {}
+        id: 0,
+        email: "",
+        phoneNumber: "",
+        firstName: "",
+        lastName: "",
+        additionalEmail: "",
+        middleName: "",
+        arabicFullName: "",
+        appointlet: "",
+        bio: "",
+        gsStatus: "",
+        joinDate: "2000-1-1",
+        positionId: "",
+        position: {}
     }
 }
 

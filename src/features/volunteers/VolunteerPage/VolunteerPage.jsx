@@ -1,11 +1,18 @@
 //import react
-import React from 'react';
+import React, { useEffect, useReducer } from 'react';
+
+//import redux
+import { useDispatch , useSelector } from 'react-redux';
+import { addManyVolunteer , selectAllVolunteer , selectVolunteerStatus} from '../VolunteerSlice';
 
 //import components
 import DashboardTable from '../../../common/components/Dashboard/DashboardTable/DashboardTable';
+import Error from '../../../common/components/Error/Error';
+import PopUp from '../../../common/components/PopUp/PopUp';
 
 //import style 
 import style from './VolunteerPage.module.css';
+import DeleteVolunteer from '../PopUpComponents/DeleteVolunteer/DeleteVolunteer';
 
 const columns = [
     {
@@ -15,7 +22,7 @@ const columns = [
     },
     {
         name: 'full name',
-        key: 'name',
+        key: 'firstName',
         type: 'normal'
     },
     {
@@ -35,7 +42,7 @@ const columns = [
     },
     {
         name: 'status',
-        key: 'status',
+        key: 'gsStatus',
         type: 'status'
     },
     {
@@ -48,119 +55,275 @@ const columns = [
     }
 ]
 
-const data = [
+const fakeData = [
     {
         id: 1,
-        name: 'Ahmad Al-Shahal',
-        squad: 'Radioactive',
-        position: 'Android Developer',
-        level: 'Specialist',
-        status: 'freeze',
+        email: "twfekajeneh@gmail.com",
+        phoneNumber: "0988311840",
+        firstName: "Twfek",
+        lastName: "Ajeneh",
+        additionalEmail: "",
+        middleName: "Moustafa",
+        arabicFullName: "توفيق عجينة",
+        appointlet: "",
+        bio: "",
+        gsStatus: "left",
+        joinDate: "2000-1-1",
+        positionId: "",
+        position: "React Dev",
+        squad: 'starter'
     },
     {
         id: 2,
-        name: 'Ahmad Al-Shahal',
-        squad: 'Radioactive',
-        position: 'Android Developer',
-        level: 'Specialist',
-        status: 'freeze',
+        email: "twfekajeneh@gmail.com",
+        phoneNumber: "0988311840",
+        firstName: "Twfek",
+        lastName: "Ajeneh",
+        additionalEmail: "",
+        middleName: "Moustafa",
+        arabicFullName: "توفيق عجينة",
+        appointlet: "",
+        bio: "",
+        gsStatus: "freeze",
+        joinDate: "2000-1-1",
+        positionId: "",
+        position: "React Dev",
+        squad: 'starter'
     },
     {
         id: 3,
-        name: 'Ahmad Al-Shahal',
-        squad: 'Radioactive',
-        position: 'Android Developer',
-        level: 'Specialist',
-        status: 'freeze',
+        email: "twfekajeneh@gmail.com",
+        phoneNumber: "0988311840",
+        firstName: "Twfek",
+        lastName: "Ajeneh",
+        additionalEmail: "",
+        middleName: "Moustafa",
+        arabicFullName: "توفيق عجينة",
+        appointlet: "",
+        bio: "",
+        gsStatus: "left",
+        joinDate: "2000-1-1",
+        positionId: "",
+        position: "React Dev",
+        squad: 'starter'
     },
     {
         id: 4,
-        name: 'Ahmad Al-Shahal',
-        squad: 'Radioactive',
-        position: 'Android Developer',
-        level: 'Specialist',
-        status: 'left',
+        email: "twfekajeneh@gmail.com",
+        phoneNumber: "0988311840",
+        firstName: "Twfek",
+        lastName: "Ajeneh",
+        additionalEmail: "",
+        middleName: "Moustafa",
+        arabicFullName: "توفيق عجينة",
+        appointlet: "",
+        bio: "",
+        gsStatus: "active",
+        joinDate: "2000-1-1",
+        positionId: "",
+        position: "React Dev",
+        squad: 'starter'
     },
     {
         id: 5,
-        name: 'Ahmad Al-Shahal',
-        squad: 'Radioactive',
-        position: 'Android Developer',
-        level: 'Specialist',
-        status: 'active',
+        email: "twfekajeneh@gmail.com",
+        phoneNumber: "0988311840",
+        firstName: "Twfek",
+        lastName: "Ajeneh",
+        additionalEmail: "",
+        middleName: "Moustafa",
+        arabicFullName: "توفيق عجينة",
+        appointlet: "",
+        bio: "",
+        gsStatus: "active",
+        joinDate: "2000-1-1",
+        positionId: "",
+        position: "React Dev",
+        squad: 'starter'
     },
     {
         id: 6,
-        name: 'Ahmad Al-Shahal',
-        squad: 'Radioactive',
-        position: 'Android Developer',
-        level: 'Specialist',
-        status: 'active',
+        email: "twfekajeneh@gmail.com",
+        phoneNumber: "0988311840",
+        firstName: "Twfek",
+        lastName: "Ajeneh",
+        additionalEmail: "",
+        middleName: "Moustafa",
+        arabicFullName: "توفيق عجينة",
+        appointlet: "",
+        bio: "",
+        gsStatus: "active",
+        joinDate: "2000-1-1",
+        positionId: "",
+        position: "React Dev",
+        squad: 'starter'
     },
     {
         id: 7,
-        name: 'Ahmad Al-Shahal',
-        squad: 'Radioactive',
-        position: 'Android Developer',
-        level: 'Specialist',
-        status: 'active',
+        email: "twfekajeneh@gmail.com",
+        phoneNumber: "0988311840",
+        firstName: "Twfek",
+        lastName: "Ajeneh",
+        additionalEmail: "",
+        middleName: "Moustafa",
+        arabicFullName: "توفيق عجينة",
+        appointlet: "",
+        bio: "",
+        gsStatus: "active",
+        joinDate: "2000-1-1",
+        positionId: "",
+        position: "React Dev",
+        squad: 'starter'
     },
     {
         id: 8,
-        name: 'Ahmad Al-Shahal',
-        squad: 'Radioactive',
-        position: 'Android Developer',
-        level: 'Specialist',
-        status: 'active',
+        email: "twfekajeneh@gmail.com",
+        phoneNumber: "0988311840",
+        firstName: "Twfek",
+        lastName: "Ajeneh",
+        additionalEmail: "",
+        middleName: "Moustafa",
+        arabicFullName: "توفيق عجينة",
+        appointlet: "",
+        bio: "",
+        gsStatus: "active",
+        joinDate: "2000-1-1",
+        positionId: "",
+        position: "React Dev",
+        squad: 'starter'
     },
     {
         id: 9,
-        name: 'Ahmad Al-Shahal',
-        squad: 'Radioactive',
-        position: 'Android Developer',
-        level: 'Specialist',
-        status: 'active',
+        email: "twfekajeneh@gmail.com",
+        phoneNumber: "0988311840",
+        firstName: "Twfek",
+        lastName: "Ajeneh",
+        additionalEmail: "",
+        middleName: "Moustafa",
+        arabicFullName: "توفيق عجينة",
+        appointlet: "",
+        bio: "",
+        gsStatus: "left",
+        joinDate: "2000-1-1",
+        positionId: "",
+        position: "React Dev",
+        squad: 'starter'
     },
     {
         id: 10,
-        name: 'Ahmad Al-Shahal',
-        squad: 'Radioactive',
-        position: 'Android Developer',
-        level: 'Specialist',
-        status: 'active',
+        email: "twfekajeneh@gmail.com",
+        phoneNumber: "0988311840",
+        firstName: "Twfek",
+        lastName: "Ajeneh",
+        additionalEmail: "",
+        middleName: "Moustafa",
+        arabicFullName: "توفيق عجينة",
+        appointlet: "",
+        bio: "",
+        gsStatus: "active",
+        joinDate: "2000-1-1",
+        positionId: "",
+        position: "React Dev",
+        squad: 'starter'
     },
     {
         id: 11,
-        name: 'Ahmad Al-Shahal',
-        squad: 'Radioactive',
-        position: 'Android Developer',
-        level: 'Specialist',
-        status: 'active',
+        email: "twfekajeneh@gmail.com",
+        phoneNumber: "0988311840",
+        firstName: "Twfek",
+        lastName: "Ajeneh",
+        additionalEmail: "",
+        middleName: "Moustafa",
+        arabicFullName: "توفيق عجينة",
+        appointlet: "",
+        bio: "",
+        gsStatus: "active",
+        joinDate: "2000-1-1",
+        positionId: "",
+        position: "React Dev",
+        squad: 'starter'
     },
 ]
 
+const initPopUpOption = {
+    id: 0,
+    isOpen: false,
+    index: 0,
+}
+
+const popReducer = (state , action) => {
+    switch(action.type){
+        case 'delete': return {
+            ...initPopUpOption,
+            id: action.id,
+            isOpen: true,
+            index: 0
+        }
+        case 'edit': return {
+            ...initPopUpOption,
+            id: action.id,
+            isOpen: true,
+            index: 1,
+        }
+        case 'add': return {
+            ...initPopUpOption,
+            id: action.id,
+            isOpen: true,
+            index: 2,
+        }
+        case 'close': return {
+            ...initPopUpOption,
+        }
+        default:
+            return state;
+    }
+}
+
 function VolunteerPage(){
+    const [popUpOption , popUpDispatch] = useReducer(popReducer , initPopUpOption);
+    const dispatch = useDispatch();
+
+    const data = useSelector(selectAllVolunteer);
+    const status = useSelector(selectVolunteerStatus);
 
     const handleDelete = (row) => {
-        console.log("delete");
-        console.log(row);
+        popUpDispatch({type:'delete' , id: row.id});
     }
     
     const handleEdit = (row) => {
-        console.log("edit");
-        console.log(row);
+        popUpDispatch({type:'edit' , id: row.id});
     }
 
+    const handleAdd = () => {
+        popUpDispatch({type:'add'});
+    }
+
+    //TODO::
     const rowClick = (row) => {
         console.log(row)
     }
 
+    //TODO::
     const onChangePage = (page , totalRow) => {
         console.log(page , totalRow);
     }
 
+    //TODO::
     const onChangeRowsPerPage = (currentRowsPerPage, currentPage) => {
         console.log( currentRowsPerPage , currentPage);
+    }
+
+    useEffect(() => {
+        dispatch(addManyVolunteer(fakeData));
+    } , []);
+
+
+    if(status==='failed'){
+        return (
+            <div className={style['volunteer-page']}>
+                <Error />
+            </div>
+        );
     }
 
     return (
@@ -174,13 +337,17 @@ function VolunteerPage(){
             <DashboardTable 
                 columns={columns}
                 data={data}
-                pending={false}
+                pending={status==='loading' || status==='idle' ? true : false}
                 rowClick={rowClick}
                 handleDelete={handleDelete}
                 handleEdit={handleEdit}
                 onChangePage={onChangePage}
                 onChangeRowsPerPage={onChangeRowsPerPage}
             />  
+
+            <PopUp open={popUpOption.isOpen} handleClose={() => popUpDispatch({type:'close'})} index={popUpOption.index}>
+                <DeleteVolunteer id={popUpOption.id}/>
+            </PopUp>
         </div>
     );
 }
