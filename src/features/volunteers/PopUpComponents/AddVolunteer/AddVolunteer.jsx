@@ -22,7 +22,7 @@ const filterOptions ={
 
 function AddVolunteer() {
 
-    const {control ,register , watch , formState , handleSubmit} = useForm({
+    const {control ,register , watch , formState , handleSubmit , unregister } = useForm({
         defaultValues:{
             firstName : '',
             lastName : '',
@@ -31,36 +31,23 @@ function AddVolunteer() {
         }
     })
 
-    const [positionNumber , setPositionNumber] = useState(1);
-    const position = [];
+    const [positionsAndSquadsNumber , setPositionsAndSquadsNumber] = useState(1);
+    const [positionsAndSquads , setPositionsAndSquads] = useState([0]);
 
-    for(let i = 0 ; i < positionNumber ; i ++) {
-        position.push(
-            <>
-                <div className={style.box}>
-                    <SelectInputField
-                        width='180px'
-                        height='40px'
-                        name='squads'
-                        placeholder='All Squads'
-                        options={filterOptions.squads}
-                        control={control}
-                    />
-                    <SelectInputField
-                        width='210px'
-                        height='40px'
-                        name='positions'
-                        placeholder='All Positions'
-                        options={filterOptions.positions}
-                        control={control}
-                    />
-                    <Button backgroundColor="rgba(234, 84, 85, 0.16)" width="40px" height="40px" onClick={() => setPositionNumber(positionNumber - 1)}>
-                        <BsTrash size="18px" color='var(--error-main)'/>
-                    </Button>
-                </div>
-                <div className={style.break}></div>    
-            </>
-        )
+    const handeDelete = (positionsAndSquadsId) => {
+        const newPositionsAndSquads = positionsAndSquads.filter((id) => {return id !== positionsAndSquadsId});
+        unregister([`positions${positionsAndSquadsId}`]);
+        unregister([`squads${positionsAndSquadsId}`]);
+        setPositionsAndSquads(newPositionsAndSquads);
+    };
+
+    const handeAdd = () => {
+        setPositionsAndSquads([...positionsAndSquads , positionsAndSquadsNumber]);
+        setPositionsAndSquadsNumber(positionsAndSquadsNumber + 1);
+    }
+
+    const onSubmit = async (data) => {
+        console.log(data);
     }
 
     return (
@@ -74,7 +61,7 @@ function AddVolunteer() {
                     // onClick={close}
                 />
             </div>
-            <form className={style["add-volunteer-body"]}>
+            <form className={style["add-volunteer-body"]} onSubmit={handleSubmit(onSubmit)}>
                 <div className={style.box}>
                     <InputField 
                         type='text'
@@ -135,7 +122,34 @@ function AddVolunteer() {
                 </div>
                 <div className={style.break}></div>
                 <div className={style.positions}>
-                    { position }
+                    { 
+                        positionsAndSquads.map((id) => {
+                            return <div key={id}>
+                                <div className={style.box}>
+                                    <SelectInputField
+                                        width='180px'
+                                        height='40px'
+                                        name={`squads${id}`}
+                                        placeholder='All Squads'
+                                        options={filterOptions.squads}
+                                        control={control}
+                                    />
+                                    <SelectInputField
+                                        width='210px'
+                                        height='40px'
+                                        name={`positions${id}`}
+                                        placeholder='All Positions'
+                                        options={filterOptions.positions}
+                                        control={control}
+                                    />
+                                    <Button backgroundColor="rgba(234, 84, 85, 0.16)" width="40px" height="40px" onClick={() => handeDelete(id)}>
+                                        <BsTrash size="18px" color='var(--error-main)'/>
+                                    </Button>
+                                </div>
+                                <div className={style.break}></div>   
+                            </div>
+                        })
+                    }
                 </div>
                 <div className={style.buttons}>
                     <SubmitButton 
@@ -148,7 +162,7 @@ function AddVolunteer() {
                 </div>
             </form>
             <div className={style["add-button"]}>
-                <Button backgroundColor="var(--secondary-dark)" width="202px" height="40px" onClick={() => setPositionNumber(positionNumber + 1)}>
+                <Button backgroundColor="var(--secondary-dark)" width="202px" height="40px" onClick={handeAdd}>
                     Add Another Position
                 </Button>
             </div>
