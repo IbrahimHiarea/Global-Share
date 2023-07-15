@@ -55,6 +55,7 @@ function SelectInputField({
                                 borderRadius: '9px',
                                 paddingLeft: '4px',
                                 boxShadow: 'none',
+                                textTransform: 'capitalize',
                                 color: state.isFocused ? 'var(--primary-main)' : 'var(--natural-alpha-2)',
                                 border: state.isFocused ? '1px solid var(--primary-main)' : '0',
                                 '&:hover':{
@@ -78,7 +79,8 @@ function SelectInputField({
                                 ...base,
                                 color: "var(--natural-alpha-3)",
                                 fontWeight: '400',
-                                fontSize: '14px'
+                                fontSize: '14px',
+                                textTransform: 'capitalize',
                             }),
                             input: (base) => ({
                                 ...base,
@@ -103,11 +105,13 @@ function SelectInputField({
                                 backgroundColor: '',
                                 color: '',
                                 paddingLeft:'20px',
+                                textTransform:'capitalize'
                             })
                         }}
                     />
                 )}
                 rules={{required: required}}
+
             />
         </InputWrapper>
     );
