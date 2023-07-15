@@ -26,15 +26,15 @@ function AddStatus ({close}){
 
     return (
         <div className={style['add-status']}>
-                <div className={style['add-status-header']}>
-                    <h2>Create New Column</h2>
-                    <IoCloseOutline 
-                        size='20px' 
-                        color='var(--natural-alpha-1)' 
-                        cursor='pointer' 
-                        onClick={close}
-                    />
-                </div>
+            <div className={style['add-status-header']}>
+                <h2>Create New Column</h2>
+                <IoCloseOutline 
+                    size='20px' 
+                    color='var(--natural-alpha-1)' 
+                    cursor='pointer' 
+                    onClick={close}
+                />
+            </div>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <InputField 
                     type='text'

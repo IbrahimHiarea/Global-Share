@@ -1,0 +1,82 @@
+.add-volunteer{
+  width: 526px;
+  height: 500px;
+  background-color: white;
+  padding: 24px;
+  border-radius: 9px;
+  -webkit-border-radius: 9px;
+  -moz-border-radius: 9px;
+  -ms-border-radius: 9px;
+  -o-border-radius: 9px;
+  position: relative;
+
+  margin-left: 100px;
+  margin-top: 100px;
+}
+
+.add-volunteer-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.add-volunteer-header h2{
+  margin: 0;
+  padding: 0;
+  color: var(--word-color);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.add-volunteer-body{
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.add-volunteer-body .box{
+  display: flex;
+  gap: 20px;
+}
+
+.break{
+  height: 1px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.buttons{
+  display: flex;
+  position: absolute;
+  right: 30px;
+  bottom: 30px;
+}
+
+.buttons input{
+  padding: 0;
+}
+
+.add-button{
+  position: absolute;
+  right: 210px;
+  bottom: 30px;
+}
+
+.add-button button{
+  margin: 0;
+}
+
+.add-volunteer-body > div > div span,
+.add-volunteer-body > div > div label{
+  display: none;
+}
+
+.positions{
+  overflow-y: auto;
+  height: 190px;
+}
+
+.positions > div{
+  margin-bottom: 20px;
+}

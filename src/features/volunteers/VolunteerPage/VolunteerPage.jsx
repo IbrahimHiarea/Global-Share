@@ -13,6 +13,7 @@ import PopUp from '../../../common/components/PopUp/PopUp';
 import InputField from '../../../common/components/Inputs/InputField/InputField';
 import SelectInputField from "../../../common/components/Inputs/SelectInputField/SelectInputField";
 import Button from '../../../common/components/Inputs/Button/Button';
+import AddVolunteer from '../PopUpComponents/AddVolunteer/AddVolunteer';
 
 //import style 
 import style from './VolunteerPage.module.css';
@@ -352,75 +353,78 @@ function VolunteerPage(){
     }
 
     return (
-        <div className={style['volunteer-page']}>
-            <h1 className={style['volunteers-title']}>Volunteers</h1>
+        // <div className={style['volunteer-page']}>
+        //     <h1 className={style['volunteers-title']}>Volunteers</h1>
 
-            <div className={style['filter-bar']}>
-                <InputField 
-                    type='text'
-                    name='search'
-                    placeholder='Search...'
-                    width='277px'
-                    height='40px'
-                    control={register('search')}
-                />
-                <SelectInputField
-                    width='140px'
-                    height='40px'
-                    name='squads'
-                    placeholder='All Squads'
-                    options={filterOptions.squads}
-                    control={control}
-                />
-                <SelectInputField
-                    width='140px'
-                    height='40px'
-                    name='positions'
-                    placeholder='All Positions'
-                    options={filterOptions.positions}
-                    control={control}
-                />
-                <SelectInputField
-                    width='140px'
-                    height='40px'
-                    name='levels'
-                    placeholder='All Levels'
-                    options={filterOptions.levels}
-                    control={control}
-                />
-                <SelectInputField
-                    width='140px'
-                    height='40px'
-                    name='statues'
-                    placeholder='All Statues'
-                    options={filterOptions.statues}
-                    control={control}
-                />
-                <Button width="140px" height="40px">
-                    <FaPlus size="15px" color='white'/> Add Volunteer
-                </Button>
-                <span className={style.reset} onClick={() => {
-                    reset(formState.defaultValues)
-                }}>
-                    Clear
-                </span>
-            </div>
+        //     <div className={style['filter-bar']}>
+        //         <InputField 
+        //             type='text'
+        //             name='search'
+        //             placeholder='Search...'
+        //             width='277px'
+        //             height='40px'
+        //             control={register('search')}
+        //         />
+        //         <SelectInputField
+        //             width='140px'
+        //             height='40px'
+        //             name='squads'
+        //             placeholder='All Squads'
+        //             options={filterOptions.squads}
+        //             control={control}
+        //         />
+        //         <SelectInputField
+        //             width='140px'
+        //             height='40px'
+        //             name='positions'
+        //             placeholder='All Positions'
+        //             options={filterOptions.positions}
+        //             control={control}
+        //         />
+        //         <SelectInputField
+        //             width='140px'
+        //             height='40px'
+        //             name='levels'
+        //             placeholder='All Levels'
+        //             options={filterOptions.levels}
+        //             control={control}
+        //         />
+        //         <SelectInputField
+        //             width='140px'
+        //             height='40px'
+        //             name='statues'
+        //             placeholder='All Statues'
+        //             options={filterOptions.statues}
+        //             control={control}
+        //         />
+        //         <Button width="140px" height="40px">
+        //             <FaPlus size="15px" color='white'/> Add Volunteer
+        //         </Button>
+        //         <span className={style.reset} onClick={() => {
+        //             reset(formState.defaultValues)
+        //         }}>
+        //             Clear
+        //         </span>
+        //     </div>
 
-            <DashboardTable 
-                columns={columns}
-                data={data}
-                pending={status==='loading' || status==='idle' ? true : false}
-                rowClick={rowClick}
-                handleDelete={handleDelete}
-                handleEdit={handleEdit}
-                onChangePage={onChangePage}
-                onChangeRowsPerPage={onChangeRowsPerPage}
-            />  
+        //     <DashboardTable 
+        //         columns={columns}
+        //         data={data}
+        //         pending={status==='loading' || status==='idle' ? true : false}
+        //         rowClick={rowClick}
+        //         handleDelete={handleDelete}
+        //         handleEdit={handleEdit}
+        //         onChangePage={onChangePage}
+        //         onChangeRowsPerPage={onChangeRowsPerPage}
+        //     />  
 
-            <PopUp open={popUpOption.isOpen} handleClose={() => popUpDispatch({type:'close'})} index={popUpOption.index}>
-                <DeleteVolunteer id={popUpOption.id}/>
-            </PopUp>
-        </div>
+        //     <PopUp open={popUpOption.isOpen} handleClose={() => popUpDispatch({type:'close'})} index={popUpOption.index}>
+        //         <DeleteVolunteer id={popUpOption.id}/>
+        //     </PopUp>
+        // </div>
+        <AddVolunteer>
+            
+        </AddVolunteer>
     );
 }
 
