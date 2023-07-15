@@ -1,5 +1,6 @@
 //import react
 import React, { useEffect, useReducer } from 'react';
+import { useForm } from 'react-hook-form';
 
 //import redux
 import { useDispatch , useSelector } from 'react-redux';
@@ -9,10 +10,17 @@ import { addManyVolunteer , selectAllVolunteer , selectVolunteerStatus} from '..
 import DashboardTable from '../../../common/components/Dashboard/DashboardTable/DashboardTable';
 import Error from '../../../common/components/Error/Error';
 import PopUp from '../../../common/components/PopUp/PopUp';
+import InputField from '../../../common/components/Inputs/InputField/InputField';
+import SelectInputField from "../../../common/components/Inputs/SelectInputField/SelectInputField";
+import Button from '../../../common/components/Inputs/Button/Button';
 
 //import style 
 import style from './VolunteerPage.module.css';
 import DeleteVolunteer from '../PopUpComponents/DeleteVolunteer/DeleteVolunteer';
+
+// import Icons
+import { FaPlus } from "react-icons/fa";
+
 
 const columns = [
     {
@@ -251,6 +259,13 @@ const initPopUpOption = {
     index: 0,
 }
 
+const filterOptions ={
+    squads: ['Radioactive' , 'Hamdi'],
+    positions : ['Android Developer' , 'react Developer'],
+    levels : ['Specialist' , 'Expert' , 'CM'],
+    statues : ['active' , 'freeze' , 'left']
+}
+
 const popReducer = (state , action) => {
     switch(action.type){
         case 'delete': return {
@@ -285,6 +300,16 @@ function VolunteerPage(){
 
     const data = useSelector(selectAllVolunteer);
     const status = useSelector(selectVolunteerStatus);
+
+    const {control ,register , watch , formState , reset} = useForm({
+        defaultValues:{
+            search: '',
+            squads: '',
+            positions: '',
+            levels: '',
+            statues: '',
+        }
+    });
 
     const handleDelete = (row) => {
         popUpDispatch({type:'delete' , id: row.id});
@@ -331,7 +356,54 @@ function VolunteerPage(){
             <h1 className={style['volunteers-title']}>Volunteers</h1>
 
             <div className={style['filter-bar']}>
-
+                <InputField 
+                    type='text'
+                    name='search'
+                    placeholder='Search...'
+                    width='277px'
+                    height='40px'
+                    control={register('search')}
+                />
+                <SelectInputField
+                    width='140px'
+                    height='40px'
+                    name='squads'
+                    placeholder='All Squads'
+                    options={filterOptions.squads}
+                    control={control}
+                />
+                <SelectInputField
+                    width='140px'
+                    height='40px'
+                    name='positions'
+                    placeholder='All Positions'
+                    options={filterOptions.positions}
+                    control={control}
+                />
+                <SelectInputField
+                    width='140px'
+                    height='40px'
+                    name='levels'
+                    placeholder='All Levels'
+                    options={filterOptions.levels}
+                    control={control}
+                />
+                <SelectInputField
+                    width='140px'
+                    height='40px'
+                    name='statues'
+                    placeholder='All Statues'
+                    options={filterOptions.statues}
+                    control={control}
+                />
+                <Button width="140px" height="40px">
+                    <FaPlus size="15px" color='white'/> Add Volunteer
+                </Button>
+                <span className={style.reset} onClick={() => {
+                    reset(formState.defaultValues)
+                }}>
+                    Clear
+                </span>
             </div>
 
             <DashboardTable 
