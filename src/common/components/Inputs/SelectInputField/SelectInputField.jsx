@@ -13,12 +13,17 @@ function SelectInputField({
         children, width, height,
         name, options, placeholder,
         control, errors , disabled,
-        required
+        required , border
     }){
     const selectOptions = [].concat( options.map((item) => {
             return {'value': item , "label": item}
         }));
         
+
+    let borderColor = 'transparent';
+    if(border) borderColor = 'var(--natural-alpha-2)';
+    if(errors && errors[name]) borderColor = 'var(--error-main)';
+
     return(
         <InputWrapper name={name} label={children} errors={errors}>
             <Controller 
@@ -48,6 +53,7 @@ function SelectInputField({
                                 display: 'none'
                             }),
                             control: (base , state) => ({
+                                
                                 ...base,
                                 width: width,
                                 height: height, 
@@ -57,9 +63,9 @@ function SelectInputField({
                                 boxShadow: 'none',
                                 textTransform: 'capitalize',
                                 color: state.isFocused ? 'var(--primary-main)' : 'var(--natural-alpha-2)',
-                                border: state.isFocused ? '1px solid var(--primary-main)' : '0',
+                                border: (state.isFocused ? '1px solid var(--primary-main)' : `1px solid ${borderColor}`),
                                 '&:hover':{
-                                    border: state.isFocused ? '1px solid var(--primary-main)' : '0',
+                                    border: (state.isFocused ? '1px solid var(--primary-main)' : `1px solid ${borderColor}`),
                                 },
                             }),
                             valueContainer: (base) => ({
@@ -111,7 +117,6 @@ function SelectInputField({
                     />
                 )}
                 rules={{required: required}}
-
             />
         </InputWrapper>
     );

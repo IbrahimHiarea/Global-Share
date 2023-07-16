@@ -1,6 +1,5 @@
 //import react
 import React, { useEffect, useReducer } from 'react';
-import { useForm } from 'react-hook-form';
 
 //import redux
 import { useDispatch , useSelector } from 'react-redux';
@@ -12,6 +11,8 @@ import Error from '../../../common/components/Error/Error';
 import PopUp from '../../../common/components/PopUp/PopUp';
 import DeleteVolunteer from '../PopUpComponents/DeleteVolunteer/DeleteVolunteer';
 import VolunteerFilterBar from '../VolunteerFilterBar/VolunteerFilterBar';
+import EditVolunteer from '../PopUpComponents/EditVolunteer/EditVolunteer';
+import AddVolunteer from '../PopUpComponents/AddVolunteer/AddVolunteer';
 
 //import style 
 import style from './VolunteerPage.module.css';
@@ -72,7 +73,9 @@ const fakeData = [
         gsStatus: "left",
         joinDate: "2000-1-1",
         positionId: "",
-        position: "React Dev",
+        position: {
+            name: 'react dev',
+        },
         squad: 'starter'
     },
     {
@@ -89,7 +92,7 @@ const fakeData = [
         gsStatus: "freeze",
         joinDate: "2000-1-1",
         positionId: "",
-        position: "React Dev",
+        position: {},
         squad: 'starter'
     },
     {
@@ -106,7 +109,7 @@ const fakeData = [
         gsStatus: "left",
         joinDate: "2000-1-1",
         positionId: "",
-        position: "React Dev",
+        position: {},
         squad: 'starter'
     },
     {
@@ -123,7 +126,7 @@ const fakeData = [
         gsStatus: "active",
         joinDate: "2000-1-1",
         positionId: "",
-        position: "React Dev",
+        position: {},
         squad: 'starter'
     },
     {
@@ -140,7 +143,7 @@ const fakeData = [
         gsStatus: "active",
         joinDate: "2000-1-1",
         positionId: "",
-        position: "React Dev",
+        position: {},
         squad: 'starter'
     },
     {
@@ -157,7 +160,7 @@ const fakeData = [
         gsStatus: "active",
         joinDate: "2000-1-1",
         positionId: "",
-        position: "React Dev",
+        position: {},
         squad: 'starter'
     },
     {
@@ -174,7 +177,7 @@ const fakeData = [
         gsStatus: "active",
         joinDate: "2000-1-1",
         positionId: "",
-        position: "React Dev",
+        position: {},
         squad: 'starter'
     },
     {
@@ -191,7 +194,7 @@ const fakeData = [
         gsStatus: "active",
         joinDate: "2000-1-1",
         positionId: "",
-        position: "React Dev",
+        position: {},
         squad: 'starter'
     },
     {
@@ -208,7 +211,7 @@ const fakeData = [
         gsStatus: "left",
         joinDate: "2000-1-1",
         positionId: "",
-        position: "React Dev",
+        position: {},
         squad: 'starter'
     },
     {
@@ -225,7 +228,7 @@ const fakeData = [
         gsStatus: "active",
         joinDate: "2000-1-1",
         positionId: "",
-        position: "React Dev",
+        position: {},
         squad: 'starter'
     },
     {
@@ -242,7 +245,7 @@ const fakeData = [
         gsStatus: "active",
         joinDate: "2000-1-1",
         positionId: "",
-        position: "React Dev",
+        position: {},
         squad: 'starter'
     },
 ]
@@ -273,7 +276,8 @@ const popReducer = (state , action) => {
             index: 2,
         }
         case 'close': return {
-            ...initPopUpOption,
+            ...state,
+            isOpen: false
         }
         default:
             return state;
@@ -332,8 +336,9 @@ function VolunteerPage(){
             />  
 
             <PopUp open={popUpOption.isOpen} handleClose={() => popUpDispatch({type:'close'})} index={popUpOption.index}>
-                <DeleteVolunteer id={popUpOption.id}/>
-                {/* <AddVolunteer id={popUpOption.id} /> */}
+                <DeleteVolunteer id={popUpOption.id} handleClose={() => popUpDispatch({type:'close'})}/>
+                <EditVolunteer id={popUpOption.id} handleClose={() => popUpDispatch({type:'close'})}/>
+                <AddVolunteer handleClose={() => popUpDispatch({type:'close'})}/>
             </PopUp>
         </div>
     );

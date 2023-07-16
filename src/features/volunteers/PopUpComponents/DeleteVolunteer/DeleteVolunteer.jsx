@@ -10,16 +10,19 @@ function DeleteVolunteer({id , handleClose}){
         //TODO::
         if(value===true){
             console.log("delete "+ id);
+            //dispatch delete action for redux
         }
         handleClose();
     }
 
     return (
-        <ConfirmPopUp 
-            title='Delete Volunteer ?'
-            confirmText='delete'
-            setIsConfirm={setIsConfirmed}
-        />
+        <>
+            <ConfirmPopUp 
+                title='Delete Volunteer ?'
+                confirmText='delete'
+                setIsConfirm={setIsConfirmed}
+            />
+        </>
     );
 }
 

@@ -1,6 +1,6 @@
 .edit-volunteer{
   width: 526px;
-  height: 500px;
+  height: 550px;
   background-color: white;
   padding: 24px;
   border-radius: 9px;
@@ -23,24 +23,31 @@
   padding: 0;
   color: var(--word-color);
   font-size: 16px;
-  font-weight: 700;
+  font-weight: bold;
+  text-transform: capitalize;
 }
 
 .edit-volunteer-body{
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 10px;
 }
 
 .edit-volunteer-body .box{
   display: flex;
+  align-items: flex-start;
   gap: 20px;
 }
 
+.add-volunteer-body .box button{
+  margin: 0;
+}
+
 .break{
-  height: 1px;
+  height: 2px;
   width: 100%;
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
 }
 
 .buttons{
@@ -64,7 +71,6 @@
   margin: 0;
 }
 
-.edit-volunteer-body > div > div span,
 .edit-volunteer-body > div > div label{
   display: none;
 }

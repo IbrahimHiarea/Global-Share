@@ -1,5 +1,5 @@
 // import react
-import React, { cloneElement } from "react";
+import React  from "react";
 
 //import components
 import Dialog from '@mui/material/Dialog';
@@ -10,7 +10,7 @@ import style from './PopUp.module.css';
 function PopUp ({children , open , handleClose , index}){
 
     let component = <></>
-    if(index && index < children.length) component = children[index]
+    if(typeof index === 'number' && index < children.length) component = children[index]
     else component = children;
 
     return (
@@ -18,10 +18,7 @@ function PopUp ({children , open , handleClose , index}){
             open={open}
             onClose={handleClose}
         >
-            {cloneElement(
-                component,
-                {handleClose: handleClose}
-            )}
+            {component}
         </Dialog>
     );
 }

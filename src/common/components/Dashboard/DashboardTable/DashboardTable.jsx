@@ -50,6 +50,7 @@ function DashboardTable ({
             selector: row => row[col.key],
             format: (row) => {
                 if(col.key==='firstName') return formatCell(row.firstName+" "+row.lastName , col.type);
+                if(col.key==='position') return formatCell(row.position.name , col.type);
                 return formatCell(row[col.key] , col.type)
             }
         }
