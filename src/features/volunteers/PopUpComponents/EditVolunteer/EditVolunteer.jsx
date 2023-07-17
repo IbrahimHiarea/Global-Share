@@ -52,13 +52,13 @@ function EditVolunteer({id , handleClose}) {
         positionsAndSquadsNumber.current++;
     }
 
-    const onSubmit = async (data) => {
+    const onSubmit = async (values) => {
         setIsLoading(true);
         if(isDirty){
             const changed = {};
             for(let key of Object.keys(dirtyFields)){
                 if(dirtyFields[key]){
-                    changed[key] = data[key];
+                    changed[key] = values[key];
                 }
             }
             console.log(changed);

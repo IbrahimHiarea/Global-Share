@@ -45,7 +45,7 @@ export const fetchProfileDetails = createAsyncThunk(
     async ( _ , {rejectWithValue , getState , signal}) => {
         try{
             // const token = selectAuthToken(getState());
-            const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImVtYWlsIjoiYWhtYWQuYWxzaGFoYWwyQGdtYWlsLmNvbSIsImlhdCI6MTY4OTE4MzMwNywiZXhwIjoxNjg5Nzg4MTA3fQ.7tII2KAksYX_GbBGfIYmUkKNIEG_VFKjYoos1qNf27g";
+            const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiYWhtYWQuYWxzaGFoYWwyQGdtYWlsLmNvbSIsImlhdCI6MTY4OTYxNTYyMSwiZXhwIjoxNjkwMjIwNDIxfQ.3YHg0ANmNnP9EX8ueFySgmboTNTC3YLhFZ8-sYBkl3M";
             const response = await profileAPI.fetchProfileDetails(token , signal);
             return response.data;
         }

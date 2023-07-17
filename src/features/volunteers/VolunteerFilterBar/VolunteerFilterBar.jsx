@@ -14,6 +14,8 @@ import SubmitButton from '../../../common/components/Inputs/SubmitButton/SubmitB
 
 //import icons & images
 import { ImPlus } from 'react-icons/im';
+import { FiSearch } from 'react-icons/fi';
+import { RxReset } from 'react-icons/rx';
 
 //import static data
 import { levelData, statusesData } from '../../../common/utils/selectorData.js';
@@ -84,14 +86,14 @@ function VolunteerFilterBar({ handleAdd }){
                 />
                 <span className={style['bar-buttons']}>
                     <SubmitButton 
-                        width='60px'
+                        width='40px'
                         height='30px'
                         disabled={status==='loading' || status==='idle' ? true : false}
                     >
-                        search
+                        <FiSearch size='15px'/>
                     </SubmitButton>
                     <span className={style.reset} onClick={() => reset(formState.defaultValues)}>
-                        Clear
+                        <RxReset size='15px'/>    
                     </span>
                 </span>
             </form>

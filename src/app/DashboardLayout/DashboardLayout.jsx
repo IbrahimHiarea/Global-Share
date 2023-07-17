@@ -12,6 +12,7 @@ import {BiHomeAlt2} from 'react-icons/bi';
 import {FaTasks} from 'react-icons/fa';
 import {CgProfile} from 'react-icons/cg';
 import {BsBookHalf} from 'react-icons/bs';
+import {HiUserGroup} from 'react-icons/hi'
 
 //import style
 import style from './DashboardLayout.module.css';
@@ -37,6 +38,11 @@ const drawerList = [
         title: 'Volunteer',
         path: 'volunteer',
         icon: <BsBookHalf />
+    },
+    {
+        title: 'Squad',
+        path: 'squad',
+        icon: <HiUserGroup />
     }
 ];
 

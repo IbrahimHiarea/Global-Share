@@ -1,10 +1,10 @@
-// import react
-import React, { useRef } from 'react';
+//import react
+import React , {useRef} from 'react';
 
 //import components
 import ConfirmPopUp from '../../../../common/components/ConfirmPopUp/ConfirmPopUp';
 
-function DeleteVolunteer({id , handleClose}){
+function DeleteSquad({id , handleClose}){
     const isConfirmed = useRef(0);
 
     const setIsConfirmed = (value) => {
@@ -15,17 +15,17 @@ function DeleteVolunteer({id , handleClose}){
             //dispatch delete action for redux
         }
         handleClose();
-    }
+    } 
 
     return (
         <>
             <ConfirmPopUp 
-                title='Delete Volunteer ?'
+                title='Delete squad ?'
                 confirmText='delete'
                 setIsConfirm={setIsConfirmed}
             />
         </>
-    );
+    )
 }
 
-export default DeleteVolunteer;
+export default DeleteSquad;

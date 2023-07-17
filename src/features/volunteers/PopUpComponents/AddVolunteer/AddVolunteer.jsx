@@ -45,9 +45,9 @@ function AddVolunteer({handleClose}) {
         positionsAndSquadsNumber.current++;
     }
 
-    const onSubmit = async (data) => {
+    const onSubmit = async (values) => {
         setIsLoading(true);
-        console.log(data);
+        console.log(values);
         //TODO:: 
         // dispatch add action to redux
     }

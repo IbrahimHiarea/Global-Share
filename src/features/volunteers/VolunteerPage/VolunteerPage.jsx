@@ -256,7 +256,7 @@ const initPopUpOption = {
     index: 0,
 }
 
-const popReducer = (state , action) => {
+const popUpReducer = (state , action) => {
     switch(action.type){
         case 'delete': return {
             ...initPopUpOption,
@@ -285,7 +285,7 @@ const popReducer = (state , action) => {
 }
 
 function VolunteerPage(){
-    const [popUpOption , popUpDispatch] = useReducer(popReducer , initPopUpOption);
+    const [popUpOption , popUpDispatch] = useReducer(popUpReducer , initPopUpOption);
     const dispatch = useDispatch();
 
     const data = useSelector(selectAllVolunteer);

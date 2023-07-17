@@ -6,13 +6,13 @@ import style from './SubmitButton.module.css';
 
 function SubmitButton ({children , width , height , disabled}){
     return (
-        <input 
-            className={style.submit}
-            type='submit' 
-            value={children}
-            style={{width , height}}
-            disabled={disabled}
-        />
+        <label className={style.submit} style={{width , height , pointerEvents: disabled ? 'none' : 'auto', opacity: disabled ? '.6' : '1'}}>
+            <input 
+                type='submit'
+                disabled={disabled}
+            />
+            {children}
+        </label>    
     );
 }
 

@@ -10,34 +10,38 @@ import HomePage from '../app/HomePage/HomePage';
 import DashboardLayout from '../app/DashboardLayout/DashboardLayout';
 import TaskPage from '../features/tasks/Task page/TaskPage';
 import VolunteerPage from '../features/volunteers/VolunteerPage/VolunteerPage';
+import SquadPage from '../features/squads/SquadPage/SquadPage';
 
 function AllRoute () {
     return (
         <Routes>
 
-            {/* home page */}
+            {/* Home page */}
             <Route index element={ <HomePage /> }/>
             <Route path='/home' element={ <HomePage />}/>
 
             {/* Login page */}
             <Route path='/login' element = { <LoginPage /> } />
 
-            {/* dashboard page */}
+            {/* Dashboard page */}
             <Route path='/dashboard/' element = { <DashboardLayout /> }>
-                {/* home section */}
+                {/* Home section */}
                 <Route path='home' element={ <></> }/>
                 
-                {/* profile sections  */}
+                {/* Profile sections  */}
                 <Route path='profile/' element={<Outlet />}>
                     <Route index element={<ProfilePage />} />
                     <Route path='edit' element = { <EditProfile /> } />
                 </Route>
 
-                {/* task sections */}
+                {/* Task sections */}
                 <Route path='task' element = { <TaskPage /> } />
 
                 {/* Volunteers section */}
                 <Route path='volunteer' element={<VolunteerPage />} />
+
+                {/* Squad section */}
+                <Route path="squad" element={<SquadPage />} />
             </Route>
         </Routes>
     );  

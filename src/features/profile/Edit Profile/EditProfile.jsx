@@ -37,16 +37,16 @@ function EditProfile (){
         values : {...data , resume : null }
     })
 
-    const onError  = (data) => console.log(data);
-    const onSubmit = async (data) => {
-        if(isDirty || data.resume){
+    const onError  = (values) => console.log(values);
+    const onSubmit = async (values) => {
+        if(isDirty || values.resume){
             const changed = {};
             for(let key of Object.keys(dirtyFields)){
                 if(dirtyFields[key]){
-                    changed[key] = data[key];
+                    changed[key] = values[key];
                 }
             }
-            if(data.resume) changed.resume = data.resume;
+            if(values.resume) changed.resume = values.resume;
             try{
                 await dispatch(updateProfileDetails(changed)).unwrap();
                 nav('/dashboard/profile');
@@ -302,6 +302,8 @@ function EditProfile (){
                             setValue={setValue}
                             width="495px"
                             height='125px'
+                            types={['PDF']}
+                            required={false}
                         >
                             Resume
                         </FileUpload>
