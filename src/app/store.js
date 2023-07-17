@@ -7,6 +7,7 @@ import snackBarReducer from '../features/snackBar/snackBarSlice';
 import taskReducer from '../features/tasks/taskSlice';
 import profileReducer from '../features/profile/profileSlice';
 import volunteerReducer from '../features/volunteers/VolunteerSlice';
+import positionReducer from '../features/Positions/PositionSlice';
 
 
 export const store = configureStore({
@@ -16,5 +17,6 @@ export const store = configureStore({
 		task: taskReducer,
 		profile: profileReducer,
 		volunteer: volunteerReducer,
+		position: positionReducer,
 	},
 });

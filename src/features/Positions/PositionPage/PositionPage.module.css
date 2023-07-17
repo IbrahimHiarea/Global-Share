@@ -1,0 +1,13 @@
+.position-page{
+  width: 100%;
+  height: calc(100vh - 55px);
+  overflow: auto;
+  background-color: var(--background-color);
+  padding: 40px;
+}
+
+.positions-title{
+  margin: 0;
+  color: var(--word-color);
+  margin-bottom: 30px;
+}
