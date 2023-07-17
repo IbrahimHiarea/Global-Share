@@ -7,6 +7,7 @@ import InputField from '../../../../common/components/Inputs/InputField/InputFie
 import SelectInputField from "../../../../common/components/Inputs/SelectInputField/SelectInputField";
 import Button from '../../../../common/components/Inputs/Button/Button';
 import SubmitButton from '../../../../common/components/Inputs/SubmitButton/SubmitButton';
+import TextAreaField from '../../../../common/components/Inputs/TextAreaField/TextAreaField'
 
 // import icons
 import { IoCloseOutline } from "react-icons/io5";
@@ -15,17 +16,17 @@ import { IoCloseOutline } from "react-icons/io5";
 import {levelData} from '../../../../common/utils/selectorData'
 
 //import style 
-import style from './AddPosition.module.css';
+import style from './AddEmail.module.css';
 import Loader from '../../../../common/components/Loader/Loader';
 
-function AddPosition({handleClose}) {
+function AddEmail({handleClose}) {
 
     const {control , register , formState : {errors} , handleSubmit , unregister } = useForm({
         defaultValues:{
-            name : '',
-            gsName : '',
-            level : '',
-            weekluHours: '',
+            nextRecruitmentStatus : '',
+            cc : '',
+            subject : '',
+            body: '',
         }
     })
 
@@ -40,16 +41,16 @@ function AddPosition({handleClose}) {
 
     if(isLoading===true){
         return (
-            <div className={style["add-position"]}>
+            <div className={style["add-email"]}>
                 <Loader  transparent={true}/>
             </div>
         );
     }
-    
+
     return (
-        <div className={style["add-position"]}>
-            <div className={style["add-position-header"]}>
-                <h2>Add Position</h2>
+        <div className={style["add-email"]}>
+            <div className={style["add-email-header"]}>
+                <h2>Add Email</h2>
                 <IoCloseOutline 
                     size='20px' 
                     color='var(--natural-alpha-1)' 
@@ -57,74 +58,69 @@ function AddPosition({handleClose}) {
                     onClick={handleClose}
                 />
             </div>
-            <form className={style["add-position-body"]} onSubmit={handleSubmit(onSubmit)}>
-                <div className={style.box}>
-                    <InputField 
-                        type='text'
-                        name='name'
-                        placeholder='Name'
-                        width='183px'
-                        height='40px'
-                        control={register('name' , {
-                            required: 'Please Enter Name',
-                            pattern: {
-                                value: /^[A-Za-z]+$/,
-                                message: "The name don't match the pattern"
-                            }
-                        })}
-                        errors={errors}
-                    />
-                    <InputField 
-                        type='text'
-                        name='gsName'
-                        placeholder='Gs Name'
-                        width='183px'
-                        height='40px'
-                        control={register('gsName' , {
-                            required: 'Please Enter The Gs Name',
-                            pattern: {
-                                value: /^[A-Za-z]+$/,
-                                message: "The name don't match the pattern"
-                            }
-                        })}
-                        errors={errors}
-                    />
-                </div>
+            <form className={style["add-email-body"]} onSubmit={handleSubmit(onSubmit)}>
                 <div className={style.box}>
                     <SelectInputField
-                        width='183px'
+                        width='300px'
                         height='40px'
-                        name='level'
-                        placeholder='Levels'
+                        name='nextRecruitmentStatus'
+                        placeholder='Next Recruitment Status'
                         options={levelData}
                         control={control}
-                        required={'enter the level'}
+                        required={'enter the next recruitment status'}
+                        errors={errors}
+                        border={true}
+                    />
+                    <div className={style.break}></div>
+                    <SelectInputField
+                        width='300px'
+                        height='40px'
+                        name='cc'
+                        placeholder='CC'
+                        options={levelData}
+                        control={control}
+                        required={'enter the CC'}
                         errors={errors}
                         border={true}
                     />
                     <InputField 
                         type='text'
-                        placeholder='Weekly Hours'
-                        name='weeklyHours'
-                        width='183px'
+                        placeholder='Subject'
+                        name='subject'
+                        width='300px'
                         height='40px'  
-                        control={register('weeklyHours' , {
-                            required: 'Please enter the weeklyHours',
+                        control={register('subject' , {
+                            required: 'Please enter the subject',
                             pattern: {
-                                value: /^\d$/,
-                                message: 'Please a Number'
+                                value: /^[a-zA-Z0-9]+$/,
+                                message: 'Please an English Character and Number'
+                            }
+                        })}
+                        errors={errors}
+                    />
+                    <TextAreaField
+                        placeholder='Body'
+                        name='body'
+                        width='518px'
+                        height='154px'  
+                        control={register('body' , {
+                            required: 'Please enter the body',
+                            pattern: {
+                                value: /^[a-zA-Z0-9]+$/,
+                                message: 'Please an English Character and Number'
                             }
                         })}
                         errors={errors}
                     />
                 </div>
+                
                 <div className={style.buttons}>
                     <SubmitButton 
                         width='157px' 
                         height='40px'
                         disabled={isLoading}
                     >
-                        Add Position
+                        Add Email
                     </SubmitButton>
                 </div>
             </form>
@@ -132,4 +128,4 @@ function AddPosition({handleClose}) {
     );
 }
 
-export default AddPosition;
+export default AddEmail;

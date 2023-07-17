@@ -8,6 +8,7 @@ import taskReducer from '../features/tasks/taskSlice';
 import profileReducer from '../features/profile/profileSlice';
 import volunteerReducer from '../features/volunteers/VolunteerSlice';
 import positionReducer from '../features/Positions/PositionSlice';
+import emailReducer from '../features/emails/EmailSlice'
 import squadReducer from '../features/squads/squadSlice';
 
 export const store = configureStore({
@@ -18,6 +19,7 @@ export const store = configureStore({
 		profile: profileReducer,
 		volunteer: volunteerReducer,
 		position: positionReducer,
-		squad: squadReducer
+		email: emailReducer,
+		squad: squadReducer,
 	},
 });
