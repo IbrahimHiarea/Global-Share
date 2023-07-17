@@ -4,13 +4,13 @@ import { useForm } from 'react-hook-form';
 
 //import redux
 import { useSelector } from 'react-redux';
-import { selectPositionById } from '../../PositionSlice';
+import { selectEmailById } from '../../EmailSlice';
 
 // import components 
 import InputField from '../../../../common/components/Inputs/InputField/InputField';
 import SelectInputField from "../../../../common/components/Inputs/SelectInputField/SelectInputField";
-import Button from '../../../../common/components/Inputs/Button/Button';
 import SubmitButton from '../../../../common/components/Inputs/SubmitButton/SubmitButton';
+import TextAreaField from '../../../../common/components/Inputs/TextAreaField/TextAreaField'
 
 // import icons
 import { IoCloseOutline } from "react-icons/io5";
@@ -19,18 +19,19 @@ import { IoCloseOutline } from "react-icons/io5";
 import {levelData} from '../../../../common/utils/selectorData'
 
 //import style 
-import style from './EditPosition.module.css';
+import style from './EditEmail.module.css';
 import Loader from '../../../../common/components/Loader/Loader';
 
-function EditPosition({id , handleClose}) {
-    const data = useSelector((state) => selectPositionById(state , id));
+function EditEmail({id , handleClose}) {
+
+    const data = useSelector((state) => selectEmailById(state , id));
 
     const {control , register , formState: {errors , isDirty , dirtyFields} , handleSubmit , unregister } = useForm({
         defaultValues:{
-            name : '',
-            gsName : '',
-            level : '',
-            weekluHours: '',
+            nextRecruitmentStatus : '',
+            cc : '',
+            subject : '',
+            body: '',
         },
         values: {...data}
     })
@@ -54,16 +55,16 @@ function EditPosition({id , handleClose}) {
 
     if(isLoading===true){
         return (
-            <div className={style["edit-position"]}>
+            <div className={style["edit-email"]}>
                 <Loader  transparent={true}/>
             </div>
         );
     }
 
     return (
-        <div className={style["edit-position"]}>
-            <div className={style["edit-position-header"]}>
-                <h2>Edit Position</h2>
+        <div className={style["edit-email"]}>
+            <div className={style["edit-email-header"]}>
+                <h2>Edit Email</h2>
                 <IoCloseOutline 
                     size='20px' 
                     color='var(--natural-alpha-1)' 
@@ -71,74 +72,69 @@ function EditPosition({id , handleClose}) {
                     onClick={handleClose}
                 />
             </div>
-            <form className={style["edit-position-body"]} onSubmit={handleSubmit(onSubmit)}>
-                <div className={style.box}>
-                    <InputField 
-                        type='text'
-                        name='name'
-                        placeholder='Name'
-                        width='183px'
-                        height='40px'
-                        control={register('name' , {
-                            required: 'Please Enter Name',
-                            pattern: {
-                                value: /^[A-Za-z]+$/,
-                                message: "The name don't match the pattern"
-                            }
-                        })}
-                        errors={errors}
-                    />
-                    <InputField 
-                        type='text'
-                        name='gsName'
-                        placeholder='Gs Name'
-                        width='183px'
-                        height='40px'
-                        control={register('gsName' , {
-                            required: 'Please Enter The Gs Name',
-                            pattern: {
-                                value: /^[A-Za-z]+$/,
-                                message: "The name don't match the pattern"
-                            }
-                        })}
-                        errors={errors}
-                    />
-                </div>
+            <form className={style["edit-email-body"]} onSubmit={handleSubmit(onSubmit)}>
                 <div className={style.box}>
                     <SelectInputField
-                        width='183px'
+                        width='300px'
                         height='40px'
-                        name='level'
-                        placeholder='Levels'
+                        name='nextRecruitmentStatus'
+                        placeholder='Next Recruitment Status'
                         options={levelData}
                         control={control}
-                        required={'enter the level'}
+                        required={'enter the next recruitment status'}
+                        errors={errors}
+                        border={true}
+                    />
+                    <div className={style.break}></div>
+                    <SelectInputField
+                        width='300px'
+                        height='40px'
+                        name='cc'
+                        placeholder='CC'
+                        options={levelData}
+                        control={control}
+                        required={'enter the CC'}
                         errors={errors}
                         border={true}
                     />
                     <InputField 
                         type='text'
-                        placeholder='Weekly Hours'
-                        name='weeklyHours'
-                        width='183px'
+                        placeholder='Subject'
+                        name='subject'
+                        width='300px'
                         height='40px'  
-                        control={register('weeklyHours' , {
-                            required: 'Please enter the weeklyHours',
+                        control={register('subject' , {
+                            required: 'Please enter the subject',
                             pattern: {
-                                value: /^\d$/,
-                                message: 'Please a Number'
+                                value: /^[a-zA-Z0-9]+$/,
+                                message: 'Please an English Character and Number'
+                            }
+                        })}
+                        errors={errors}
+                    />
+                    <TextAreaField
+                        placeholder='Body'
+                        name='body'
+                        width='518px'
+                        height='154px'  
+                        control={register('body' , {
+                            required: 'Please enter the body',
+                            pattern: {
+                                value: /^[a-zA-Z0-9]+$/,
+                                message: 'Please an English Character and Number'
                             }
                         })}
                         errors={errors}
                     />
                 </div>
+                
                 <div className={style.buttons}>
                     <SubmitButton 
                         width='157px' 
                         height='40px'
                         disabled={isLoading || !isDirty}
                     >
-                        Edit Position
+                        Edit Email
                     </SubmitButton>
                 </div>
             </form>
@@ -146,4 +142,4 @@ function EditPosition({id , handleClose}) {
     );
 }
 
-export default EditPosition;
+export default EditEmail;

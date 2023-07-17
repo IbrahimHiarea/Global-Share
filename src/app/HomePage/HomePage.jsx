@@ -4,16 +4,16 @@ import React from 'react';
 //import style
 import style from './HomePage.module.css';
 
-import PositionPage from '../../features/Positions/PositionPage/PositionPage';
+import EmailPage from '../../features/emails/EmailPage/EmailPage';
 
 function HomePage (){
 
     return (
         <div className={style.home}>
             {/* this is home */}
-            <PositionPage>
+            <EmailPage>
                 
-            </PositionPage>
+            </EmailPage>
         </div>
     );
 }
