@@ -1,30 +1,28 @@
 // import react
-import React , { useRef, useState }  from 'react';
+import React , { useState }  from 'react';
 import { useForm } from 'react-hook-form';
 
 // import components 
 import InputField from '../../../../common/components/Inputs/InputField/InputField';
 import SelectInputField from "../../../../common/components/Inputs/SelectInputField/SelectInputField";
-import Button from '../../../../common/components/Inputs/Button/Button';
 import SubmitButton from '../../../../common/components/Inputs/SubmitButton/SubmitButton';
 import TextAreaField from '../../../../common/components/Inputs/TextAreaField/TextAreaField'
+import Loader from '../../../../common/components/Loader/Loader';
 
 // import icons
 import { IoCloseOutline } from "react-icons/io5";
 
 //import static data
-import {levelData} from '../../../../common/utils/selectorData'
+import {recruitmentStatusData} from '../../../../common/utils/selectorData'
 
 //import style 
 import style from './AddEmail.module.css';
-import Loader from '../../../../common/components/Loader/Loader';
 
 function AddEmail({handleClose}) {
-
-    const {control , register , formState : {errors} , handleSubmit , unregister } = useForm({
+    const {control , register , formState : {errors} , handleSubmit} = useForm({
         defaultValues:{
-            nextRecruitmentStatus : '',
-            cc : '',
+            nextRecruitmentStatus : null,
+            cc : null,
             subject : '',
             body: '',
         }
@@ -65,7 +63,7 @@ function AddEmail({handleClose}) {
                         height='40px'
                         name='nextRecruitmentStatus'
                         placeholder='Next Recruitment Status'
-                        options={levelData}
+                        options={recruitmentStatusData}
                         control={control}
                         required={'enter the next recruitment status'}
                         errors={errors}
@@ -77,11 +75,12 @@ function AddEmail({handleClose}) {
                         height='40px'
                         name='cc'
                         placeholder='CC'
-                        options={levelData}
+                        options={recruitmentStatusData}
                         control={control}
                         required={'enter the CC'}
                         errors={errors}
                         border={true}
+                        isMulti={true}
                     />
                     <InputField 
                         type='text'
@@ -92,7 +91,7 @@ function AddEmail({handleClose}) {
                         control={register('subject' , {
                             required: 'Please enter the subject',
                             pattern: {
-                                value: /^[a-zA-Z0-9]+$/,
+                                value: /^[a-zA-Z0-9 ]+$/,
                                 message: 'Please an English Character and Number'
                             }
                         })}
@@ -104,11 +103,7 @@ function AddEmail({handleClose}) {
                         width='518px'
                         height='154px'  
                         control={register('body' , {
-                            required: 'Please enter the body',
-                            pattern: {
-                                value: /^[a-zA-Z0-9]+$/,
-                                message: 'Please an English Character and Number'
-                            }
+                            required: 'Please enter the body'
                         })}
                         errors={errors}
                     />

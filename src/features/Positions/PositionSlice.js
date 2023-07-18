@@ -6,7 +6,7 @@ import {
 } from "@reduxjs/toolkit";
 
 //import API
-import * as polunteerAPI from './PositionAPI';
+import * as positionAPI from './PositionAPI';
 
 // init slice
 const status = {
@@ -16,26 +16,21 @@ const status = {
     failed: "failed"
 }
 
-// const PositionModel = {
-//     id: 0,
-//     email: "",
-//     phoneNumber: "",
-//     firstName: "",
-//     lastName: "",
-//     additionalEmail: "",
-//     middleName: "",
-//     arabicFullName: "",
-//     appointlet: "",
-//     bio: "",
-//     gsStatus: "",
-//     joinDate: "2000-1-1",
-//     positionId: "",
-//     position: {}
-// }
+const PositionModel = {
+    id: 0,
+    name: '',
+    gsName: '',
+    jobDescription: '',
+    weeklyHours: 0,
+    gsLevel: '',
+    squadId: 0,
+    squad: {}, //squad model
+    users: [],
+}
 
-const postionAdapter = createEntityAdapter({
-    selectId : (vol) => vol.id,
-    sortComparer: (volA , volB) => volA.id - volB.id
+const positionAdapter = createEntityAdapter({
+    selectId : (po) => po.id,
+    sortComparer: (poA , poB) => poA.id - poB.id
 });
 
 
@@ -45,18 +40,18 @@ const postionAdapter = createEntityAdapter({
 //create slice
 const positionSlice = createSlice({
     name : 'position',
-    initialState: postionAdapter.getInitialState({
+    initialState: positionAdapter.getInitialState({
         status: status.idle,
         error: null,
         isSearched: false
     }),
     reducers: {
         addPosition: (state , action) => {
-            postionAdapter.addOne(state , action.payload);
+            positionAdapter.addOne(state , action.payload);
             state.status = status.succeeded;
         },
         addManyPosition: (state , action) => {
-            postionAdapter.addMany(state , action.payload);
+            positionAdapter.addMany(state , action.payload);
             state.status = status.succeeded;
         }
     },
@@ -70,7 +65,7 @@ const positionSlice = createSlice({
 export const {
     selectAll: selectAllPosition,
     selectById: selectPositionById,
-} = postionAdapter.getSelectors(state => state.position);
+} = positionAdapter.getSelectors(state => state.position);
 export const selectPositionStatus = state => state.position.status;
 export const selectPositionError = state => state.position.error;
 

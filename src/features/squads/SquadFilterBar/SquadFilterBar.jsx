@@ -14,7 +14,7 @@ import SubmitButton from '../../../common/components/Inputs/SubmitButton/SubmitB
 //import icons & images
 import { ImPlus } from 'react-icons/im';
 import { FiSearch } from 'react-icons/fi';
-import {RxReset} from 'react-icons/rx';
+import { RxReset } from 'react-icons/rx';
 
 //import style 
 import style from './SquadFilterBar.module.css';

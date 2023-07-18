@@ -81,7 +81,7 @@ function EditSquad({id , handleClose}){
                         control={register('name' , {
                             required: 'Please Enter The Name',
                             pattern: {
-                                value: /^[A-Za-z]+$/,
+                                value: /^[A-Za-z ]+$/,
                                 message: "The name don't match the pattern"
                             }
                         })}
@@ -96,7 +96,7 @@ function EditSquad({id , handleClose}){
                         control={register('gsName' , {
                             required: 'Please Enter The GS Name',
                             pattern: {
-                                value: /^[A-Za-z]+$/,
+                                value: /^[A-Za-z ]+$/,
                                 message: "The name don't match the pattern"
                             }
                         })}

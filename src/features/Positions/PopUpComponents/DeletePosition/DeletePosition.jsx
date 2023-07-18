@@ -1,5 +1,5 @@
 // import react
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import ConfirmPopUp from '../../../../common/components/ConfirmPopUp/ConfirmPopUp';
 
 function DeletePosition({id , handleClose}) {
@@ -8,9 +8,9 @@ function DeletePosition({id , handleClose}) {
 
     const setIsConfirmed = (value) => {
         isConfirmed.current = value;
-        //TODO::
         if(value===true){
             console.log("delete "+ id);
+            //TODO::
             //dispatch delete action for redux
         }
         handleClose();

@@ -13,6 +13,8 @@ import {FaTasks} from 'react-icons/fa';
 import {CgProfile} from 'react-icons/cg';
 import {BsBookHalf} from 'react-icons/bs';
 import {HiUserGroup} from 'react-icons/hi'
+import {MdEmail} from 'react-icons/md';
+import {SiGoogleanalytics} from 'react-icons/si';
 
 //import style
 import style from './DashboardLayout.module.css';
@@ -43,7 +45,18 @@ const drawerList = [
         title: 'Squad',
         path: 'squad',
         icon: <HiUserGroup />
-    }
+    },
+    {
+        title: 'Position',
+        path: 'position',
+        icon: <SiGoogleanalytics />
+    },
+    {
+        title: 'Email',
+        path: 'email',
+        icon: <MdEmail />
+    },
+
 ];
 
 function Header(){

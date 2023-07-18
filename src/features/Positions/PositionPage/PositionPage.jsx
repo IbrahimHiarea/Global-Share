@@ -40,13 +40,13 @@ const columns = [
     },
     {
         name: 'squad',
-        key: 'squad',
+        key: 'squadName',
         type: 'normal'
     },
     {
         name: 'weekly hours',
         key: 'weeklyHours',
-        type: 'status'
+        type: 'colored'
     },
     {
         key: 'edit',
@@ -60,125 +60,149 @@ const columns = [
 
 const fakeData = [
     {
-        id: "1",
-        name: "Android Developer",
-        gsName : "Androidy",
-        jobDescription: "Develop and maintaine android applications",
-        weeklyHours: "20",
-        gsLevel: "SPECIALIST",
-        squadId: "2",
-        squad : "Radioactive"
+        id: 1,
+        name: 'Android Developer',
+        gsName: 'Kotlin Hero',
+        jobDescription: '',
+        weeklyHours: 11,
+        gsLevel: 'Specialist',
+        squadId: 0,
+        squad: {
+            name: 'Radioactive'
+        }, //squad model
+        users: [],
     },
     {
-        id: "2",
-        name: "Backend Developer",
-        gsName : "Backendy",
-        jobDescription : "Develop and maintaine server-side applications",
-        weeklyHours: "20",
-        gsLevel: "SPECIALIST",
-        squadId: "2",
-        squad : "Radioactive"
+        id: 2,
+        name: 'Android Developer',
+        gsName: 'Kotlin Hero',
+        jobDescription: '',
+        weeklyHours: 12,
+        gsLevel: 'intern',
+        squadId: 0,
+        squad: {
+            name: 'Radioactive'
+        }, //squad model
+        users: [],
     },
     {
-        id: "3",
-        name: "Backend Developer",
-        gsName : "Backendy",
-        jobDescription : "Develop and maintaine server-side applications",
-        weeklyHours: "20",
-        gsLevel: "SPECIALIST",
-        squadId: "2",
-        squad : "Radioactive"
+        id: 3,
+        name: 'Android Developer',
+        gsName: 'Kotlin Hero',
+        jobDescription: '',
+        weeklyHours: 11,
+        gsLevel: 'Specialist',
+        squadId: 0,
+        squad: {
+            name: 'Radioactive'
+        }, //squad model
+        users: [],
     },
     {
-        id: "4",
-        name: "Backend Developer",
-        gsName : "Backendy",
-        jobDescription : "Develop and maintaine server-side applications",
-        weeklyHours: "20",
-        gsLevel: "SPECIALIST",
-        squadId: "2",
-        squad : "Radioactive"
+        id: 4,
+        name: 'Android Developer',
+        gsName: 'Kotlin Hero',
+        jobDescription: '',
+        weeklyHours: 11,
+        gsLevel: 'Specialist',
+        squadId: 0,
+        squad: {
+            name: 'Radioactive'
+        }, //squad model
+        users: [],
     },
     {
-        id: "5",
-        name: "Backend Developer",
-        gsName : "Backendy",
-        jobDescription : "Develop and maintaine server-side applications",
-        weeklyHours: "20",
-        gsLevel: "SPECIALIST",
-        squadId: "2",
-        squad : "Radioactive"
+        id: 5,
+        name: 'Android Developer',
+        gsName: 'Kotlin Hero',
+        jobDescription: '',
+        weeklyHours: 11,
+        gsLevel: 'Specialist',
+        squadId: 0,
+        squad: {
+            name: 'Radioactive'
+        }, //squad model
+        users: [],
     },
     {
-        id: "6",
-        name: "Backend Developer",
-        gsName : "Backendy",
-        jobDescription : "Develop and maintaine server-side applications",
-        weeklyHours: "20",
-        gsLevel: "SPECIALIST",
-        squadId: "2",
-        squad : "Radioactive"
+        id: 6,
+        name: 'Android Developer',
+        gsName: 'Kotlin Hero',
+        jobDescription: '',
+        weeklyHours: 11,
+        gsLevel: 'Specialist',
+        squadId: 0,
+        squad: {
+            name: 'Radioactive'
+        }, //squad model
+        users: [],
     },
     {
-        id: "7",
-        name: "Backend Developer",
-        gsName : "Backendy",
-        jobDescription : "Develop and maintaine server-side applications",
-        weeklyHours: "20",
-        gsLevel: "SPECIALIST",
-        squadId: "2",
-        squad : "Radioactive"
+        id: 7,
+        name: 'Android Developer',
+        gsName: 'Kotlin Hero',
+        jobDescription: '',
+        weeklyHours: 11,
+        gsLevel: 'Specialist',
+        squadId: 0,
+        squad: {
+            name: 'Radioactive'
+        }, //squad model
+        users: [],
     },
     {
-        id: "8",
-        name: "Android Developer",
-        gsName : "Androidy",
-        jobDescription: "Develop and maintaine android applications",
-        weeklyHours: "20",
-        gsLevel: "SPECIALIST",
-        squadId: "2",
-        squad : "Radioactive"
+        id: 8,
+        name: 'Android Developer',
+        gsName: 'Kotlin Hero',
+        jobDescription: '',
+        weeklyHours: 11,
+        gsLevel: 'Specialist',
+        squadId: 0,
+        squad: {
+            name: 'Radioactive'
+        }, //squad model
+        users: [],
     },
     {
-        id: "9",
-        name: "Android Developer",
-        gsName : "Androidy",
-        jobDescription: "Develop and maintaine android applications",
-        weeklyHours: "20",
-        gsLevel: "SPECIALIST",
-        squadId: "2",
-        squad : "Radioactive"
+        id: 9,
+        name: 'Android Developer',
+        gsName: 'Kotlin Hero',
+        jobDescription: '',
+        weeklyHours: 11,
+        gsLevel: 'Specialist',
+        squadId: 0,
+        squad: {
+            name: 'Radioactive'
+        }, //squad model
+        users: [],
     },
     {
-        id: "10",
-        name: "Android Developer",
-        gsName : "Androidy",
-        jobDescription: "Develop and maintaine android applications",
-        weeklyHours: "20",
-        gsLevel: "SPECIALIST",
-        squadId: "2",
-        squad : "Radioactive"
+        id: 10,
+        name: 'Android Developer',
+        gsName: 'Kotlin Hero',
+        jobDescription: '',
+        weeklyHours: 11,
+        gsLevel: 'Specialist',
+        squadId: 0,
+        squad: {
+            name: 'Radioactive'
+        }, //squad model
+        users: [],
     },
     {
-        id: "11",
-        name: "Android Developer",
-        gsName : "Androidy",
-        jobDescription: "Develop and maintaine android applications",
-        weeklyHours: "20",
-        gsLevel: "SPECIALIST",
-        squadId: "2",
-        squad : "Radioactive"
+        id: 11,
+        name: 'Android Developer',
+        gsName: 'Kotlin Hero',
+        jobDescription: '',
+        weeklyHours: 11,
+        gsLevel: 'Specialist',
+        squadId: 0,
+        squad: {
+            name: 'Radioactive'
+        }, //squad model
+        users: [],
     },
-    {
-        id: "12",
-        name: "Android Developer",
-        gsName : "Androidy",
-        jobDescription: "Develop and maintaine android applications",
-        weeklyHours: "20",
-        gsLevel: "SPECIALIST",
-        squadId: "2",
-        squad : "Radioactive"
-    },
+    
 ]
 
 const initPopUpOption = {
@@ -187,7 +211,7 @@ const initPopUpOption = {
     index: 0,
 }
 
-const popReducer = (state , action) => {
+const popUpReducer = (state , action) => {
     switch(action.type){
         case 'delete': return {
             ...initPopUpOption,
@@ -216,8 +240,7 @@ const popReducer = (state , action) => {
 }
 
 function PositionPage() {
-
-    const [popUpOption , popUpDispatch] = useReducer(popReducer , initPopUpOption);
+    const [popUpOption , popUpDispatch] = useReducer(popUpReducer , initPopUpOption);
     const dispatch = useDispatch();
 
     const data = useSelector(selectAllPosition);

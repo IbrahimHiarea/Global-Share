@@ -1,5 +1,5 @@
 // import react
-import React , { useRef, useState }  from 'react';
+import React , { useState }  from 'react';
 import { useForm } from 'react-hook-form';
 
 //import redux
@@ -11,29 +11,28 @@ import InputField from '../../../../common/components/Inputs/InputField/InputFie
 import SelectInputField from "../../../../common/components/Inputs/SelectInputField/SelectInputField";
 import SubmitButton from '../../../../common/components/Inputs/SubmitButton/SubmitButton';
 import TextAreaField from '../../../../common/components/Inputs/TextAreaField/TextAreaField'
+import Loader from '../../../../common/components/Loader/Loader';
 
 // import icons
 import { IoCloseOutline } from "react-icons/io5";
 
 //import static data
-import {levelData} from '../../../../common/utils/selectorData'
+import {recruitmentStatusData} from '../../../../common/utils/selectorData'
 
 //import style 
 import style from './EditEmail.module.css';
-import Loader from '../../../../common/components/Loader/Loader';
 
 function EditEmail({id , handleClose}) {
-
     const data = useSelector((state) => selectEmailById(state , id));
 
-    const {control , register , formState: {errors , isDirty , dirtyFields} , handleSubmit , unregister } = useForm({
+    const {control , register , formState: {errors , isDirty , dirtyFields} , handleSubmit} = useForm({
         defaultValues:{
-            nextRecruitmentStatus : '',
-            cc : '',
+            nextRecruitmentStatus : null,
+            cc : null,
             subject : '',
             body: '',
         },
-        values: {...data}
+        values: {body: data.body , subject: data.subject , nextRecruitmentStatus: {label: data.nextRecruitmentStatus , value: data.nextRecruitmentStatus} , cc: []}
     })
 
     const [isLoading , setIsLoading] = useState(false);
@@ -74,12 +73,12 @@ function EditEmail({id , handleClose}) {
             </div>
             <form className={style["edit-email-body"]} onSubmit={handleSubmit(onSubmit)}>
                 <div className={style.box}>
-                    <SelectInputField
+                <SelectInputField
                         width='300px'
                         height='40px'
                         name='nextRecruitmentStatus'
                         placeholder='Next Recruitment Status'
-                        options={levelData}
+                        options={recruitmentStatusData}
                         control={control}
                         required={'enter the next recruitment status'}
                         errors={errors}
@@ -91,11 +90,12 @@ function EditEmail({id , handleClose}) {
                         height='40px'
                         name='cc'
                         placeholder='CC'
-                        options={levelData}
+                        options={recruitmentStatusData}
                         control={control}
                         required={'enter the CC'}
                         errors={errors}
                         border={true}
+                        isMulti={true}
                     />
                     <InputField 
                         type='text'
@@ -106,7 +106,7 @@ function EditEmail({id , handleClose}) {
                         control={register('subject' , {
                             required: 'Please enter the subject',
                             pattern: {
-                                value: /^[a-zA-Z0-9]+$/,
+                                value: /^[a-zA-Z0-9 ]+$/,
                                 message: 'Please an English Character and Number'
                             }
                         })}
@@ -118,11 +118,7 @@ function EditEmail({id , handleClose}) {
                         width='518px'
                         height='154px'  
                         control={register('body' , {
-                            required: 'Please enter the body',
-                            pattern: {
-                                value: /^[a-zA-Z0-9]+$/,
-                                message: 'Please an English Character and Number'
-                            }
+                            required: 'Please enter the body'
                         })}
                         errors={errors}
                     />

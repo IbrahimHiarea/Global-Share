@@ -1,6 +1,6 @@
 .add-position{
-  width: 438px;
-  height: 300px;
+  width: 440px;
+  height: 320px;
   background-color: white;
   padding: 24px;
   border-radius: 9px;
@@ -8,7 +8,6 @@
   -moz-border-radius: 9px;
   -ms-border-radius: 9px;
   -o-border-radius: 9px;
-  position: relative;
 }
 
 .add-position-header{
@@ -30,26 +29,21 @@
 .add-position-body{
   display: flex;
   flex-direction: column;
-  /* gap: 10px; */
-}
+  gap: 5px;
+} 
 
 .add-position-body .box{
   display: flex;
   align-items: flex-start;
-  gap: 20px;
+  justify-content: space-between;
 }
 
 .buttons{
   display: flex;
-  position: absolute;
-  right: 30px;
-  bottom: 30px;
+  justify-content: flex-end;
+  margin-top: 10px;
 }
 
-.buttons input{
-  padding: 0;
-}
-
-.add-position-body > div > div label{
+.add-position-body .box label{
   display: none;
 }

@@ -16,26 +16,17 @@ const status = {
     failed: "failed"
 }
 
-// const EmailModel = {
-//     id: 0,
-//     email: "",
-//     phoneNumber: "",
-//     firstName: "",
-//     lastName: "",
-//     additionalEmail: "",
-//     middleName: "",
-//     arabicFullName: "",
-//     appointlet: "",
-//     bio: "",
-//     gsStatus: "",
-//     joinDate: "2000-1-1",
-//     positionId: "",
-//     position: {}
-// }
+const EmailModel = {
+    id: 0,
+    subject: '',
+    nextRecruitmentStatus: '',
+    body: '',
+    cc: []
+}
 
 const emailAdapter = createEntityAdapter({
-    selectId : (vol) => vol.id,
-    sortComparer: (volA , volB) => volA.id - volB.id
+    selectId : (em) => em.id,
+    sortComparer: (emA , emB) => emA.id - emB.id
 });
 
 

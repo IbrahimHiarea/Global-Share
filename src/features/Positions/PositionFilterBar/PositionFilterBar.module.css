@@ -15,14 +15,6 @@
   border: none;
 }
 
-.filter-bar input[type="submit"]{
-  padding: 0;
-  font-size: 14px;
-  font-weight: 400;
-  margin-bottom: 5px;
-  background-color: var(--primary-main);
-}
-
 .filter-bar > div label,
 .filter-bar > div span {
   display: none;
@@ -39,7 +31,7 @@
   align-items: center;
   cursor: pointer;
   border-radius: 9px;
-  width: 60px;
+  width: 40px;
   height: 30px;
   background-color: var(--natural-alpha-7);
   -webkit-border-radius: 9px;

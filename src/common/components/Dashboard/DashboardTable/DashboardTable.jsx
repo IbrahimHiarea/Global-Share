@@ -3,7 +3,7 @@ import React from 'react';
 
 //import components
 import DataTable from 'react-data-table-component';
-import { HeaderCell, IdCell, NextArrow, NormalCell, PreviousArrow, StatusCell } from '../DashboardCell/DashboardCell';
+import { ColoredCell, HeaderCell, IdCell, NextArrow, NormalCell, PreviousArrow, RecruitmentStatusCell, StatusCell } from '../DashboardCell/DashboardCell';
 import Button from '../../Inputs/Button/Button';
 
 // import icon & image
@@ -17,8 +17,10 @@ import { CircularProgress } from '@mui/material';
 
 const formatCell = (value , type) => {
     if(type==='id') return <IdCell id={value} />;
-    else if(type==='normal') return <NormalCell value={value} />
-    else if(type==='status') return <StatusCell status={value} />
+    else if(type==='normal') return <NormalCell value={value} />;
+    else if(type==='status') return <StatusCell status={value} />;
+    else if(type==='colored') return <ColoredCell value={value} />;
+    else if(type==='recruitmentStatus') return <RecruitmentStatusCell recruitmentStatus={value} />;
     return value;
 }
 
@@ -51,6 +53,7 @@ function DashboardTable ({
             format: (row) => {
                 if(col.key==='firstName') return formatCell(row.firstName+" "+row.lastName , col.type);
                 if(col.key==='position') return formatCell(row.position.name , col.type);
+                if(col.key==='squadName') return formatCell(row.squad.name  , col.type);
                 return formatCell(row[col.key] , col.type)
             }
         }

@@ -42,6 +42,25 @@ export const StatusCell = ({status}) => {
     );
 }
 
+export const RecruitmentStatusCell = ({recruitmentStatus}) => {
+    return (
+        <div className={
+            clsx(
+                style['recruitment-status-cell'],
+                {[style['recruitment-status-cell-error']] : recruitmentStatus.toLowerCase()==='refused'}
+            )
+        }>
+            {recruitmentStatus}
+        </div>
+    );
+}
+
+
+export const ColoredCell = ({value}) => {
+    return (
+        <div className={style['colored-cell']} >{value}</div>
+    );
+}
 
 export const NextArrow = () => {
     return (

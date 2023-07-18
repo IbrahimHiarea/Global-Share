@@ -8,9 +8,9 @@ function DeleteEmail({id , handleClose}) {
 
     const setIsConfirmed = (value) => {
         isConfirmed.current = value;
-        //TODO::
         if(value===true){
             console.log("delete "+ id);
+            //TODO::
             //dispatch delete action for redux
         }
         handleClose();

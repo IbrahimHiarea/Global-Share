@@ -11,6 +11,8 @@ import DashboardLayout from '../app/DashboardLayout/DashboardLayout';
 import TaskPage from '../features/tasks/Task page/TaskPage';
 import VolunteerPage from '../features/volunteers/VolunteerPage/VolunteerPage';
 import SquadPage from '../features/squads/SquadPage/SquadPage';
+import PositionPage from '../features/Positions/PositionPage/PositionPage';
+import EmailPage from '../features/emails/EmailPage/EmailPage';
 
 function AllRoute () {
     return (
@@ -42,6 +44,12 @@ function AllRoute () {
 
                 {/* Squad section */}
                 <Route path="squad" element={<SquadPage />} />
+
+                {/* Position section */}
+                <Route path="position" element={<PositionPage />} />
+
+                {/* Email section */}
+                <Route path='email' element={<EmailPage />}/>
             </Route>
         </Routes>
     );  

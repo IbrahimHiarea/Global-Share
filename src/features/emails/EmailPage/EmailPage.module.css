@@ -7,8 +7,9 @@
   padding: 40px;
 }
 
-.emails-title{
+.email-title{
   margin: 0;
   color: var(--word-color);
   margin-bottom: 30px;
+  text-transform: capitalize;
 }

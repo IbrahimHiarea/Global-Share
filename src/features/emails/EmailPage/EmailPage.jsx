@@ -31,7 +31,7 @@ const columns = [
     {
         name: 'next recruitment status',
         key: 'nextRecruitmentStatus',
-        type: 'status'
+        type: 'recruitmentStatus'
     },
     {
         key: 'edit',
@@ -48,85 +48,78 @@ const fakeData = [
         id: 1,
         subject: "Volunteering Role",
         nextRecruitmentStatus : "HR Approved",
-        cc : "Hamdi",
-        body: "Hamdi is a good person"
+        body: "Hamdi is a good person",
+        cc : ['ahmad', 'ibrahim'],
     },
     {
         id: 2,
         subject: "Volunteering Role",
-        nextRecruitmentStatus : "Refused",
-        cc : "Hamdi",
-        body: "Hamdi is a good person"
+        nextRecruitmentStatus : "refused",
+        body: "Hamdi is a good person",
+        cc : ['ahmad', 'ibrahim'],
     },
     {
         id: 3,
         subject: "Volunteering Role",
-        nextRecruitmentStatus : "Refused",
-        cc : "Hamdi",
-        body: "Hamdi is a good person"
+        nextRecruitmentStatus : "HR Approved",
+        body: "Hamdi is a good person",
+        cc : ['ahmad', 'ibrahim'],
     },
     {
         id: 4,
         subject: "Volunteering Role",
-        nextRecruitmentStatus : "Done",
-        cc : "Hamdi",
-        body: "Hamdi is a good person"
+        nextRecruitmentStatus : "tech-interview approved",
+        body: "Hamdi is a good person",
+        cc : ['ahmad', 'ibrahim'],
     },
     {
         id: 5,
         subject: "Volunteering Role",
         nextRecruitmentStatus : "HR Approved",
-        cc : "Hamdi",
-        body: "Hamdi is a good person"
+        body: "Hamdi is a good person",
+        cc : ['ahmad', 'ibrahim'],
     },
     {
         id: 6,
         subject: "Volunteering Role",
         nextRecruitmentStatus : "HR Approved",
-        cc : "Hamdi",
-        body: "Hamdi is a good person"
+        body: "Hamdi is a good person",
+        cc : ['ahmad', 'ibrahim'],
     },
     {
         id: 7,
         subject: "Volunteering Role",
         nextRecruitmentStatus : "HR Approved",
-        cc : "Hamdi",
-        body: "Hamdi is a good person"
+        body: "Hamdi is a good person",
+        cc : ['ahmad', 'ibrahim'],
     },
     {
         id: 8,
         subject: "Volunteering Role",
         nextRecruitmentStatus : "HR Approved",
-        cc : "Hamdi",
-        body: "Hamdi is a good person"
+        body: "Hamdi is a good person",
+        cc : ['ahmad', 'ibrahim'],
     },
     {
         id: 9,
         subject: "Volunteering Role",
         nextRecruitmentStatus : "HR Approved",
-        cc : "Hamdi",
-        body: "Hamdi is a good person"
+        body: "Hamdi is a good person",
+        cc : ['ahmad', 'ibrahim'],
     },
     {
         id: 10,
         subject: "Volunteering Role",
         nextRecruitmentStatus : "HR Approved",
-        cc : "Hamdi",
-        body: "Hamdi is a good person"
+        body: "Hamdi is a good person",
+        cc : ['ahmad', 'ibrahim'],
     },
     {
         id: 11,
         subject: "Volunteering Role",
         nextRecruitmentStatus : "HR Approved",
-        cc : "Hamdi",
-        body: "Hamdi is a good person"
-    },
-    {
-        id: 12,
-        subject: "Volunteering Role",
-        nextRecruitmentStatus : "HR Approved",
-        cc : "Hamdi",
-        body: "Hamdi is a good person"
+        body: "Hamdi is a good person",
+        cc : ['ahmad', 'ibrahim'],
     },
 ]
 
@@ -136,7 +129,7 @@ const initPopUpOption = {
     index: 0,
 }
 
-const popReducer = (state , action) => {
+const popUpReducer = (state , action) => {
     switch(action.type){
         case 'delete': return {
             ...initPopUpOption,
@@ -165,8 +158,7 @@ const popReducer = (state , action) => {
 }
 
 function EmailPage() {
-
-    const [popUpOption , popUpDispatch] = useReducer(popReducer , initPopUpOption);
+    const [popUpOption , popUpDispatch] = useReducer(popUpReducer , initPopUpOption);
     const dispatch = useDispatch();
 
     const data = useSelector(selectAllEmail);
@@ -201,7 +193,7 @@ function EmailPage() {
 
     return (
         <div className={style['email-page']}>
-            <h1 className={style['emails-title']}>emails</h1>
+            <h1 className={style['email-title']}>emails</h1>
 
             <EmailFilterBar handleAdd={handleAdd}/>
 

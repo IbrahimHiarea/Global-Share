@@ -14,20 +14,21 @@ import SubmitButton from '../../../common/components/Inputs/SubmitButton/SubmitB
 
 //import icons & images
 import { ImPlus } from 'react-icons/im';
+import { FiSearch } from 'react-icons/fi';
+import {RxReset} from 'react-icons/rx';
 
 //import static data
-import { levelData, statusesData } from '../../../common/utils/selectorData.js';
+import { levelData } from '../../../common/utils/selectorData.js';
 
 //import style
 import style from './PositionFilterBar.module.css';
 
 function PositionFilterBar({ handleAdd }) {
-
     const {control , register , formState , reset , handleSubmit} = useForm({
         defaultValues:{
             search: '',
-            squad: '',
-            level: '',
+            squad: null,
+            level: null,
         }
     });
 
@@ -35,6 +36,7 @@ function PositionFilterBar({ handleAdd }) {
 
     const onSubmit = (values) => {
         console.log(values)
+        //TODO::
         //dispatch search action to redux
     }
 
@@ -62,25 +64,25 @@ function PositionFilterBar({ handleAdd }) {
                     height='40px'
                     name='squad'
                     placeholder='All squads'
-                    options={statusesData}
+                    options={levelData}
                     control={control}
                 />
                 <span className={style['bar-buttons']}>
                     <SubmitButton 
-                        width='60px'
+                        width='40px'
                         height='30px'
                         disabled={status==='loading' || status==='idle' ? true : false}
                     >
-                        search
-                    </SubmitButton>
+                        <FiSearch size='15px'/>
+                    </SubmitButton> 
                     <span className={style.reset} onClick={() => reset(formState.defaultValues)}>
-                        Clear
+                        <RxReset size='15px'/>    
                     </span>
                 </span>
             </form>
             <div style={{marginBottom: '5px'}}>
                 <Button width="150px" height="40px" onClick={handleAdd}>
-                    <ImPlus size="13px" color='white'style={{marginRight: '8px'}}/> Add Volunteer
+                    <ImPlus size="13px" color='white'style={{marginRight: '8px'}}/> Add Position
                 </Button>
             </div>
         </div>

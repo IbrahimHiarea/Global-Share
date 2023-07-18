@@ -5,6 +5,7 @@ import { Controller } from "react-hook-form";
 //import components
 import InputWrapper from '../InputWrapper/InputWrapper';
 import Select , { components }from 'react-select';
+import { Avatar } from "@mui/material";
 
 //import image & icon
 import image from '../../../../assets/images/profileImage/profile.png';
@@ -13,7 +14,6 @@ import image2 from '../../../../assets/images/loginImage/login.png';
 
 //import style
 import style from './MultiSelectInputField.module.css';
-import { Avatar } from "@mui/material";
 
 function MultiSelectInputField({
         children, width, height,
@@ -163,7 +163,7 @@ const ValueContainer = props => {
         <components.ValueContainer {...props}>
             { length >= 1 ?
                 (
-                    <>
+                    <div style={{textOverflow: 'ellipsis' , overflow: 'hidden' , whiteSpace: 'nowrap'}}>
                         <span 
                             style={{
                                 textTransform: 'capitalize',
@@ -180,7 +180,7 @@ const ValueContainer = props => {
                             { length > 1 && ` & ${length - 1} Member`}
                         </span>
                         {React.cloneElement(props.children[1])}
-                    </>
+                    </div>
                 )
                     :
                 (

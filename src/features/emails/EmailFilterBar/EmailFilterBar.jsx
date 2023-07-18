@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 
 //import redux
 import { useSelector } from 'react-redux';
-import {selectEmailStatus} from '../EmailSlice'
+import { selectEmailStatus} from '../EmailSlice'
 
 //import components
 import InputField from '../../../common/components/Inputs/InputField/InputField';
@@ -13,16 +13,14 @@ import SubmitButton from '../../../common/components/Inputs/SubmitButton/SubmitB
 
 //import icons & images
 import { ImPlus } from 'react-icons/im';
-
-//import static data
-import { levelData, statusesData } from '../../../common/utils/selectorData.js';
+import { FiSearch } from 'react-icons/fi';
+import { RxReset } from 'react-icons/rx';
 
 //import style
 import style from './EmailFilterBar.module.css';
 
 function EmailFilterBar({ handleAdd }) {
-
-    const {control , register , formState , reset , handleSubmit} = useForm({
+    const {register , formState , reset , handleSubmit} = useForm({
         defaultValues:{
             search: '',
         }
@@ -32,6 +30,7 @@ function EmailFilterBar({ handleAdd }) {
 
     const onSubmit = (values) => {
         console.log(values)
+        //TODO::
         //dispatch search action to redux
     }
 
@@ -48,20 +47,20 @@ function EmailFilterBar({ handleAdd }) {
                 />
                 <span className={style['bar-buttons']}>
                     <SubmitButton 
-                        width='60px'
+                        width='40px'
                         height='30px'
                         disabled={status==='loading' || status==='idle' ? true : false}
                     >
-                        search
-                    </SubmitButton>
+                        <FiSearch size='15px'/>
+                    </SubmitButton> 
                     <span className={style.reset} onClick={() => reset(formState.defaultValues)}>
-                        Clear
+                        <RxReset size='15px'/>    
                     </span>
                 </span>
             </form>
             <div style={{marginBottom: '5px'}}>
                 <Button width="150px" height="40px" onClick={handleAdd}>
-                    <ImPlus size="13px" color='white'style={{marginRight: '8px'}}/> Add Volunteer
+                    <ImPlus size="13px" color='white'style={{marginRight: '8px'}}/> Add Email
                 </Button>
             </div>
         </div>

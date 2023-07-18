@@ -4,7 +4,7 @@ import { Controller } from "react-hook-form";
 
 //import components
 import InputWrapper from '../InputWrapper/InputWrapper';
-import Select from 'react-select';
+import Select , { components } from 'react-select';
 
 //import style
 import style from './SelectInputField.module.css';
@@ -13,7 +13,8 @@ function SelectInputField({
         children, width, height,
         name, options, placeholder,
         control, errors , disabled,
-        required , border
+        required , border , menuHeight,
+        isMulti
     }){
     const selectOptions = [].concat( options.map((item) => {
             return {'value': item , "label": item}
@@ -39,7 +40,7 @@ function SelectInputField({
                         isSearchable={true}
                         placeholder={placeholder}
                         isDisabled={disabled}
-                        maxMenuHeight={300}
+                        maxMenuHeight={menuHeight ? menuHeight : 300}
                         classNamePrefix={'te'}
                         // menuIsOpen={true}
                         styles={{
@@ -53,7 +54,6 @@ function SelectInputField({
                                 display: 'none'
                             }),
                             control: (base , state) => ({
-                                
                                 ...base,
                                 width: width,
                                 height: height, 
@@ -114,6 +114,8 @@ function SelectInputField({
                                 textTransform:'capitalize'
                             })
                         }}
+                        isMulti={isMulti ? isMulti : false}
+                        components={isMulti ? {ValueContainer} : {}}
                     />
                 )}
                 rules={{required: required}}
@@ -121,5 +123,40 @@ function SelectInputField({
         </InputWrapper>
     );
 }
+
+const ValueContainer = props => {
+    let length = props.getValue().length;
+
+    return (
+        <components.ValueContainer {...props}>
+            { length >= 1 ?
+                (
+                    <div style={{textOverflow: 'ellipsis' , overflow: 'hidden' , whiteSpace: 'nowrap'}}>
+                        <span 
+                            style={{
+                                textTransform: 'capitalize',
+                            }}
+                        >
+                            {props.children[0][0]?.props?.data?.value}
+                        </span>
+                        <span
+                            style={{
+                                fontSize: '12px'
+                            }}
+                        >
+                            &nbsp;
+                            { length > 1 && ` & ${length - 1} Member`}
+                        </span>
+                        {React.cloneElement(props.children[1])}
+                    </div>
+                )
+                    :
+                (
+                    <>{props.children}</>
+                )
+            }
+        </components.ValueContainer>
+    );
+};
 
 export default SelectInputField;

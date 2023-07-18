@@ -97,7 +97,7 @@ function EditVolunteer({id , handleClose}) {
                         control={register('firstName' , {
                             required: 'Please Enter The First Name',
                             pattern: {
-                                value: /^[A-Za-z]+$/,
+                                value: /^[A-Za-z ]+$/,
                                 message: "The name don't match the pattern"
                             }
                         })}
@@ -112,7 +112,7 @@ function EditVolunteer({id , handleClose}) {
                         control={register('lastName' , {
                             required: 'Please Enter The Last Name',
                             pattern: {
-                                value: /^[A-Za-z]+$/,
+                                value: /^[A-Za-z ]+$/,
                                 message: "The name don't match the pattern"
                             }
                         })}

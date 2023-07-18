@@ -1,5 +1,5 @@
 // import react
-import React , { useRef, useState }  from 'react';
+import React , { useState }  from 'react';
 import { useForm } from 'react-hook-form';
 
 //import redux
@@ -9,8 +9,8 @@ import { selectPositionById } from '../../PositionSlice';
 // import components 
 import InputField from '../../../../common/components/Inputs/InputField/InputField';
 import SelectInputField from "../../../../common/components/Inputs/SelectInputField/SelectInputField";
-import Button from '../../../../common/components/Inputs/Button/Button';
 import SubmitButton from '../../../../common/components/Inputs/SubmitButton/SubmitButton';
+import Loader from '../../../../common/components/Loader/Loader';
 
 // import icons
 import { IoCloseOutline } from "react-icons/io5";
@@ -20,19 +20,18 @@ import {levelData} from '../../../../common/utils/selectorData'
 
 //import style 
 import style from './EditPosition.module.css';
-import Loader from '../../../../common/components/Loader/Loader';
 
 function EditPosition({id , handleClose}) {
     const data = useSelector((state) => selectPositionById(state , id));
 
-    const {control , register , formState: {errors , isDirty , dirtyFields} , handleSubmit , unregister } = useForm({
+    const {control , register , formState: {errors , isDirty , dirtyFields} , handleSubmit } = useForm({
         defaultValues:{
             name : '',
             gsName : '',
-            level : '',
-            weekluHours: '',
+            level : null,
+            weeklyHours: '',
         },
-        values: {...data}
+        values: {name: data.name , gsName: data.gsName , weeklyHours: data.weeklyHours , level: {label: data.gsLevel , value: data.gsLevel}}
     })
 
     const [isLoading , setIsLoading] = useState(false);
@@ -77,12 +76,12 @@ function EditPosition({id , handleClose}) {
                         type='text'
                         name='name'
                         placeholder='Name'
-                        width='183px'
+                        width='185px'
                         height='40px'
                         control={register('name' , {
-                            required: 'Please Enter Name',
+                            required: 'Please Enter the Name',
                             pattern: {
-                                value: /^[A-Za-z]+$/,
+                                value: /^[A-Za-z ]+$/,
                                 message: "The name don't match the pattern"
                             }
                         })}
@@ -92,12 +91,12 @@ function EditPosition({id , handleClose}) {
                         type='text'
                         name='gsName'
                         placeholder='Gs Name'
-                        width='183px'
+                        width='185px'
                         height='40px'
                         control={register('gsName' , {
                             required: 'Please Enter The Gs Name',
                             pattern: {
-                                value: /^[A-Za-z]+$/,
+                                value: /^[A-Za-z ]+$/,
                                 message: "The name don't match the pattern"
                             }
                         })}
@@ -106,7 +105,7 @@ function EditPosition({id , handleClose}) {
                 </div>
                 <div className={style.box}>
                     <SelectInputField
-                        width='183px'
+                        width='185px'
                         height='40px'
                         name='level'
                         placeholder='Levels'
@@ -115,18 +114,19 @@ function EditPosition({id , handleClose}) {
                         required={'enter the level'}
                         errors={errors}
                         border={true}
+                        menuHeight={100}
                     />
                     <InputField 
                         type='text'
                         placeholder='Weekly Hours'
                         name='weeklyHours'
-                        width='183px'
+                        width='185px'
                         height='40px'  
                         control={register('weeklyHours' , {
-                            required: 'Please enter the weeklyHours',
+                            required: 'Please enter the weekly Hours',
                             pattern: {
-                                value: /^\d$/,
-                                message: 'Please a Number'
+                                value: /^\d+$/,
+                                message: 'should be a Number'
                             }
                         })}
                         errors={errors}
