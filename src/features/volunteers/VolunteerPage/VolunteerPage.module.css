@@ -1,6 +1,6 @@
 .volunteer-page{
   width: 100%;
-  height: calc(100vh - 55px);
+  height: 100vh;
   overflow: auto;
   background-color: var(--background-color);
   /* background-color: red; */
