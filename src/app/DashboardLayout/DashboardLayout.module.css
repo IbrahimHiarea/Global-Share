@@ -201,7 +201,7 @@
 }
 
 .navbar-link-background{
-    color: var(--primary-white);
+    color: white;
 }
 
 .navbar-link-background::before{
@@ -227,6 +227,22 @@
 
 .navbar-link-background-open::before{
     width: 250px;
+}
+
+.navbar-link-background::after{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -29px;
+    width: 15px;
+    height: 45px;
+    background-color: #66CCCC;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    box-shadow: 0 0 6px 2px rgba(77 , 235 , 50 , 30%);
 }
 
 .navbar-link-title{
