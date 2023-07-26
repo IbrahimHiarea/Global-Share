@@ -90,3 +90,8 @@
     color: var(--error-main);
     background-color: var(--error-background);
 }
+
+.recruitment-status-cell-warning{
+    color: var(--warning-main);
+    background-color: var(--warning-background);
+}

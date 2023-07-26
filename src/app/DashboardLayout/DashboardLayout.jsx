@@ -15,6 +15,7 @@ import {HiUserGroup} from 'react-icons/hi'
 import {MdEmail} from 'react-icons/md';
 import {SiGoogleanalytics} from 'react-icons/si';
 import {IoIosArrowForward} from 'react-icons/io';
+import {AiFillAppstore} from "react-icons/ai";
 
 //import style
 import style from './DashboardLayout.module.css';
@@ -57,6 +58,11 @@ const drawerList = [
         path: 'email',
         icon: <MdEmail />
     },
+    {
+        title: 'Application',
+        path: 'application',
+        icon: <AiFillAppstore />
+    }
 ];
 
 

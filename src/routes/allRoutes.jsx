@@ -13,6 +13,7 @@ import VolunteerPage from '../features/volunteers/VolunteerPage/VolunteerPage';
 import SquadPage from '../features/squads/SquadPage/SquadPage';
 import PositionPage from '../features/Positions/PositionPage/PositionPage';
 import EmailPage from '../features/emails/EmailPage/EmailPage';
+import ApplicationPage from '../features/application/ApplicationPage/ApplicationPage';
 
 function AllRoute () {
     return (
@@ -50,6 +51,10 @@ function AllRoute () {
 
                 {/* Email section */}
                 <Route path='email' element={<EmailPage />}/>
+
+                {/* Application section */}
+                <Route path='application' element={<ApplicationPage />}/>
+
             </Route>
         </Routes>
     );  

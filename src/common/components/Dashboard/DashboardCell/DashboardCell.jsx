@@ -47,7 +47,8 @@ export const RecruitmentStatusCell = ({recruitmentStatus}) => {
         <div className={
             clsx(
                 style['recruitment-status-cell'],
-                {[style['recruitment-status-cell-error']] : recruitmentStatus.toLowerCase()==='refused'}
+                {[style['recruitment-status-cell-error']] : recruitmentStatus.toLowerCase()==='refused'},
+                {[style['recruitment-status-cell-warning']] : recruitmentStatus.toLowerCase()==='applied'}
             )
         }>
             {recruitmentStatus}
