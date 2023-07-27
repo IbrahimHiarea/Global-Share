@@ -1,0 +1,45 @@
+.question-card{
+  width: 386px;
+  min-height: 140px;
+  border-radius: 8px;
+  border: 1px solid #E5E5ED;
+  display: flex;
+  padding: 14px 16px;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.title{
+  color: var(--word-color);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.options{
+  display: flex;
+  padding: 15px 22px;
+  background-color: white;
+  border-radius: 8px;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.option{
+  display: flex;
+  color: #768396;
+  font-size: 12px;
+  font-weight: 500;
+  gap: 10px;
+  align-items: center;
+}
+
+.box{
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  border: 1px solid var(--word-color);
+}
+
+.not-active{
+  padding-left: 2px;
+}
