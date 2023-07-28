@@ -1,0 +1,62 @@
+.change-applicant-position{
+  width: 438px;
+  height: 206px;
+  background-color: white;
+  padding: 24px;
+  border-radius: 9px;
+  -webkit-border-radius: 9px;
+  -moz-border-radius: 9px;
+  -ms-border-radius: 9px;
+  -o-border-radius: 9px;
+  position: relative;
+}
+
+.change-applicant-position-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.change-applicant-position-header h2{
+  margin: 0;
+  padding: 0;
+  color: var(--word-color);
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.change-applicant-position-body{
+  display: flex;
+  flex-direction: column;
+} 
+
+.box > div label{
+  display: none;
+}
+
+.buttons{
+  display: flex;
+  position: absolute;
+  gap: 26px;
+  bottom: 20px;
+  right: 28px;
+}
+
+.email{
+  position: absolute;
+  bottom: 20px;
+  right: 232px;
+}
+
+.email button{
+  margin: 0;
+  justify-content: space-evenly !important;
+}
+
+.buttons label{
+  background-color: var(--secondary-dark);
+}
+
+
