@@ -9,7 +9,6 @@ import Avatar from '@mui/material/Avatar';
 import profileImage from '../../assets/images/profileImage/profile1.png';
 import {BiHomeAlt2} from 'react-icons/bi';
 import {FaTasks} from 'react-icons/fa';
-import {CgProfile} from 'react-icons/cg';
 import {BsBookHalf} from 'react-icons/bs';
 import {HiUserGroup} from 'react-icons/hi'
 import {MdEmail} from 'react-icons/md';
@@ -33,11 +32,6 @@ const drawerList = [
         path: 'task',
         icon: <FaTasks />
     },
-    // {
-    //     title: 'profile',
-    //     path: 'profile',
-    //     icon: <CgProfile />
-    // },
     {
         title: 'Volunteer',
         path: 'volunteer',
@@ -117,15 +111,30 @@ function Navbar(){
                     <span onClick={handleToggle}> <IoIosArrowForward size='21px'/> </span>
                     <ul className={style['navbar-list']}>
                     {
-                        drawerList.map(({title , path , icon}) => (
+                        drawerList.map(({title , path , icon} , index) => (
                             <li key={title} className={style['navbar-list-item']}>
                                 <NavLink  
-                                    className={({isActive}) => clsx(style['navbar-link'] , {[style['navbar-link-background']] : isActive} , {[style['navbar-link-background-open']] : isActive && isOpen})}
+                                    className={({isActive}) => 
+                                        clsx(
+                                            style['navbar-link'], 
+                                            {[style['navbar-link-alt-hover']] : !isOpen},
+                                            {[style['navbar-link-hover']] : !isActive},
+                                            {[style['navbar-link-hover-open']] : !isActive && isOpen},
+                                            {[style['navbar-link-background']] : isActive}, 
+                                            {[style['navbar-link-background-open']] : isActive && isOpen}
+                                        )
+                                    }
                                     to={path}
                                     onClick={handleClose}
                                 >
                                     {icon} <span className={clsx(style['navbar-link-title'] , {[style['navbar-link-title-open']] : isOpen})}>{title}</span>
                                 </NavLink>
+                                <span 
+                                    style={{top: `${177 + (57*index)}px`}} 
+                                    className={clsx(style['navbar-link-alt'])}
+                                >
+                                    {title}
+                                </span>
                             </li>
                         ))
                     }

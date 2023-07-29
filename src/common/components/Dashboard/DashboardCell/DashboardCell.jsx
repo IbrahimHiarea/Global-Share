@@ -5,6 +5,9 @@ import clsx from 'clsx';
 // import icons & image
 import {MdNavigateNext , MdNavigateBefore} from 'react-icons/md';
 
+//import static data
+import {statusesData , recruitmentStatusData} from '../../../utils/selectorData'
+
 // import style
 import style from './DashboardCell.module.css';
 
@@ -33,8 +36,8 @@ export const StatusCell = ({status}) => {
         <div className={
             clsx(
                 style['status-cell'], 
-                {[style['status-cell-warning']]: status.toLowerCase()==='freeze'},
-                {[style['status-cell-error']]: status.toLowerCase()==='left'}
+                {[style['status-cell-warning']]: status.toLowerCase()===statusesData.freeze},
+                {[style['status-cell-error']]: status.toLowerCase()===statusesData.left}
             )
         }> 
         {status} 
@@ -47,15 +50,14 @@ export const RecruitmentStatusCell = ({recruitmentStatus}) => {
         <div className={
             clsx(
                 style['recruitment-status-cell'],
-                {[style['recruitment-status-cell-error']] : recruitmentStatus.toLowerCase()==='refused'},
-                {[style['recruitment-status-cell-warning']] : recruitmentStatus.toLowerCase()==='applied'}
+                {[style['recruitment-status-cell-error']] : recruitmentStatus.toLowerCase()===recruitmentStatusData.refused},
+                {[style['recruitment-status-cell-warning']] : recruitmentStatus.toLowerCase()===recruitmentStatusData.applied}
             )
         }>
             {recruitmentStatus}
         </div>
     );
 }
-
 
 export const ColoredCell = ({value}) => {
     return (

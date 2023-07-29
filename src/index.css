@@ -56,6 +56,9 @@
 
   /* word color */
   --word-color: #232360;
+
+  /* border color */
+  --border-color: #d6d6e3;
 }
 
 html {

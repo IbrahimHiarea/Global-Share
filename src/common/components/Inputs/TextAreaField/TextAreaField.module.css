@@ -1,5 +1,5 @@
 .text-area{
-    border: 1px solid var(--natural-alpha-2);
+    border: .1rem solid var(--border-color);
     width: 333px;
     height: 45px;
     color: var(--natural-alpha-2);

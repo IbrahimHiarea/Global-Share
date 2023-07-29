@@ -161,7 +161,7 @@ function EditVolunteer({id , handleClose}) {
                                         height='40px'
                                         name={`squads${id}`}
                                         placeholder='All Squads'
-                                        options={levelData}
+                                        options={Object.values(levelData)}
                                         control={control}
                                         required={'enter the squad'}
                                         errors={errors}
@@ -172,7 +172,7 @@ function EditVolunteer({id , handleClose}) {
                                         height='40px'
                                         name={`positions${id}`}
                                         placeholder='All Positions'
-                                        options={levelData}
+                                        options={Object.values(levelData)}
                                         control={control}
                                         required='enter the position'
                                         errors={errors}

@@ -7,6 +7,7 @@ import InputField from '../../../../common/components/Inputs/InputField/InputFie
 import SelectInputField from "../../../../common/components/Inputs/SelectInputField/SelectInputField";
 import Button from '../../../../common/components/Inputs/Button/Button';
 import SubmitButton from '../../../../common/components/Inputs/SubmitButton/SubmitButton';
+import Loader from '../../../../common/components/Loader/Loader';
 
 // import icons
 import { IoCloseOutline } from "react-icons/io5";
@@ -17,7 +18,6 @@ import {levelData} from '../../../../common/utils/selectorData'
 
 //import style 
 import style from './AddVolunteer.module.css';
-import Loader from '../../../../common/components/Loader/Loader';
 
 function AddVolunteer({handleClose}) {
     const {control , register , formState : {errors} , handleSubmit , unregister } = useForm({
@@ -147,7 +147,7 @@ function AddVolunteer({handleClose}) {
                                         height='40px'
                                         name={`squads${id}`}
                                         placeholder='All Squads'
-                                        options={levelData}
+                                        options={Object.values(levelData)}
                                         control={control}
                                         required={'enter the squad'}
                                         errors={errors}
@@ -158,7 +158,7 @@ function AddVolunteer({handleClose}) {
                                         height='40px'
                                         name={`positions${id}`}
                                         placeholder='All Positions'
-                                        options={levelData}
+                                        options={Object.values(levelData)}
                                         control={control}
                                         required='enter the position'
                                         errors={errors}

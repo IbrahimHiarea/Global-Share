@@ -15,8 +15,10 @@
     -moz-border-radius: 9px;
     -ms-border-radius: 9px;
     -o-border-radius: 9px;
-    border: 1px solid var(--natural-alpha-2);
+    border: .1rem solid var(--border-color);
     padding: 10px;
+    color: var(--natural-alpha-3);
+    font-weight: 300;
 }
 
 .upload-label{

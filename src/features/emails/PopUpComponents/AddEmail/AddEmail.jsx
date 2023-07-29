@@ -63,7 +63,7 @@ function AddEmail({handleClose}) {
                         height='40px'
                         name='nextRecruitmentStatus'
                         placeholder='Next Recruitment Status'
-                        options={recruitmentStatusData}
+                        options={Object.values(recruitmentStatusData)}
                         control={control}
                         required={'enter the next recruitment status'}
                         errors={errors}
@@ -75,7 +75,7 @@ function AddEmail({handleClose}) {
                         height='40px'
                         name='cc'
                         placeholder='CC'
-                        options={recruitmentStatusData}
+                        options={Object.values(recruitmentStatusData)}
                         control={control}
                         required={'enter the CC'}
                         errors={errors}

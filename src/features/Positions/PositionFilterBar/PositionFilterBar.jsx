@@ -15,7 +15,7 @@ import SubmitButton from '../../../common/components/Inputs/SubmitButton/SubmitB
 //import icons & images
 import { ImPlus } from 'react-icons/im';
 import { FiSearch } from 'react-icons/fi';
-import {RxReset} from 'react-icons/rx';
+import { RxReset } from 'react-icons/rx';
 
 //import static data
 import { levelData } from '../../../common/utils/selectorData.js';
@@ -56,7 +56,7 @@ function PositionFilterBar({ handleAdd }) {
                     height='40px'
                     name='level'
                     placeholder='All levels'
-                    options={levelData}
+                    options={Object.values(levelData)}
                     control={control}
                 />
                 <SelectInputField
@@ -64,7 +64,7 @@ function PositionFilterBar({ handleAdd }) {
                     height='40px'
                     name='squad'
                     placeholder='All squads'
-                    options={levelData}
+                    options={Object.values(levelData)}
                     control={control}
                 />
                 <span className={style['bar-buttons']}>

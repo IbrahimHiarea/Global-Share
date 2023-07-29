@@ -22,7 +22,7 @@ function SelectInputField({
         
 
     let borderColor = 'transparent';
-    if(border) borderColor = 'var(--natural-alpha-2)';
+    if(border) borderColor = 'var(--border-color)';
     if(errors && errors[name]) borderColor = 'var(--error-main)';
 
     return(
@@ -63,9 +63,9 @@ function SelectInputField({
                                 boxShadow: 'none',
                                 textTransform: 'capitalize',
                                 color: state.isFocused ? 'var(--primary-main)' : 'var(--natural-alpha-2)',
-                                border: (state.isFocused ? '1px solid var(--primary-main)' : `1px solid ${borderColor}`),
+                                border: (state.isFocused ? '.1rem solid var(--primary-main)' : `.1rem solid ${borderColor}`),
                                 '&:hover':{
-                                    border: (state.isFocused ? '1px solid var(--primary-main)' : `1px solid ${borderColor}`),
+                                    border: (state.isFocused ? '.1rem solid var(--primary-main)' : `.1rem solid ${borderColor}`),
                                 },
                             }),
                             valueContainer: (base) => ({

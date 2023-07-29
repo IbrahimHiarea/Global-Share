@@ -81,8 +81,7 @@ function DashboardTable ({
             pagination
             paginationComponentOptions={
                 {
-                    rowsPerPageText: 'Showing',
-                    selectAllRowsItem: true,
+                    noRowsPerPage: true
                 }
             }
             paginationIconFirstPage={null}
@@ -90,8 +89,6 @@ function DashboardTable ({
             paginationIconNext={<NextArrow />}
             paginationIconPrevious={<PreviousArrow />}
             onChangePage={onChangePage}
-            onChangeRowsPerPage={onChangeRowsPerPage}
-            paginationRowsPerPageOptions={[10 , 20 , 30]}
         />
     );
 }

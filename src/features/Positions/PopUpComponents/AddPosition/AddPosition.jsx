@@ -94,7 +94,7 @@ function AddPosition({handleClose}) {
                         height='40px'
                         name='level'
                         placeholder='Levels'
-                        options={levelData}
+                        options={Object.values(levelData)}
                         control={control}
                         required={'enter the level'}
                         errors={errors}

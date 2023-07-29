@@ -57,7 +57,7 @@ function VolunteerFilterBar({ handleAdd }){
                     height='40px'
                     name='status'
                     placeholder='All statuses'
-                    options={statusesData}
+                    options={Object.values(statusesData)}
                     control={control}
                 />
                 <SelectInputField
@@ -65,7 +65,7 @@ function VolunteerFilterBar({ handleAdd }){
                     height='40px'
                     name='squad'
                     placeholder='All squads'
-                    options={statusesData}
+                    options={Object.values(statusesData)}
                     control={control}
                 />
                 <SelectInputField
@@ -73,7 +73,7 @@ function VolunteerFilterBar({ handleAdd }){
                     height='40px'
                     name='position'
                     placeholder='All positions'
-                    options={statusesData}
+                    options={Object.values(statusesData)}
                     control={control}
                 />
                 <SelectInputField
@@ -81,7 +81,7 @@ function VolunteerFilterBar({ handleAdd }){
                     height='40px'
                     name='level'
                     placeholder='All levels'
-                    options={levelData}
+                    options={Object.values(levelData)}
                     control={control}
                 />
                 <span className={style['bar-buttons']}>
