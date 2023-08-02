@@ -34,3 +34,11 @@ export const recruitmentStatusData = {
     done: 'done',
     refused: 'refused'
 };
+
+export const questionTypeData = {
+    long: 'long',
+    short: 'short',
+    radio: 'radio',
+    checkbox: 'checkbox',
+    file: 'file'
+};
