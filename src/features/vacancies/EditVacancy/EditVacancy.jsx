@@ -20,9 +20,9 @@ import { BsTrash } from "react-icons/bs";
 import {levelData, questionTypeData} from '../../../common/utils/selectorData'
 
 //import style 
-import style from './AddVacancy.module.css';
+import style from './EditVacancy.module.css';
 
-function AddVacancy() {
+function EditVacancy() {
 
     const {control , register , watch , setValue , formState : {errors} , handleSubmit , unregister } = useForm({
         defaultValues:{
@@ -64,19 +64,19 @@ function AddVacancy() {
 
     if(isLoading===true){
         return (
-            <div className={style['add-vacancy-loader']}>
+            <div className={style['edit-vacancy-loader']}>
                 <Loader  transparent={true}/>
             </div>
         );
     }
 
     return (
-        <div className={style['add-vacancy']}>
-            <div className={style['add-vacancy-header']}>
+        <div className={style['edit-vacancy']}>
+            <div className={style['edit-vacancy-header']}>
                 <CiSquareChevLeft size="55px" color='#8B909A' cursor="pointer" onClick={() => navigate(-1)}/>
-                <h1>Add Vacancy</h1>
+                <h1>Edit Vacancy</h1>
             </div>
-            <form className={style["add-vacancy-body"]} onSubmit={handleSubmit(onSubmit)}>
+            <form className={style["edit-vacancy-body"]} onSubmit={handleSubmit(onSubmit)}>
                 <div className={style.box}>
                     <SelectInputField
                         width='243px'
@@ -208,7 +208,7 @@ function AddVacancy() {
                         height='40px'
                         disabled={isLoading}
                     >
-                        Add Vacancy
+                        Edit Vacancy
                     </SubmitButton>
                 </div>
             </form>
@@ -221,4 +221,4 @@ function AddVacancy() {
     );
 }
 
-export default AddVacancy;
+export default EditVacancy;

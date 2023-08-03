@@ -1,16 +1,16 @@
-.add-vacancy{
+.edit-vacancy{
   padding: 36px 55px 120px;
   position: relative;
 }
 
-.add-vacancy-header{
+.edit-vacancy-header{
   display: flex;
   gap: 30px;
   align-items: center;
   margin-bottom: 30px;
 }
 
-.add-vacancy-header h1{
+.edit-vacancy-header h1{
   color: var(--word-color);
   font-size: 34px;
   font-weight: 700;
@@ -18,7 +18,7 @@
   padding: 0;
 }
 
-.add-vacancy-body{
+.edit-vacancy-body{
   display: flex;
   flex-direction: column;
 }
@@ -62,7 +62,7 @@
   margin: 0;
 }
 
-.add-vacancy-loader{
+.edit-vacancy-loader{
   display: flex;
   align-items: center;
   min-height: 100vh;

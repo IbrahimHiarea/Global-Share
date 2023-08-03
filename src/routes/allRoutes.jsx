@@ -16,6 +16,7 @@ import EmailPage from '../features/emails/EmailPage/EmailPage';
 import ApplicationPage from '../features/application/ApplicationPage/ApplicationPage';
 import VacanciesPage from '../features/vacancies/VacanciesPage/VacanciesPage'
 import AddVacancy from '../features/vacancies/AddVacancy/AddVacancy'
+import EditVacancy from '../features/vacancies/EditVacancy/EditVacancy'
 
 function AllRoute () {
     return (

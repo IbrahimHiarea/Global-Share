@@ -10,7 +10,7 @@ import style from './QuestionOptions.module.css';
 
 function QuestionOptions({ questionId , setValue , currentOptions}) {
 
-    const [options , setOptions] = useState([]);
+    const [options , setOptions] = useState(currentOptions);
     const [addOption , setAddOption] = useState(false);
     const [newOption , setNewOption] = useState('');
     const [error , setError] = useState(false);
