@@ -6,7 +6,7 @@ import { useNavigate , Outlet , NavLink } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 
 //import icon & image
-import profileImage from '../../assets/images/profileImage/profile1.png';
+import profileImage from '../../assets/images/profileImage/profile2.png';
 import {BiHomeAlt2} from 'react-icons/bi';
 import {FaTasks} from 'react-icons/fa';
 import {BsBookHalf} from 'react-icons/bs';
@@ -23,37 +23,37 @@ import clsx from 'clsx';
 //static data
 const drawerList = [
     {
-        title: 'Home',
+        title: 'home',
         path: 'home',
         icon: <BiHomeAlt2 />
     },
     {
-        title: 'task Management',
+        title: 'task management',
         path: 'task',
         icon: <FaTasks />
     },
     {
-        title: 'Volunteer',
+        title: 'volunteer',
         path: 'volunteer',
         icon: <BsBookHalf />
     },
     {
-        title: 'Squad',
+        title: 'squad',
         path: 'squad',
         icon: <HiUserGroup />
     },
     {
-        title: 'Position',
+        title: 'position',
         path: 'position',
         icon: <SiGoogleanalytics />
     },
     {
-        title: 'Email',
+        title: 'email',
         path: 'email',
         icon: <MdEmail />
     },
     {
-        title: 'Application',
+        title: 'application',
         path: 'application',
         icon: <AiFillAppstore />
     }
@@ -71,7 +71,10 @@ function Navbar(){
 
     const handleClose = () => setIsOpen(false);
 
-    const handleInfoClick = () => nav('profile');
+    const handleInfoClick = () =>{
+        nav('profile');
+        handleClose();
+    }
 
     return (
         <>

@@ -15,9 +15,8 @@ import { HiOutlineMail } from "react-icons/hi";
 //import style 
 import style from './RefuseApplication.module.css';
 
-function RefuseApplication({handleClose}) {
-
-    const {control , register , formState : {errors} , handleSubmit } = useForm({
+function RefuseApplication({id , handleClose}) {
+    const {register , formState : {errors} , handleSubmit } = useForm({
         defaultValues:{
             refuseReason : '',
         }
@@ -29,7 +28,7 @@ function RefuseApplication({handleClose}) {
         setIsLoading(true);
         console.log(values);
         //TODO:: 
-        // dispatch add action to redux
+        // dispatch approve action to redux
     }
 
     if(isLoading===true){
@@ -56,7 +55,7 @@ function RefuseApplication({handleClose}) {
                     <TextAreaField 
                         name='refuseReason'
                         placeholder='Refuse Reason'
-                        width='283px'
+                        width='292px'
                         height='120px'
                         control={register('refuseReason' , {
                             required: 'Please enter the Refuse Reason',

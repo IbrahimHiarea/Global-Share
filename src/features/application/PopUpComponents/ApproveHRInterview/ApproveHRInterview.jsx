@@ -16,8 +16,7 @@ import { HiOutlineMail } from "react-icons/hi";
 import style from './ApproveHRInterview.module.css';
 
 function ApproveHRInterview({handleClose}) {
-
-    const {control , register , formState : {errors} , handleSubmit } = useForm({
+    const {register , formState : {errors} , handleSubmit } = useForm({
         defaultValues:{
             hrInterviewFeedback : '',
         }
@@ -51,7 +50,7 @@ function ApproveHRInterview({handleClose}) {
                     onClick={handleClose}
                 />
             </div>
-            <form className={style["approve-as-hr-interview-body"]} onSubmit={handleSubmit(onSubmit)}>
+            <div className={style.email}>
                 <Button 
                     width='166px' 
                     height='40px' 
@@ -61,10 +60,12 @@ function ApproveHRInterview({handleClose}) {
                 >
                     <HiOutlineMail color='var(--word-color)' size="17px"/> Preview Email
                 </Button>
+            </div>
+            <form className={style["approve-as-hr-interview-body"]} onSubmit={handleSubmit(onSubmit)}>
                 <TextAreaField 
                     name='hrInterviewFeedback'
                     placeholder='HR Interview Feedback'
-                    width='385px'
+                    width='392px'
                     height='120px'
                     control={register('hrInterviewFeedback' , {
                         required: 'Please enter the HR Interview Feedback',
@@ -75,6 +76,7 @@ function ApproveHRInterview({handleClose}) {
                     width='137px' 
                     height='40px'
                     disabled={isLoading}
+                    backgroundColor='var(--secondary-dark)'
                 >
                     Approve
                 </SubmitButton>

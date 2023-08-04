@@ -15,6 +15,13 @@ import {ReactComponent as NoData} from '../../../../assets/icons/noData.svg';
 import style from './DashboardTable.module.css';
 import { CircularProgress } from '@mui/material';
 
+function getProp(object , keys){
+    let value = object;
+    for(let i of keys)
+        value = value[i];
+    return value;
+}
+
 const formatCell = (value , type) => {
     if(type==='id') return <IdCell id={value} />;
     else if(type==='normal') return <NormalCell value={value} />;
@@ -41,25 +48,22 @@ const iconButton = (row , key , onClick) => {
 function DashboardTable ({
         columns , data , 
         rowClick , pending ,
-        handleDelete , handleEdit , onChangePage ,
-        onChangeRowsPerPage
+        handleDelete , handleEdit , onChangePage
     }){
 
     const initColumns = columns.map((col) => {
         if(col.type!=='button') return {
             name: <HeaderCell title={col.name}/>,
             sortable: true,
-            selector: row => row[col.key],
+            selector: row => row[col.keys[0]],
             format: (row) => {
-                if(col.key==='firstName') return formatCell(row.firstName+" "+row.lastName , col.type);
-                if(col.key==='position') return formatCell(row.position.name , col.type);
-                if(col.key==='squadName') return formatCell(row.squad.name  , col.type);
-                return formatCell(row[col.key] , col.type)
+                if(col.keys[0]==='firstName') return formatCell(row.firstName+" "+row.lastName , col.type);
+                return formatCell(getProp(row , col.keys) , col.type)
             }
         }
         return {
-            selector: (row) => row[col.key],
-            format: (row) => iconButton(row , col.key , col.key==='delete' ? handleDelete : handleEdit),
+            selector: (row) => row[col.keys[0]],
+            format: (row) => iconButton(row , col.keys[0] , col.keys[0]==='delete' ? handleDelete : handleEdit),
             ignoreRowClick: true,
             button: true
         }
@@ -81,7 +85,7 @@ function DashboardTable ({
             pagination
             paginationComponentOptions={
                 {
-                    noRowsPerPage: true
+                    noRowsPerPage: true,
                 }
             }
             paginationIconFirstPage={null}

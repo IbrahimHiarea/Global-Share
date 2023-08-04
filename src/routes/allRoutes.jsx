@@ -14,6 +14,7 @@ import SquadPage from '../features/squads/SquadPage/SquadPage';
 import PositionPage from '../features/Positions/PositionPage/PositionPage';
 import EmailPage from '../features/emails/EmailPage/EmailPage';
 import ApplicationPage from '../features/application/ApplicationPage/ApplicationPage';
+import ApplicationDetails from '../features/application/ApplicationDetails/ApplicationDetails';
 
 function AllRoute () {
     return (
@@ -53,8 +54,10 @@ function AllRoute () {
                 <Route path='email' element={<EmailPage />}/>
 
                 {/* Application section */}
-                <Route path='application' element={<ApplicationPage />}/>
-
+                <Route path='application' element={<Outlet />}>
+                    <Route index element={<ApplicationPage />} />
+                    <Route path=':applicationId' element={<ApplicationDetails />} />
+                </Route>
             </Route>
         </Routes>
     );  

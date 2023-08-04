@@ -237,6 +237,7 @@
     -moz-transform: scale(0);
     -ms-transform: scale(0);
     -o-transform: scale(0);
+    text-transform: capitalize;
 }
 
 .navbar-link-alt::before{

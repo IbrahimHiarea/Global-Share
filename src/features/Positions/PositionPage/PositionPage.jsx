@@ -20,40 +20,40 @@ import style from './PositionPage.module.css';
 const columns = [
     {
         name: 'id',
-        key: 'id',
+        keys: ['id'],
         type: 'id',
     },
     {
         name: 'name',
-        key: 'name',
+        keys: ['name'],
         type: 'normal'
     },
     {
         name: 'gs name',
-        key: 'gsName',
+        keys: ['gsName'],
         type: 'normal'
     },
     {
         name: 'level',
-        key: 'gsLevel',
+        keys: ['gsLevel'],
         type: 'normal'
     },
     {
         name: 'squad',
-        key: 'squadName',
+        keys: ['squad' , 'name'],
         type: 'normal'
     },
     {
         name: 'weekly hours',
-        key: 'weeklyHours',
+        keys: ['weeklyHours'],
         type: 'colored'
     },
     {
-        key: 'edit',
+        keys: ['edit'],
         type: 'button',
     },
     {
-        key: 'delete',
+        keys: ['delete'],
         type: 'button',
     }
 ]
@@ -255,10 +255,6 @@ function PositionPage() {
         console.log(page , totalRow);
     }
 
-    //TODO::
-    const onChangeRowsPerPage = (currentRowsPerPage, currentPage) => {
-        console.log( currentRowsPerPage , currentPage);
-    }
 
     useEffect(() => {
         dispatch(addManyPosition(fakeData));
@@ -287,7 +283,6 @@ function PositionPage() {
                 handleDelete={(row) => popUpDispatch({type:'delete' , id: row.id})}
                 handleEdit={(row) => popUpDispatch({type:'edit' , id: row.id})}
                 onChangePage={onChangePage}
-                onChangeRowsPerPage={onChangeRowsPerPage}
             />  
 
             <PopUp open={popUpOption.isOpen} handleClose={() => popUpDispatch({type:'close'})} index={popUpOption.index}>

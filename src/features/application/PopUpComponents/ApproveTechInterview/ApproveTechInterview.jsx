@@ -16,10 +16,9 @@ import { HiOutlineMail } from "react-icons/hi";
 import style from './ApproveTechInterview.module.css';
 
 function ApproveTechInterview({handleClose}) {
-
-    const {control , register , formState : {errors} , handleSubmit } = useForm({
+    const {register , formState : {errors} , handleSubmit } = useForm({
         defaultValues:{
-            approveTechInterview : '',
+            techInterviewFeedback: '',
         }
     })
 
@@ -51,7 +50,7 @@ function ApproveTechInterview({handleClose}) {
                     onClick={handleClose}
                 />
             </div>
-            <form className={style["approve-as-tech-interview-body"]} onSubmit={handleSubmit(onSubmit)}>
+            <div className={style.email}>
                 <Button 
                     width='166px' 
                     height='40px' 
@@ -61,13 +60,15 @@ function ApproveTechInterview({handleClose}) {
                 >
                     <HiOutlineMail color='var(--word-color)' size="17px"/> Preview Email
                 </Button>
+            </div>
+            <form className={style["approve-as-tech-interview-body"]} onSubmit={handleSubmit(onSubmit)}>
                 <TextAreaField 
-                    name='approveTechInterview'
+                    name='techInterviewFeedback'
                     placeholder='Tech Interview Feedback'
-                    width='385px'
+                    width='392px'
                     height='120px'
-                    control={register('approveTechInterview' , {
-                        required: 'Please enter the Approve Tech Interview Feedback',
+                    control={register('techInterviewFeedback' , {
+                        required: 'Please enter the Tech Interview Feedback',
                     })}
                     errors={errors}
                 />
@@ -75,6 +76,7 @@ function ApproveTechInterview({handleClose}) {
                     width='137px' 
                     height='40px'
                     disabled={isLoading}
+                    backgroundColor='var(--secondary-dark)'
                 >
                     Approve
                 </SubmitButton>

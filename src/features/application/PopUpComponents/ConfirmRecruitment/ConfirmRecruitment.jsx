@@ -16,8 +16,7 @@ import { HiOutlineMail } from "react-icons/hi";
 import style from './ConfirmRecruitment.module.css';
 
 function ConfirmRecruitment({handleClose}) {
-
-    const {control , register , watch , formState : {errors} , handleSubmit } = useForm({
+    const {register , watch , formState : {errors} , handleSubmit } = useForm({
         defaultValues:{
             firstName : '',
             lastName : '',
@@ -60,7 +59,7 @@ function ConfirmRecruitment({handleClose}) {
                         type='text'
                         name='firstName'
                         placeholder='First Name'
-                        width='183px'
+                        width='200px'
                         height='40px'
                         control={register('firstName' , {
                             required: 'Please Enter The First Name',
@@ -75,7 +74,7 @@ function ConfirmRecruitment({handleClose}) {
                         type='text'
                         name='lastName'
                         placeholder='Last Name'
-                        width='183px'
+                        width='200px'
                         height='40px'
                         control={register('lastName' , {
                             required: 'Please Enter The Last Name',
@@ -92,7 +91,7 @@ function ConfirmRecruitment({handleClose}) {
                         type='password'
                         placeholder='Password'
                         name='password'
-                        width='183px'
+                        width='200px'
                         height='40px'  
                         control={register('password' , {
                             required: 'Please enter the password',
@@ -107,7 +106,7 @@ function ConfirmRecruitment({handleClose}) {
                         type='password'
                         placeholder='Confirm Password'
                         name='confirmPassword'
-                        width='183px'
+                        width='200px'
                         height='40px'  
                         control={register('confirmPassword' , {
                             required: 'Please enter the Confirm Password',
@@ -122,9 +121,10 @@ function ConfirmRecruitment({handleClose}) {
                 </div>
                 <div className={style.buttons}>
                     <SubmitButton 
-                        width='137px' 
+                        width='160px' 
                         height='40px'
                         disabled={isLoading}
+                        backgroundColor='var(--secondary-dark)'
                     >
                         Create Account
                     </SubmitButton>

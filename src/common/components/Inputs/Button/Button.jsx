@@ -9,7 +9,7 @@ function Button ({children , width , height , disabled , backgroundColor , color
         <button
             className={style.button}
             style={{
-                width: width,
+                minWidth: width,
                 height: height,
                 backgroundColor: backgroundColor,
                 color: color

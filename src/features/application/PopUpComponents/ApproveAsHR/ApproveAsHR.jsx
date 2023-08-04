@@ -16,10 +16,9 @@ import { HiOutlineMail } from "react-icons/hi";
 import style from './ApproveAsHR.module.css';
 
 function ApproveAsHR({handleClose}) {
-
-    const {control , register , formState : {errors} , handleSubmit } = useForm({
+    const {register , formState : {errors} , handleSubmit } = useForm({
         defaultValues:{
-            hrFeedback : '',
+            hrFeedback: '',
         }
     })
 
@@ -51,7 +50,7 @@ function ApproveAsHR({handleClose}) {
                     onClick={handleClose}
                 />
             </div>
-            <form className={style["approve-as-hr-body"]} onSubmit={handleSubmit(onSubmit)}>
+            <div className={style.email}>
                 <Button 
                     width='166px' 
                     height='40px' 
@@ -61,10 +60,12 @@ function ApproveAsHR({handleClose}) {
                 >
                     <HiOutlineMail color='var(--word-color)' size="17px"/> Preview Email
                 </Button>
+            </div>
+            <form className={style["approve-as-hr-body"]} onSubmit={handleSubmit(onSubmit)}>
                 <TextAreaField 
                     name='hrFeedback'
                     placeholder='HR Feedback'
-                    width='385px'
+                    width='392px'
                     height='120px'
                     control={register('hrFeedback' , {
                         required: 'Please enter the HR Feedback',
@@ -75,6 +76,7 @@ function ApproveAsHR({handleClose}) {
                     width='137px' 
                     height='40px'
                     disabled={isLoading}
+                    backgroundColor='var(--secondary-dark)'
                 >
                     Approve
                 </SubmitButton>

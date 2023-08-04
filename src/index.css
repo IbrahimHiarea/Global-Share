@@ -151,6 +151,19 @@ ul {
   margin-left: auto;
 }
 
+.rdt_Pagination::before{
+  content: 'Showing';
+}
+
+/* mui */
+.css-1t1j96h-MuiPaper-root-MuiDialog-paper{
+  border-radius: 9px !important;
+  -webkit-border-radius: 9px !important;
+  -moz-border-radius: 9px !important;
+  -ms-border-radius: 9px !important;
+  -o-border-radius: 9px !important;
+}
+
 /* media */
 
 .container {

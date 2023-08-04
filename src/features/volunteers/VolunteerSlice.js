@@ -19,6 +19,7 @@ const status = {
 const volunteerModel = {
     id: 0,
     email: "",
+    password: '',
     phoneNumber: "",
     firstName: "",
     lastName: "",
@@ -30,7 +31,13 @@ const volunteerModel = {
     gsStatus: "",
     joinDate: "2000-1-1",
     positionId: "",
-    position: {}
+    position: {
+        name: '',
+        squad: {
+            name: ''
+        }
+    },
+    comments: [],
 }
 
 const volunteerAdapter = createEntityAdapter({

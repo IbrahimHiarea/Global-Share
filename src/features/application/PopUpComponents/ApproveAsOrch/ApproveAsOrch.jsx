@@ -16,8 +16,7 @@ import { HiOutlineMail } from "react-icons/hi";
 import style from './ApproveAsOrch.module.css';
 
 function ApproveAsOrch({handleClose}) {
-
-    const {control , register , formState : {errors} , handleSubmit } = useForm({
+    const {register , formState : {errors} , handleSubmit } = useForm({
         defaultValues:{
             orchFeedback : '',
         }
@@ -51,7 +50,7 @@ function ApproveAsOrch({handleClose}) {
                     onClick={handleClose}
                 />
             </div>
-            <form className={style["approve-as-orch-body"]} onSubmit={handleSubmit(onSubmit)}>
+            <div className={style.email}>
                 <Button 
                     width='166px' 
                     height='40px' 
@@ -61,10 +60,12 @@ function ApproveAsOrch({handleClose}) {
                 >
                     <HiOutlineMail color='var(--word-color)' size="17px"/> Preview Email
                 </Button>
+            </div>
+            <form className={style["approve-as-orch-body"]} onSubmit={handleSubmit(onSubmit)}>
                 <TextAreaField 
                     name='orchFeedback'
                     placeholder='Orch Feedback'
-                    width='385px'
+                    width='392px'
                     height='120px'
                     control={register('orchFeedback' , {
                         required: 'Please enter the orch Feedback',
@@ -75,6 +76,7 @@ function ApproveAsOrch({handleClose}) {
                     width='137px' 
                     height='40px'
                     disabled={isLoading}
+                    backgroundColor='var(--secondary-dark)'
                 >
                     Approve
                 </SubmitButton>

@@ -16,9 +16,43 @@ const status = {
     failed: "failed"
 } 
 
+const applicationModel = {
+    id: 0,
+    vacancyId: 0,
+    vacancy: {
+        position: {
+            name: '',
+            squad: {
+                name: '',
+            }
+        }
+    },
+    status: 'applied',
+    feedbacks: [], //feedback model
+    answers: [], //answer model
+};  
+
+const feedbackModel = {
+    id: 0,
+    applicationId: 0,
+    application: {},
+    type: '', // recruitmentStatus,
+    text: '',
+};
+
+const answersModel = {
+    id: 0,
+    text: '',
+    applicationId: 0,
+    application: {},
+    questionId : '',
+    question: {}, //vacancy question model
+};
+
+
 const applicationAdapter = createEntityAdapter({
-    selectId: (sq) => sq.id,
-    sortComparer: (sqA , sqB) => sqA.id - sqB.id
+    selectId: (ap) => ap.id,
+    sortComparer: (apA , apB) => apA.id - apB.id
 });
 
 

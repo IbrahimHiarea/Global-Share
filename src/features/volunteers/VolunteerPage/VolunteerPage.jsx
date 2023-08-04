@@ -20,40 +20,40 @@ import style from './VolunteerPage.module.css';
 const columns = [
     {
         name: 'id',
-        key: 'id',
+        keys: ['id'],
         type: 'id',
     },
     {
         name: 'full name',
-        key: 'firstName',
+        keys: ['firstName'],
         type: 'normal'
     },
     {
         name: 'squad',
-        key: 'squad',
+        keys: ['position' , 'squad' , 'name'],
         type: 'normal'
     },
     {
         name: 'position',
-        key: 'position',
+        keys: ['position' , 'name'],
         type: 'normal'
     },
     {
         name: 'level',
-        key: 'level',
+        keys: ['level'],
         type: 'normal'
     },
     {
         name: 'status',
-        key: 'gsStatus',
+        keys: ['gsStatus'],
         type: 'status'
     },
     {
-        key: 'edit',
+        keys: ['edit'],
         type: 'button',
     },
     {
-        key: 'delete',
+        keys: ['delete'],
         type: 'button',
     }
 ]
@@ -75,8 +75,10 @@ const fakeData = [
         positionId: "",
         position: {
             name: 'react dev',
+            squad: {
+                name: 'Radioactive'
+            }
         },
-        squad: 'starter'
     },
     {
         id: 2,
@@ -92,8 +94,12 @@ const fakeData = [
         gsStatus: "freeze",
         joinDate: "2000-1-1",
         positionId: "",
-        position: {},
-        squad: 'starter'
+        position: {
+            name: 'react dev',
+            squad: {
+                name: 'Radioactive'
+            }
+        },
     },
     {
         id: 3,
@@ -109,8 +115,12 @@ const fakeData = [
         gsStatus: "left",
         joinDate: "2000-1-1",
         positionId: "",
-        position: {},
-        squad: 'starter'
+        position: {
+            name: 'react dev',
+            squad: {
+                name: 'Radioactive'
+            }
+        },
     },
     {
         id: 4,
@@ -126,8 +136,12 @@ const fakeData = [
         gsStatus: "active",
         joinDate: "2000-1-1",
         positionId: "",
-        position: {},
-        squad: 'starter'
+        position: {
+            name: 'react dev',
+            squad: {
+                name: 'Radioactive'
+            }
+        },
     },
     {
         id: 5,
@@ -143,8 +157,12 @@ const fakeData = [
         gsStatus: "active",
         joinDate: "2000-1-1",
         positionId: "",
-        position: {},
-        squad: 'starter'
+        position: {
+            name: 'react dev',
+            squad: {
+                name: 'Radioactive'
+            }
+        },
     },
     {
         id: 6,
@@ -160,8 +178,12 @@ const fakeData = [
         gsStatus: "active",
         joinDate: "2000-1-1",
         positionId: "",
-        position: {},
-        squad: 'starter'
+        position: {
+            name: 'react dev',
+            squad: {
+                name: 'Radioactive'
+            }
+        },
     },
     {
         id: 7,
@@ -177,8 +199,12 @@ const fakeData = [
         gsStatus: "active",
         joinDate: "2000-1-1",
         positionId: "",
-        position: {},
-        squad: 'starter'
+        position: {
+            name: 'react dev',
+            squad: {
+                name: 'Radioactive'
+            }
+        },
     },
     {
         id: 8,
@@ -194,8 +220,12 @@ const fakeData = [
         gsStatus: "active",
         joinDate: "2000-1-1",
         positionId: "",
-        position: {},
-        squad: 'starter'
+        position: {
+            name: 'react dev',
+            squad: {
+                name: 'Radioactive'
+            }
+        },
     },
     {
         id: 9,
@@ -211,8 +241,12 @@ const fakeData = [
         gsStatus: "left",
         joinDate: "2000-1-1",
         positionId: "",
-        position: {},
-        squad: 'starter'
+        position: {
+            name: 'react dev',
+            squad: {
+                name: 'Radioactive'
+            }
+        },
     },
     {
         id: 10,
@@ -228,8 +262,12 @@ const fakeData = [
         gsStatus: "active",
         joinDate: "2000-1-1",
         positionId: "",
-        position: {},
-        squad: 'starter'
+        position: {
+            name: 'react dev',
+            squad: {
+                name: 'Radioactive'
+            }
+        },
     },
     {
         id: 11,
@@ -245,8 +283,12 @@ const fakeData = [
         gsStatus: "active",
         joinDate: "2000-1-1",
         positionId: "",
-        position: {},
-        squad: 'starter'
+        position: {
+            name: 'react dev',
+            squad: {
+                name: 'Radioactive'
+            }
+        },
     },
 ]
 
@@ -300,11 +342,6 @@ function VolunteerPage(){
         console.log(page , totalRow);
     }
 
-    //TODO::
-    const onChangeRowsPerPage = (currentRowsPerPage, currentPage) => {
-        console.log( currentRowsPerPage , currentPage);
-    }
-
     useEffect(() => {
         dispatch(addManyVolunteer(fakeData));
     } , []);
@@ -332,7 +369,6 @@ function VolunteerPage(){
                 handleDelete={(row) => popUpDispatch({type:'delete' , id: row.id})}
                 handleEdit={(row) => popUpDispatch({type:'edit' , id: row.id})}
                 onChangePage={onChangePage}
-                onChangeRowsPerPage={onChangeRowsPerPage}
             />  
 
             <PopUp open={popUpOption.isOpen} handleClose={() => popUpDispatch({type:'close'})} index={popUpOption.index}>

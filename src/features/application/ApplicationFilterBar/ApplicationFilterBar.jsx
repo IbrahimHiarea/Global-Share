@@ -18,7 +18,7 @@ import { RxReset } from 'react-icons/rx';
 import style from './ApplicationFilterBar.module.css';
 
 
-function ApplicationFilterBar({handleAdd}){
+function ApplicationFilterBar(){
     const {register , formState , reset , handleSubmit} = useForm({
         defaultValues:{
             search: '',

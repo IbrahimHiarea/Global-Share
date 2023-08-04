@@ -1,5 +1,6 @@
 //import react
 import React, { useEffect, useReducer } from 'react';
+import { useNavigate } from 'react-router';
 
 //import redux
 import { useDispatch , useSelector } from 'react-redux';
@@ -16,27 +17,27 @@ import style from './ApplicationPage.module.css';
 const columns = [
     {
         name: 'id',
-        key: 'id',
+        keys: ['id'],
         type: 'id',
     },
     {
         name: 'vacancy id',
-        key: 'vacancyId',
+        keys: ['vacancyId'],
         type: 'id'
     },
     {
         name: 'Position',
-        key: 'position',
+        keys: ['vacancy' , 'position' , 'name'],
         type: 'normal'
     },
     {
         name: 'Squad',
-        key: 'squad',
+        keys: ['vacancy' , 'position' , 'squad' , 'name'],
         type: 'normal',
     },
-    {
+    {   
         name: 'status',
-        key: 'status',
+        keys: ['status'],
         type: 'recruitmentStatus'
     },
 ];
@@ -44,98 +45,198 @@ const columns = [
 const fakeData = [
     {
         id: 1,
-        vacancyId: 1,
-        position: 'Specialist Android Developer',
-        squad: 'Radioactive',
-        status: 'Applied'
+        vacancyId: 200,
+        vacancy: {
+            position: {
+                name: 'Specialist Android Developer',
+                squad: {
+                    name: 'Radioactive',
+                }
+            }
+        },
+        status: 'applied',
+        feedbacks: [],
+        answers: [],
     },
     {
         id: 2,
-        vacancyId: 2,
-        position: 'Specialist Android Developer',
-        squad: 'Radioactive',
-        status: 'HR Approved'
+        vacancyId: 100,
+        vacancy: {
+            position: {
+                name: 'Specialist Android Developer',
+                squad: {
+                    name: 'Radioactive',
+                }
+            }
+        },
+        status: 'hr_approved',
+        feedbacks: [],
+        answers: [],
     },
     {
         id: 3,
-        vacancyId: 3,
-        position: 'Specialist Android Developer',
-        squad: 'Radioactive',
-        status: 'Orch Approved'
+        vacancyId: 100,
+        vacancy: {
+            position: {
+                name: 'Specialist Android Developer',
+                squad: {
+                    name: 'Radioactive',
+                }
+            }
+        },
+        status: 'orch_approved',
+        feedbacks: [],
+        answers: [],
     },
     {
         id: 4,
-        vacancyId: 4,
-        position: 'Specialist Android Developer',
-        squad: 'Radioactive',
-        status: 'Refused'
+        vacancyId: 100,
+        vacancy: {
+            position: {
+                name: 'Specialist Android Developer',
+                squad: {
+                    name: 'Radioactive',
+                }
+            }
+        },
+        status: 'hr_interview_approved',
+        feedbacks: [],
+        answers: [],
     },
     {
         id: 5,
-        vacancyId: 5,
-        position: 'Specialist Android Developer',
-        squad: 'Radioactive',
-        status: 'HR-Interview Approved'
+        vacancyId: 100,
+        vacancy: {
+            position: {
+                name: 'Specialist Android Developer',
+                squad: {
+                    name: 'Radioactive',
+                }
+            }
+        },
+        status: 'tech_interview_approved',
+        feedbacks: [],
+        answers: [],
     },
     {
         id: 6,
-        vacancyId: 6,
-        position: 'Specialist Android Developer',
-        squad: 'Radioactive',
-        status: 'HR-Interview Approved'
+        vacancyId: 100,
+        vacancy: {
+            position: {
+                name: 'Specialist Android Developer',
+                squad: {
+                    name: 'Radioactive',
+                }
+            }
+        },
+        status: 'done',
+        feedbacks: [],
+        answers: [],
     },
     {
         id: 7,
-        vacancyId: 7,
-        position: 'Specialist Android Developer',
-        squad: 'Radioactive',
-        status: 'Done'
+        vacancyId: 100,
+        vacancy: {
+            position: {
+                name: 'Specialist Android Developer',
+                squad: {
+                    name: 'Radioactive',
+                }
+            }
+        },
+        status: 'refused',
+        feedbacks: [],
+        answers: [],
     },
     {
         id: 8,
-        vacancyId: 8,
-        position: 'Specialist Android Developer',
-        squad: 'Radioactive',
-        status: 'Applied'
+        vacancyId: 100,
+        vacancy: {
+            position: {
+                name: 'Specialist Android Developer',
+                squad: {
+                    name: 'Radioactive',
+                }
+            }
+        },
+        status: 'applied',
+        feedbacks: [],
+        answers: [],
     },
     {
         id: 9,
-        vacancyId: 9,
-        position: 'Specialist Android Developer',
-        squad: 'Radioactive',
-        status: 'Applied'
+        vacancyId: 100,
+        vacancy: {
+            position: {
+                name: 'Specialist Android Developer',
+                squad: {
+                    name: 'Radioactive',
+                }
+            }
+        },
+        status: 'applied',
+        feedbacks: [],
+        answers: [],
     },
     {
         id: 10,
-        vacancyId: 10,
-        position: 'Specialist Android Developer',
-        squad: 'Radioactive',
-        status: 'Applied'
+        vacancyId: 100,
+        vacancy: {
+            position: {
+                name: 'Specialist Android Developer',
+                squad: {
+                    name: 'Radioactive',
+                }
+            }
+        },
+        status: 'applied',
+        feedbacks: [],
+        answers: [],
     },
     {
         id: 11,
-        vacancyId: 11,
-        position: 'Specialist Android Developer',
-        squad: 'Radioactive',
-        status: 'Applied'
+        vacancyId: 100,
+        vacancy: {
+            position: {
+                name: 'Specialist Android Developer',
+                squad: {
+                    name: 'Radioactive',
+                }
+            }
+        },
+        status: 'applied',
+        feedbacks: [],
+        answers: [],
+    },
+    {
+        id: 12,
+        vacancyId: 100,
+        vacancy: {
+            position: {
+                name: 'Specialist Android Developer',
+                squad: {
+                    name: 'Radioactive',
+                }
+            }
+        },
+        status: 'applied',
+        feedbacks: [],
+        answers: [],
     },
 ];
 
 function ApplicationPage() {
-
+    const nav = useNavigate();
     const dispatch = useDispatch();
 
     const data = useSelector(selectAllApplication);
     const status = useSelector(selectApplicationStatus);
 
+    const onRowClick = (row) => nav(`${row.id}`);
+
     //TODO::
     const onChangePage = (page , totalRow) => {
         console.log(page , totalRow);
-    }
-
-    //TODO::
-    const onChangeRowsPerPage = (currentRowsPerPage, currentPage) => {
-        console.log( currentRowsPerPage , currentPage);
     }
 
     useEffect(() => {
@@ -160,11 +261,9 @@ function ApplicationPage() {
                 columns={columns}
                 data={data}
                 pending={status==='loading' || status ==='idle' ? true : false}
-                rowClick={(row) => console.log(row)}
+                rowClick={onRowClick}
                 onChangePage={onChangePage}
-                onChangeRowsPerPage={onChangeRowsPerPage}
             />
-            
         </div>
     );
 }

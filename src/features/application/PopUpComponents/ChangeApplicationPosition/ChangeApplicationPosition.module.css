@@ -1,24 +1,19 @@
-.change-applicant-position{
-  width: 438px;
-  height: 206px;
+.change-application-position{
+  width: 440px;
+  height: 220px;
   background-color: white;
   padding: 24px;
-  border-radius: 9px;
-  -webkit-border-radius: 9px;
-  -moz-border-radius: 9px;
-  -ms-border-radius: 9px;
-  -o-border-radius: 9px;
   position: relative;
 }
 
-.change-applicant-position-header{
+.change-application-position-header{
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 25px;
 }
 
-.change-applicant-position-header h2{
+.change-application-position-header h2{
   margin: 0;
   padding: 0;
   color: var(--word-color);
@@ -27,7 +22,7 @@
   text-transform: capitalize;
 }
 
-.change-applicant-position-body{
+.change-application-position-body{
   display: flex;
   flex-direction: column;
 } 
@@ -40,14 +35,14 @@
   display: flex;
   position: absolute;
   gap: 26px;
-  bottom: 20px;
-  right: 28px;
+  bottom: 24px;
+  right: 24px;
 }
 
 .email{
   position: absolute;
-  bottom: 20px;
-  right: 232px;
+  bottom: 24px;
+  left: 24px;
 }
 
 .email button{

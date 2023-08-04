@@ -20,25 +20,25 @@ import style from './EmailPage.module.css';
 const columns = [
     {
         name: 'id',
-        key: 'id',
+        keys: ['id'],
         type: 'id',
     },
     {
         name: 'subject',
-        key: 'subject',
+        keys: ['subject'],
         type: 'normal'
     },
     {
         name: 'next recruitment status',
-        key: 'nextRecruitmentStatus',
+        keys: ['nextRecruitmentStatus'],
         type: 'recruitmentStatus'
     },
     {
-        key: 'edit',
+        keys: ['edit'],
         type: 'button',
     },
     {
-        key: 'delete',
+        keys: ['delete'],
         type: 'button',
     }
 ]
@@ -173,11 +173,6 @@ function EmailPage() {
         console.log(page , totalRow);
     }
 
-    //TODO::
-    const onChangeRowsPerPage = (currentRowsPerPage, currentPage) => {
-        console.log( currentRowsPerPage , currentPage);
-    }
-
     useEffect(() => {
         dispatch(addManyEmail(fakeData));
     } , []);
@@ -205,7 +200,6 @@ function EmailPage() {
                 handleDelete={(row) => popUpDispatch({type:'delete' , id: row.id})}
                 handleEdit={(row) => popUpDispatch({type:'edit' , id: row.id})}
                 onChangePage={onChangePage}
-                onChangeRowsPerPage={onChangeRowsPerPage}
             />  
 
             <PopUp open={popUpOption.isOpen} handleClose={() => popUpDispatch({type:'close'})} index={popUpOption.index}>

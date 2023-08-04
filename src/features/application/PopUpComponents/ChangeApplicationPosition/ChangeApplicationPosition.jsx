@@ -16,13 +16,12 @@ import { HiOutlineMail } from "react-icons/hi";
 import {levelData} from '../../../../common/utils/selectorData'
 
 //import style 
-import style from './ChangeApplicantPosition.module.css';
+import style from './ChangeApplicationPosition.module.css';
 
-function ChangeApplicantPosition({handleClose}) {
-
-    const {control , formState : {errors} , handleSubmit } = useForm({
+function ChangeApplicationPosition({id , position , handleClose}) {
+    const {control , formState : {errors , isDirty} , handleSubmit} = useForm({
         defaultValues:{
-            position : '',
+            position : {value: position , label: position},
         }
     })
 
@@ -37,15 +36,15 @@ function ChangeApplicantPosition({handleClose}) {
 
     if(isLoading===true){
         return (
-            <div className={style["change-applicant-position"]}>
+            <div className={style["change-application-position"]}>
                 <Loader  transparent={true}/>
             </div>
         );
     }
 
     return (
-        <div className={style["change-applicant-position"]}>
-            <div className={style["change-applicant-position-header"]}>
+        <div className={style["change-application-position"]}>
+            <div className={style["change-application-position-header"]}>
                 <h2>Change Applicant's Position</h2>
                 <IoCloseOutline 
                     size='20px' 
@@ -54,25 +53,26 @@ function ChangeApplicantPosition({handleClose}) {
                     onClick={handleClose}
                 />
             </div>
-            <form className={style["change-applicant-position-body"]} onSubmit={handleSubmit(onSubmit)}>
+            <form className={style["change-application-position-body"]} onSubmit={handleSubmit(onSubmit)}>
                 <div className={style.box}>
                     <SelectInputField
-                        width='216px'
+                        width='240px'
                         height='40px'
                         name='position'
                         placeholder='Position'
-                        options={levelData}
+                        options={Object.values(levelData)}
                         control={control}
                         required={'enter the position'}
                         errors={errors}
                         border={true}
+                        menuHeight='90px'
                     />
                 </div>
                 <div className={style.buttons}>
                     <SubmitButton 
-                        width='177px' 
+                        width='170px' 
                         height='40px'
-                        disabled={isLoading}
+                        disabled={isLoading || !isDirty} 
                     >
                         Change Position
                     </SubmitButton>
@@ -93,4 +93,4 @@ function ChangeApplicantPosition({handleClose}) {
     );
 }
 
-export default ChangeApplicantPosition;
+export default ChangeApplicationPosition;

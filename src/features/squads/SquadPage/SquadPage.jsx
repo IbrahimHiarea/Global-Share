@@ -20,25 +20,25 @@ import style from './SquadPage.module.css';
 const columns = [
     {
         name: 'id',
-        key: 'id',
+        keys: ['id'],
         type: 'id',
     },
     {
         name: 'name',
-        key: 'name',
+        keys: ['name'],
         type: 'normal'
     },
     {
         name: 'gs name',
-        key: 'gsName',
+        keys: ['gsName'],
         type: 'normal'
     },
     {
-        key: 'edit',
+        keys: ['edit'],
         type: 'button',
     },
     {
-        key: 'delete',
+        keys: ['delete'],
         type: 'button',
     }
 ];
@@ -195,11 +195,6 @@ function SquadPage(){
         console.log(page , totalRow);
     }
 
-    //TODO::
-    const onChangeRowsPerPage = (currentRowsPerPage, currentPage) => {
-        console.log( currentRowsPerPage , currentPage);
-    }
-
     useEffect(() => {
         dispatch(addManySquad(fakeData));
     } , []);
@@ -226,7 +221,6 @@ function SquadPage(){
                 handleDelete={(row) => popUpDispatch({type:'delete' , id: row.id})}
                 handleEdit={(row) => popUpDispatch({type:'edit' , id: row.id})}
                 onChangePage={onChangePage}
-                onChangeRowsPerPage={onChangeRowsPerPage}
             />
             
             <PopUp open={popUpOption.isOpen} handleClose={() => popUpDispatch({type:'close'})} index={popUpOption.index}>

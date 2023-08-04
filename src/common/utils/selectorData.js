@@ -27,10 +27,10 @@ export const priorityData = {
 
 export const recruitmentStatusData = {
     applied: 'applied',
-    hr_approved: 'hr approved',
-    orch_approved: 'orch approved',
-    hr_interview_approved: 'hr-interview approved',
-    tech_interview_approved: 'tech-interview approved',
+    hr_approved: 'hr_approved',
+    orch_approved: 'orch_approved',
+    hr_interview_approved: 'hr_interview_approved',
+    tech_interview_approved: 'tech_interview_approved',
+    refused: 'refused',
     done: 'done',
-    refused: 'refused'
 };

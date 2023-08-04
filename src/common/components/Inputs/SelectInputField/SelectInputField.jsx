@@ -63,9 +63,9 @@ function SelectInputField({
                                 boxShadow: 'none',
                                 textTransform: 'capitalize',
                                 color: state.isFocused ? 'var(--primary-main)' : 'var(--natural-alpha-2)',
-                                border: (state.isFocused ? '.1rem solid var(--primary-main)' : `.1rem solid ${borderColor}`),
+                                border: ((state.isFocused && borderColor!=='var(--error-main)') ? '.1rem solid var(--primary-main)' : `.1rem solid ${borderColor}`),
                                 '&:hover':{
-                                    border: (state.isFocused ? '.1rem solid var(--primary-main)' : `.1rem solid ${borderColor}`),
+                                    border: ((state.isFocused && borderColor!=='var(--error-main)') ? '.1rem solid var(--primary-main)' : `.1rem solid ${borderColor}`),
                                 },
                             }),
                             valueContainer: (base) => ({
