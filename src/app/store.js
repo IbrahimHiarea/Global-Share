@@ -11,6 +11,7 @@ import positionReducer from '../features/Positions/PositionSlice';
 import emailReducer from '../features/emails/EmailSlice'
 import squadReducer from '../features/squads/squadSlice';
 import applicationReducer from '../features/application/ApplicationSlice';
+import vacanciesReducer from '../features/vacancies/VacanciesSlice';
 
 export const store = configureStore({
 	reducer: {
@@ -23,5 +24,6 @@ export const store = configureStore({
 		email: emailReducer,
 		squad: squadReducer,
 		application: applicationReducer,
+		vacancies: vacanciesReducer,
 	},
 });
