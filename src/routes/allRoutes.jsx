@@ -15,8 +15,8 @@ import PositionPage from '../features/Positions/PositionPage/PositionPage';
 import EmailPage from '../features/emails/EmailPage/EmailPage';
 import ApplicationPage from '../features/application/ApplicationPage/ApplicationPage';
 import ApplicationDetails from '../features/application/ApplicationDetails/ApplicationDetails';
-import VacanciesPage from '../features/vacancies/VacanciesPage/VacanciesPage'
-import AddVacancy from '../features/vacancies/AddVacancy/AddVacancy'
+import VacancyPage from '../features/vacancies/VacancyPage/VacancyPage';
+import AddVacancy from '../features/vacancies/AddVacancy/AddVacancy';
 
 function AllRoute () {
     return (
@@ -61,8 +61,8 @@ function AllRoute () {
                     <Route path=':applicationId' element={<ApplicationDetails />} />
                 </Route>
                 {/* VacanciesPage section */}
-                <Route path='vacancies/'>
-                    <Route index element={<VacanciesPage />}/>
+                <Route path='vacancy/'>
+                    <Route index element={<VacancyPage />}/>
                     <Route path='add' element={<AddVacancy />}/>
                 </Route>
 

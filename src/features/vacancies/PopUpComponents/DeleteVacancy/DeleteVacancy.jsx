@@ -4,7 +4,7 @@ import React , {useRef} from 'react';
 //import components
 import ConfirmPopUp from '../../../../common/components/ConfirmPopUp/ConfirmPopUp';
 
-function DeleteVacancies({id , handleClose}){
+function DeleteVacancy({id , handleClose}){
     const isConfirmed = useRef(0);
 
     const setIsConfirmed = (value) => {
@@ -28,4 +28,4 @@ function DeleteVacancies({id , handleClose}){
     )
 }
 
-export default DeleteVacancies;
+export default DeleteVacancy;

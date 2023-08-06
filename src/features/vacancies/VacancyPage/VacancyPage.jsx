@@ -4,46 +4,46 @@ import { useNavigate } from 'react-router-dom';
 
 //import redux
 import { useDispatch , useSelector } from 'react-redux';
-import { addManyVacancies , selectAllVacancies , selectVacanciesStatus } from '../VacanciesSlice';
+import { addManyVacancy , selectAllVacancy , selectVacancyStatus } from '../VacancySlice';
 
 //import components
 import Error from '../../../common/components/Error/Error';
-import VacanciesFilterBar from '../VacanciesFilterBar/VacanciesFilterBar';
+import VacancyFilterBar from '../VacancyFilterBar/VacancyFilterBar';
 import DashboardTable from '../../../common/components/Dashboard/DashboardTable/DashboardTable';
 import PopUp from '../../../common/components/PopUp/PopUp';
-import DeleteVacancies from '../PopUpComponents/DeleteVacancies/DeleteVacancies'
+import DeleteVacancy from '../PopUpComponents/DeleteVacancy/DeleteVacancy'
+import EditVacancy from '../EditVacancy/EditVacancy';
 
 //import style
-import style from './VacanciesPage.module.css';
-
+import style from './VacancyPage.module.css';
 
 const columns = [
     {
         name: 'id',
-        key: 'id',
+        keys: ['id'],
         type: 'id',
     },
     {
-        name: 'Position',
-        key: 'position',
+        name: 'position',
+        keys: ['position'],
         type: 'normal'
     },
     {
-        name: 'Squad',
-        key: 'squad',
-        type: 'normal',
+        name: 'squad',
+        keys: ['squad'],
+        type: 'normal'
     },
-    {
+    {   
         name: 'status',
-        key: 'status',
+        keys: ['status'],
         type: 'recruitmentStatus'
     },
     {
-        key: 'edit',
+        keys: ['edit'],
         type: 'button',
     },
     {
-        key: 'delete',
+        keys: ['delete'],
         type: 'button',
     }
 ];
@@ -153,18 +153,18 @@ const popUpReducer = (state , action) => {
     }
 }
 
-function VacanciesPage(){
+function VacancyPage(){
     const [popUpOption , popUpDispatch] = useReducer(popUpReducer , initPopUpOption);
     const dispatch = useDispatch();
 
-    const data = useSelector(selectAllVacancies);
-    const status = useSelector(selectVacanciesStatus);
+    const data = useSelector(selectAllVacancy);
+    const status = useSelector(selectVacancyStatus);
 
     const nav = useNavigate();
 
     const handleAdd = () => {
         popUpDispatch({type:'add'});
-        nav('/dashboard/vacancies/add');
+        nav('/dashboard/vacancy/add');
     }
 
     //TODO::
@@ -178,7 +178,7 @@ function VacanciesPage(){
     }
 
     useEffect(() => {
-        dispatch(addManyVacancies(fakeData));
+        dispatch(addManyVacancy(fakeData));
     } , []);
 
     if(status==='failed'){
@@ -193,7 +193,7 @@ function VacanciesPage(){
         <div className={style['vacancies-page']}>
             <h1 className={style['vacancies-title']}>Vacancies</h1>
 
-            <VacanciesFilterBar handleAdd={handleAdd}/>
+            <VacancyFilterBar handleAdd={handleAdd}/>
 
             <DashboardTable 
                 columns={columns}
@@ -207,10 +207,11 @@ function VacanciesPage(){
             />
             
             <PopUp open={popUpOption.isOpen} handleClose={() => popUpDispatch({type:'close'})} index={popUpOption.index}>
-                <DeleteVacancies id={popUpOption.id}  handleClose={() => popUpDispatch({type:'close'})}/>
+                <DeleteVacancy id={popUpOption.id}  handleClose={() => popUpDispatch({type:'close'})}/>
+                // TODO :: nav to edit page
             </PopUp>
         </div>
     );
 }
 
-export default VacanciesPage;
+export default VacancyPage;

@@ -8,9 +8,9 @@ const axiosApi = axios.create({
     baseURL : baseURL,
     timeout: 15000,
     headers: {
-        "Content-type": "vacancies/json",
+        "Content-type": "vacancy/json",
     },
 });
 
 
-//vacancies api
+//vacancy api

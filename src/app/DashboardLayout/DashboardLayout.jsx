@@ -59,8 +59,8 @@ const drawerList = [
         icon: <AiFillAppstore />
     },
     {
-        title: 'Vacancies',
-        path: 'vacancies',
+        title: 'vacancy',
+        path: 'vacancy',
         icon: <MdWork />
     },
 

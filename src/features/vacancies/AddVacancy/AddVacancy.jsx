@@ -1,16 +1,14 @@
 // import react
 import React , { useRef, useState }  from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm , useFieldArray } from 'react-hook-form';
 import {useNavigate} from "react-router-dom"
 
 // import components 
-import InputField from '../../../common/components/Inputs/InputField/InputField';
 import SelectInputField from "../../../common/components/Inputs/SelectInputField/SelectInputField";
 import Button from '../../../common/components/Inputs/Button/Button';
 import SubmitButton from '../../../common/components/Inputs/SubmitButton/SubmitButton';
 import TextAreaField from '../../../common/components/Inputs/TextAreaField/TextAreaField'
 import Loader from '../../../common/components/Loader/Loader';
-import QuestionOptions from '../../../common/components/Question/QuestionOptions/QuestionOptions'
 
 // import icons
 import { CiSquareChevLeft } from "react-icons/ci";
@@ -24,7 +22,7 @@ import style from './AddVacancy.module.css';
 
 function AddVacancy() {
 
-    const {control , register , watch , setValue , formState : {errors} , handleSubmit , unregister } = useForm({
+    const {control , register , formState : {errors} , handleSubmit } = useForm({
         defaultValues:{
             squad : '',
             position : '',
@@ -34,25 +32,25 @@ function AddVacancy() {
             preferredQualifications: '',
             effect: '',
         }
-    })
+    });
+
+    const { fields , append , remove } = useFieldArray({
+        name: 'question',
+        control, 
+    });
 
     const navigate = useNavigate();
 
     const [isLoading , setIsLoading] = useState(false);
-    const QuestionsNumber = useRef(1);
-    const [questions , setQuestions] = useState([0]);
 
-    const handelDelete = (questionId) => {
-        const newQuestions = questions.filter((id) => {return id !== questionId});
-        unregister([`question${questionId}`]);
-        unregister([`questionType${questionId}`]);
-        unregister([`options${questionId}`]);
-        setQuestions(newQuestions);
+    const handelDelete = (index) => {
+        remove(index);
     };
 
     const handelAdd = () => {
-        setQuestions([...questions , QuestionsNumber.current]);
-        QuestionsNumber.current++;
+        append({
+            question: '',
+        });
     }
 
     const onSubmit = async (values) => {
@@ -161,44 +159,23 @@ function AddVacancy() {
                 <div className={style.break}></div>
                 <div className={style.questions}>
                     {
-                        questions?.map((id) => (
-                            <>
-                                <div className={style.question} key={id}>
-                                    <InputField 
-                                        type='text'
-                                        name={`question${id}`}
-                                        placeholder='Question'
-                                        width='443px'
-                                        height='40px'
-                                        control={register( `question${id}` , {
-                                            required: 'Please Enter The question',
-                                            pattern: {
-                                                value: /^[A-Za-z ]+$/,
-                                                message: "The question doesn't match the pattern"
-                                            }
-                                        })}
-                                        errors={errors}
-                                    />
-                                    <SelectInputField
-                                        width='243px'
-                                        height='40px'
-                                        name={`questionType${id}`}
-                                        placeholder='Question Type'
-                                        options={Object.values(questionTypeData)}
-                                        control={control}
-                                        required='enter the question type'
-                                        errors={errors}
-                                        border={true}
-                                    />
-                                    <Button backgroundColor="var(--error-background)" width="40px" height="40px" onClick={() => handelDelete(id)}>
-                                        <BsTrash size="18px" color='var(--error-main)'/>
-                                    </Button>
+                        fields?.map((field , index) => (
+                            <div className={style.question} key={field.id}>
+                                <SelectInputField
+                                    width='443px'
+                                    height='40px'
+                                    name={`question.${index}.value`}
+                                    placeholder='Select Question'
+                                    options={Object.values(questionTypeData)}
+                                    control={control}
+                                    required='enter the question'
+                                    errors={errors}
+                                    border={true}
+                                />
+                                <div className={style['delete-button']} onClick={() => handelDelete(index)}>
+                                    <BsTrash size="18px" color='var(--error-main)'/>
                                 </div>
-                                {
-                                    (watch(`questionType${id}`)?.value === "checkbox"  ||  watch(`questionType${id}`)?.value === "radio")  &&  
-                                    <QuestionOptions questionId={id} setValue={setValue} currentOptions={[]}/>
-                                }
-                            </>
+                            </div>
                         ))
                     }
                 </div>
