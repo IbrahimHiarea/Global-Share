@@ -11,7 +11,7 @@ import positionReducer from '../features/Positions/PositionSlice';
 import emailReducer from '../features/emails/EmailSlice'
 import squadReducer from '../features/squads/squadSlice';
 import applicationReducer from '../features/application/ApplicationSlice';
-import vacanciesReducer from '../features/vacancies/VacanciesSlice';
+import vacancyReducer from '../features/vacancies/VacancySlice';
 import questionReducer from '../features/question/questionSlice';
 
 
@@ -27,6 +27,6 @@ export const store = configureStore({
 		squad: squadReducer,
 		application: applicationReducer,
 		question: questionReducer,
-		vacancies: vacanciesReducer,
+		vacancy: vacancyReducer,
 	},
 });

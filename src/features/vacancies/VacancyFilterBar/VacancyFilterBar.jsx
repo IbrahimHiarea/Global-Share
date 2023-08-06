@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 
 //import redux
 import { useSelector } from 'react-redux';
-import { selectVacanciesStatus } from '../VacanciesSlice';
+import { selectVacancyStatus } from '../VacancySlice';
 
 //import components
 import InputField from '../../../common/components/Inputs/InputField/InputField';
@@ -17,16 +17,16 @@ import { FiSearch } from 'react-icons/fi';
 import { RxReset } from 'react-icons/rx';
 
 //import style 
-import style from './VacanciesFilterBar.module.css';
+import style from './VacancyFilterBar.module.css';
 
-function VacanciesFilterBar({handleAdd}){
+function VacancyFilterBar({handleAdd}){
     const {register , formState , reset , handleSubmit} = useForm({
         defaultValues:{
             search: '',
         }
     });
 
-    const status = useSelector(selectVacanciesStatus);
+    const status = useSelector(selectVacancyStatus);
 
     const onSubmit = (values) => {
         console.log(values);
@@ -67,4 +67,4 @@ function VacanciesFilterBar({handleAdd}){
     );
 }
 
-export default VacanciesFilterBar;
+export default VacancyFilterBar;
