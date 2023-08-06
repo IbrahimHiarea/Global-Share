@@ -17,6 +17,7 @@ import ApplicationPage from '../features/application/ApplicationPage/Application
 import ApplicationDetails from '../features/application/ApplicationDetails/ApplicationDetails';
 import VacanciesPage from '../features/vacancies/VacanciesPage/VacanciesPage'
 import AddVacancy from '../features/vacancies/AddVacancy/AddVacancy'
+import QuestionPage from '../features/question/QuestionPage/QuestionPage';
 
 function AllRoute () {
     return (
@@ -60,11 +61,15 @@ function AllRoute () {
                     <Route index element={<ApplicationPage />} />
                     <Route path=':applicationId' element={<ApplicationDetails />} />
                 </Route>
+
                 {/* VacanciesPage section */}
                 <Route path='vacancies/'>
                     <Route index element={<VacanciesPage />}/>
                     <Route path='add' element={<AddVacancy />}/>
                 </Route>
+
+                {/* Question section */}
+                <Route path='question' element={<QuestionPage />}/>
 
             </Route>
         </Routes>

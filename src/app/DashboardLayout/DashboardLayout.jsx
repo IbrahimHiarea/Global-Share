@@ -7,7 +7,7 @@ import Avatar from '@mui/material/Avatar';
 
 //import icon & image
 import profileImage from '../../assets/images/profileImage/profile2.png';
-import {BiHomeAlt2} from 'react-icons/bi';
+import {HiHome} from 'react-icons/hi';
 import {FaTasks} from 'react-icons/fa';
 import {BsBookHalf} from 'react-icons/bs';
 import {HiUserGroup} from 'react-icons/hi'
@@ -16,6 +16,7 @@ import {SiGoogleanalytics} from 'react-icons/si';
 import {IoIosArrowForward} from 'react-icons/io';
 import {AiFillAppstore} from "react-icons/ai";
 import {MdWork} from "react-icons/md";
+import {BiSpreadsheet} from 'react-icons/bi';
 
 //import style
 import style from './DashboardLayout.module.css';
@@ -26,7 +27,7 @@ const drawerList = [
     {
         title: 'home',
         path: 'home',
-        icon: <BiHomeAlt2 />
+        icon: <HiHome />
     },
     {
         title: 'task management',
@@ -63,9 +64,12 @@ const drawerList = [
         path: 'vacancies',
         icon: <MdWork />
     },
-
+    {
+        title: 'question',
+        path: 'question',
+        icon: <BiSpreadsheet />
+    }
 ];
-
 
 function Navbar(){
     const nav = useNavigate();
@@ -140,7 +144,7 @@ function Navbar(){
                                     {icon} <span className={clsx(style['navbar-link-title'] , {[style['navbar-link-title-open']] : isOpen})}>{title}</span>
                                 </NavLink>
                                 <span 
-                                    style={{top: `${177 + (57*index)}px`}} 
+                                    style={{top: `${167 + (57*index)}px`}} 
                                     className={clsx(style['navbar-link-alt'])}
                                 >
                                     {title}

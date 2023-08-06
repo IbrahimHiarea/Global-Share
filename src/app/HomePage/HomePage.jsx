@@ -5,7 +5,6 @@ import React from 'react';
 import style from './HomePage.module.css';
 
 function HomePage (){
-
     return (
         <div className={style.home}>
             this is home

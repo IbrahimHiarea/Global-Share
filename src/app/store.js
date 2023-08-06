@@ -12,6 +12,8 @@ import emailReducer from '../features/emails/EmailSlice'
 import squadReducer from '../features/squads/squadSlice';
 import applicationReducer from '../features/application/ApplicationSlice';
 import vacanciesReducer from '../features/vacancies/VacanciesSlice';
+import questionReducer from '../features/question/questionSlice';
+
 
 export const store = configureStore({
 	reducer: {
@@ -24,6 +26,7 @@ export const store = configureStore({
 		email: emailReducer,
 		squad: squadReducer,
 		application: applicationReducer,
+		question: questionReducer,
 		vacancies: vacanciesReducer,
 	},
 });
