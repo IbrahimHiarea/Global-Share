@@ -14,3 +14,15 @@ const axiosApi = axios.create({
 
 
 //squad api
+export async function getSquads(search , skip , take , token , signal){
+    //send search for filter
+    return axiosApi.get(
+        `/squad?skip=${skip}&take=${take}`,
+        {
+            signal : signal,
+            headers: {
+                Authorization : `Bearer ${token}`
+            }
+        }
+    );  
+}

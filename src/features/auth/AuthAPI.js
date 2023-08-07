@@ -20,3 +20,16 @@ export async function loginRequest({username: email , password} , signal){
         {signal: signal}
     );
 }
+
+
+export async function checkToken(token , signal){
+    return axiosApi.post(
+        'auth/check',
+        {
+            signal: signal,
+            headers: {
+                Authorization : `Bearer ${token}`
+            },
+        }
+    );
+}

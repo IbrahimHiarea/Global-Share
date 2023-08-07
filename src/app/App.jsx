@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 //import redux
 import { useDispatch } from 'react-redux';
-import {tokenAdded} from '../features/auth/AuthSlice';
+import {tokenAdded  , checkToken} from '../features/auth/AuthSlice';
 
 //import route
 import AllRoute from '../routes/allRoutes';
@@ -17,10 +17,17 @@ function App() {
 	const [flag , setFlag] = useState(false);
 	const dispatch = useDispatch();
 
-	// useEffect(() => {
-	// 	if(localStorage.length)
-	// 		dispatch(tokenAdded(localStorage.getItem('token')));
-	// } , []);
+	useEffect(() => {
+		const checkToken = async () => {
+			if(localStorage.length!==0){
+				dispatch(tokenAdded(localStorage.getItem('token')));
+				// dispatch(checkToken());
+			}
+			setFlag(false);
+		}
+
+		checkToken();
+	} , []);
 
 	return (
 		<div className={style.app}>

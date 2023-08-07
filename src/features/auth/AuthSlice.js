@@ -2,7 +2,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 //import API
-import { loginRequest } from "./AuthAPI";
+import * as authRequest from "./AuthAPI";
 
 // init state
 const status = {
@@ -15,16 +15,19 @@ const status = {
 const initialState = {
     status: status.idle,
     error: null,
-    token: ''
+    isAuthorized: false,
+    token: null,
+    info: {
+        name: 'Twfek Ajeneh',
+    },
 }
-
 
 // thunks actions
 export const login = createAsyncThunk(
     'auth/login', 
     async (data , thunkAPI) => {
         try{
-            const response = await loginRequest(data , thunkAPI.signal);
+            const response = await authRequest.loginRequest(data , thunkAPI.signal);
             return response.data.token;
         } catch(error){
             let message = "Network connection error"
@@ -43,6 +46,29 @@ export const login = createAsyncThunk(
     }
 ); 
 
+export const checkToken = createAsyncThunk(
+    'auth/checkToken',
+    async (_ , thunkAPI) => {
+        try{
+            const token = thunkAPI.getState().auth.token;
+            console.log(token);
+            const response = await authRequest.checkToken(token , thunkAPI.signal);
+            return response.data;
+        } catch(error){
+            const message = 'unAuthorized';
+            return thunkAPI.rejectWithValue(message);
+        }
+    },
+);
+
+export const logout = createAsyncThunk(
+    'auth/logout',
+    async () =>{
+        localStorage.clear();
+        return;
+    }
+);
+
 
 //creating auth slice
 const authSlice = createSlice({
@@ -50,9 +76,9 @@ const authSlice = createSlice({
     initialState,
     reducers:{
         tokenAdded: (state , action) => {
-            state.status = status.succeeded;
             state.token = action.payload;
-        }
+            state.status = status.succeeded;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -60,14 +86,33 @@ const authSlice = createSlice({
                 state.status = status.loading;
             })
             .addCase(login.fulfilled , (state , action) => {
-                console.log(action);
-                state.status = status.succeeded;
                 state.token = action.payload;
+                state.isAuthorized = true;
+                state.status = status.succeeded;
             })
             .addCase(login.rejected , (state , action) => {
-                console.log(action);
-                state.status = status.failed;
                 state.error = action.payload;
+                state.isAuthorized = false;
+                state.status = status.failed;
+            })
+            .addCase(checkToken.pending , (state , action) => {
+                state.status = status.loading;
+            })
+            .addCase(checkToken.fulfilled , (state , action) => {
+                state.info = action.payload;
+                state.status = status.succeeded;
+            })  
+            .addCase(checkToken.rejected , (state , action) => {
+                state.token = null;
+                state.info = null;
+                state.isAuthorized = false;
+                state.status = status.failed;
+            })
+            .addCase(logout.fulfilled , (state , _) => {
+                state.token = null;
+                state.info = null;
+                state.isAuthorized = false;
+                state.status = status.idle;
             })
     }
 });

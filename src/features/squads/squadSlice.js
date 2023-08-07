@@ -22,8 +22,16 @@ const squadModel = {
     gsName: '',
     description: '',
     imageUrl: '',
-    positions: [],
-    board: {}
+    positions: [
+        {
+            id: 0,
+            name: '',
+            gsName: '',
+            weeklyHours: 0,
+            gsLevel: '',
+            squadId: 0,
+        }
+    ], //position model
 }   
 
 const squadAdapter = createEntityAdapter({
@@ -31,9 +39,19 @@ const squadAdapter = createEntityAdapter({
     sortComparer: (sqA , sqB) => sqA.id - sqB.id
 });
 
-
 //thunk actions
-
+export const getSquads = createAsyncThunk(
+    'squads/getSquads',
+    async (data , thunkAPI) =>{
+        try{
+            const token = thunkAPI.getState().auth.token;
+            const response = await squadAPI.getSquads(data.search , data.skip , data.take , token , thunkAPI.signal);
+            return response.data;
+        } catch(error){
+            
+        }
+    }, 
+);
 
 //create slice
 const squadSlice = createSlice({
@@ -63,6 +81,7 @@ const squadSlice = createSlice({
 export const {
     selectAll: selectAllSquad,
     selectById: selectSquadById,
+
 } = squadAdapter.getSelectors(state => state.squad);
 export const selectSquadStatus = state => state.squad.status;
 export const selectSquadError = state => state.squad.error;
