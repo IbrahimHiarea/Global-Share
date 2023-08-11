@@ -3,8 +3,9 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 
 //import redux
-import { useSelector } from 'react-redux';
-import { selectSquadStatus } from '../squadSlice';
+import { useSelector , useDispatch } from 'react-redux';
+import { getSquads, selectSquadStatus } from '../squadSlice';
+import { showMessage } from '../../snackBar/snackBarSlice';
 
 //import components
 import InputField from '../../../common/components/Inputs/InputField/InputField';
@@ -20,6 +21,7 @@ import { RxReset } from 'react-icons/rx';
 import style from './SquadFilterBar.module.css';
 
 function SquadFilterBar({handleAdd}){
+    const dispatch = useDispatch();
     const {register , formState , reset , handleSubmit} = useForm({
         defaultValues:{
             search: '',
@@ -28,10 +30,23 @@ function SquadFilterBar({handleAdd}){
 
     const status = useSelector(selectSquadStatus);
 
-    const onSubmit = (values) => {
-        console.log(values);
-        //TODO::
-        //dispatch search action to redux
+    const handleReset = async() => {
+        try{
+            reset(formState.defaultValues);
+            await dispatch(getSquads({search: ''})).unwrap();
+        }catch(error){
+            if(error?.name==="ConditionError") return;
+            dispatch(showMessage({message: error , severity: 2}));
+        }
+    }
+
+    const onSubmit = async (values) => {
+        try{
+            await dispatch(getSquads(values)).unwrap();
+        }catch(error){
+            if(error?.name==="ConditionError") return;
+            dispatch(showMessage({message: error , severity: 2}));
+        }
     }
 
     return (
@@ -53,7 +68,13 @@ function SquadFilterBar({handleAdd}){
                     >
                         <FiSearch size='15px'/>
                     </SubmitButton> 
-                    <span className={style.reset} onClick={() => reset(formState.defaultValues)}>
+                    <span 
+                        className={style.reset} 
+                        style={{
+                            pointerEvents: (status==='loading' || status==='idle') ? 'none' : 'auto'
+                        }}
+                        onClick={handleReset}
+                    >
                         <RxReset size='15px'/>    
                     </span>
                 </span>

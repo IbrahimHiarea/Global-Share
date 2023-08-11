@@ -3,10 +3,17 @@ import React, { useEffect, useReducer } from 'react';
 
 //import redux
 import { useDispatch , useSelector } from 'react-redux';
-import { addManySquad , selectAllSquad , selectSquadStatus } from '../squadSlice';
+import { 
+    selectAllSquad, 
+    selectSquadStatus,
+    getSquads, 
+    selectSquadTotalCount, 
+    selectSquadResetTable, 
+    getSquadsPage
+} from '../squadSlice';
+import { showMessage } from '../../snackBar/snackBarSlice';
 
 //import components
-import Error from '../../../common/components/Error/Error';
 import SquadFilterBar from '../SquadFilterBar/SquadFilterBar';
 import DashboardTable from '../../../common/components/Dashboard/DashboardTable/DashboardTable';
 import PopUp from '../../../common/components/PopUp/PopUp';
@@ -41,108 +48,6 @@ const columns = [
         keys: ['delete'],
         type: 'button',
     }
-];
-
-const fakeData = [
-    {
-        id: 1,
-        name: 'Social Media',
-        gsName: 'Radioactive',
-        description: 'Radioactive Radioactive Radioactive Radioactive Radioactive Radioactive',
-        imageUrl: '',
-        positions: [],
-        board: {}
-    },
-    {
-        id: 2,
-        name: 'fasg Media',
-        gsName: 'Radioactive',
-        description: 'Radioactive gasg Radioactive Radioactive Radioactive Radioactive',
-        imageUrl: '',
-        positions: [],
-        board: {}
-    },
-    {
-        id: 3,
-        name: 'Social Media',
-        gsName: 'Radioactive',
-        description: 'Radioactive Radioactive Radioactive Radioactive Radioactive Radioactive',
-        imageUrl: '',
-        positions: [],
-        board: {}
-    },
-    {
-        id: 4,
-        name: 'Social Media',
-        gsName: 'Radioactive',
-        description: 'Radioactive Radioactive Radioactive Radioactive Radioactive Radioactive',
-        imageUrl: '',
-        positions: [],
-        board: {}
-    },
-    {
-        id: 5,
-        name: 'Social Media',
-        gsName: 'Radioactive',
-        description: 'Radioactive Radioactive Radioactive Radioactive Radioactive Radioactive',
-        imageUrl: '',
-        positions: [],
-        board: {}
-    },
-    {
-        id: 6,
-        name: 'Social Media',
-        gsName: 'Radioactive',
-        description: 'Radioactive Radioactive Radioactive Radioactive Radioactive Radioactive',
-        imageUrl: '',
-        positions: [],
-        board: {}
-    },
-    {
-        id: 7,
-        name: 'Social Media',
-        gsName: 'Radioactive',
-        description: 'Radioactive Radioactive Radioactive Radioactive Radioactive Radioactive',
-        imageUrl: '',
-        positions: [],
-        board: {}
-    },
-    {
-        id: 8,
-        name: 'Social Media',
-        gsName: 'Radioactive',
-        description: 'Radioactive Radioactive Radioactive Radioactive Radioactive Radioactive',
-        imageUrl: '',
-        positions: [],
-        board: {}
-    },
-    {
-        id: 9,
-        name: 'Social Media',
-        gsName: 'Radioactive',
-        description: 'Radioactive Radioactive Radioactive Radioactive Radioactive Radioactive',
-        imageUrl: '',
-        positions: [],
-        board: {}
-    },
-    {
-        id: 10,
-        name: 'Social Media',
-        gsName: 'Radioactive',
-        description: 'Radioactive Radioactive Radioactive Radioactive Radioactive Radioactive',
-        imageUrl: '',
-        positions: [],
-        board: {}
-    },
-    {
-        id: 11,
-        name: 'Social Media',
-        gsName: 'Radioactive',
-        description: 'Radioactive Radioactive Radioactive Radioactive Radioactive Radioactive',
-        imageUrl: '',
-        positions: [],
-        board: {}
-    },
 ];
 
 const initPopUpOption = {
@@ -185,27 +90,38 @@ function SquadPage(){
 
     const data = useSelector(selectAllSquad);
     const status = useSelector(selectSquadStatus);
+    const totalCount = useSelector(selectSquadTotalCount);
+    const resetTable = useSelector(selectSquadResetTable);
 
     const handleAdd = () => {
         popUpDispatch({type:'add'});
     }
 
-    //TODO::
-    const onChangePage = (page , totalRow) => {
-        console.log(page , totalRow);
+    const onChangePage = async (page , totalRow) => {
+        const skip = (page-1)*10;
+        if(data.length <= skip){
+            try{
+                await dispatch(getSquadsPage({skip})).unwrap();
+            }catch(error){
+                if(error?.name==="ConditionError") return;
+                dispatch(showMessage({message: error , severity: 2}));
+            }
+        }
     }
 
     useEffect(() => {
-        dispatch(addManySquad(fakeData));
-    } , []);
 
-    if(status==='failed'){
-        return (
-            <div className={style['squad-page']}>
-                <Error />
-            </div>
-        );
-    }
+        const req = async () => {
+            try{
+                await dispatch(getSquads({search: ''})).unwrap();
+            }catch(error){
+                if(error?.name==="ConditionError") return;
+                dispatch(showMessage({message: error , severity: 2}));
+            }
+        }
+
+        req();
+    } , []);
 
     return (
         <div className={style['squad-page']}>
@@ -217,10 +133,12 @@ function SquadPage(){
                 columns={columns}
                 data={data}
                 pending={status==='loading' || status ==='idle' ? true : false}
-                rowClick={(row) => console.log(row)}
+                rowClick={(row) => {}}
                 handleDelete={(row) => popUpDispatch({type:'delete' , id: row.id})}
                 handleEdit={(row) => popUpDispatch({type:'edit' , id: row.id})}
                 onChangePage={onChangePage}
+                totalCount={totalCount}
+                resetTable={resetTable}
             />
             
             <PopUp open={popUpOption.isOpen} handleClose={() => popUpDispatch({type:'close'})} index={popUpOption.index}>

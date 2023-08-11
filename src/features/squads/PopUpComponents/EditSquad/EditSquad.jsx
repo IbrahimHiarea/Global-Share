@@ -3,8 +3,8 @@ import React , {useState} from 'react';
 import { useForm } from 'react-hook-form';
 
 //import redux 
-import { useSelector } from 'react-redux';
-import {selectSquadById} from '../../squadSlice';
+import { useSelector , useDispatch} from 'react-redux';
+import {selectSquadById, updateSquad} from '../../squadSlice';
 
 //import components
 import InputField from '../../../../common/components/Inputs/InputField/InputField';
@@ -18,8 +18,10 @@ import { IoCloseOutline } from "react-icons/io5";
 
 //import style
 import style from './EditSquad.module.css';
+import { showMessage } from '../../../snackBar/snackBarSlice';
 
 function EditSquad({id , handleClose}){
+    const dispatch = useDispatch();
     const data = useSelector((state) => selectSquadById(state , id));
 
     const {register , formState : {errors , isDirty , dirtyFields} , handleSubmit , watch , setValue} = useForm({
@@ -36,7 +38,6 @@ function EditSquad({id , handleClose}){
 
     const onSubmit = async (values) => {
         setIsLoading(true);
-        
         if(isDirty || values.image){
             const changed = {};
             for(let key of Object.keys(dirtyFields)){
@@ -45,9 +46,14 @@ function EditSquad({id , handleClose}){
                 }
             }
             if(values.image) changed.image = values.image;
-            console.log(changed);
-            //TODO:: 
-            // dispatch add action to redux
+            try{
+                await dispatch(updateSquad(changed)).unwrap();
+                dispatch(showMessage({message: 'Squad Edited successfully' , severity: 1}));
+                handleClose();
+            }catch(error){
+                dispatch(showMessage({message: error , severity: 2}));
+                setIsLoading(false);
+            }
         }
     }
 
@@ -80,10 +86,6 @@ function EditSquad({id , handleClose}){
                         height='40px'
                         control={register('name' , {
                             required: 'Please Enter The Name',
-                            pattern: {
-                                value: /^[A-Za-z ]+$/,
-                                message: "The name don't match the pattern"
-                            }
                         })}
                         errors={errors}
                     />
@@ -95,10 +97,6 @@ function EditSquad({id , handleClose}){
                         height='40px'
                         control={register('gsName' , {
                             required: 'Please Enter The GS Name',
-                            pattern: {
-                                value: /^[A-Za-z ]+$/,
-                                message: "The name don't match the pattern"
-                            }
                         })}
                         errors={errors}
                     />
@@ -122,7 +120,7 @@ function EditSquad({id , handleClose}){
                         setValue={setValue}
                         width="390px"
                         height='40px'
-                        label='Upload Image'
+                        label={data.imageUrl ? data.imageUrl : 'Upload Image'}
                         types={["jpg", "png"]}
                         row={true}
                     />
@@ -133,7 +131,7 @@ function EditSquad({id , handleClose}){
                         height='40px'
                         disabled={(isLoading || (isDirty===false && watch('image')===null))}
                     >
-                        Add Volunteer   
+                        Add squad   
                     </SubmitButton>
                 </div>
             </form>

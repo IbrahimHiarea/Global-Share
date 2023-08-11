@@ -2,6 +2,11 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+//import redux
+import { useDispatch } from 'react-redux';
+import {createSquad} from '../../squadSlice';
+import { showMessage } from '../../../snackBar/snackBarSlice';
+
 //import components
 import InputField from '../../../../common/components/Inputs/InputField/InputField';
 import SubmitButton from '../../../../common/components/Inputs/SubmitButton/SubmitButton';
@@ -16,6 +21,7 @@ import { IoCloseOutline } from "react-icons/io5";
 import style from './AddSquad.module.css';
 
 function AddSquad ({handleClose}){
+    const dispatch = useDispatch();
     const {register , formState : {errors} , handleSubmit , watch , setValue} = useForm({
         defaultValues:{
             name: '',
@@ -28,10 +34,15 @@ function AddSquad ({handleClose}){
     const [isLoading , setIsLoading] = useState(false);
 
     const onSubmit = async (values) => {
-        setIsLoading(true);
-        console.log(values);
-        //TODO:: 
-        // dispatch add action to redux
+        try{
+            setIsLoading(true);
+            await dispatch(createSquad(values)).unwrap();
+            dispatch(showMessage({message: 'Squad Added successfully' , severity: 1}));
+            handleClose();
+        }catch(error){
+            dispatch(showMessage({message: error , severity: 2}));
+            setIsLoading(false);
+        }
     }
 
     if(isLoading===true){
@@ -63,10 +74,6 @@ function AddSquad ({handleClose}){
                         height='40px'
                         control={register('name' , {
                             required: 'Please Enter The Name',
-                            pattern: {
-                                value: /^[A-Za-z ]+$/,
-                                message: "The name don't match the pattern"
-                            }
                         })}
                         errors={errors}
                     />
@@ -78,10 +85,6 @@ function AddSquad ({handleClose}){
                         height='40px'
                         control={register('gsName' , {
                             required: 'Please Enter The GS Name',
-                            pattern: {
-                                value: /^[A-Za-z ]+$/,
-                                message: "The name don't match the pattern"
-                            }
                         })}
                         errors={errors}
                     />
@@ -117,7 +120,7 @@ function AddSquad ({handleClose}){
                         height='40px'
                         disabled={isLoading}
                     >
-                        Add Volunteer
+                        Add squad
                     </SubmitButton>
                 </div>
             </form>

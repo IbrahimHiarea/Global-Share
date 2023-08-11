@@ -48,7 +48,8 @@ const iconButton = (row , key , onClick) => {
 function DashboardTable ({
         columns , data , 
         rowClick , pending ,
-        handleDelete , handleEdit , onChangePage
+        handleDelete , handleEdit , onChangePage,
+        totalCount, resetTable
     }){
 
     const initColumns = columns.map((col) => {
@@ -93,6 +94,9 @@ function DashboardTable ({
             paginationIconNext={<NextArrow />}
             paginationIconPrevious={<PreviousArrow />}
             onChangePage={onChangePage}
+            paginationServer={true}
+            paginationTotalRows={totalCount}
+            paginationResetDefaultPage={resetTable}
         />
     );
 }

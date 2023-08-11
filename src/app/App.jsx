@@ -14,13 +14,14 @@ import SnackBar from '../features/snackBar/snackBar message/SnackBar'
 import style from './App.module.css'
 
 function App() {
-	const [flag , setFlag] = useState(false);
+	const [flag , setFlag] = useState(true);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
 		const checkToken = async () => {
 			if(localStorage.length!==0){
-				dispatch(tokenAdded(localStorage.getItem('token')));
+				const token = localStorage.getItem('token');
+				dispatch(tokenAdded(token));
 				// dispatch(checkToken());
 			}
 			setFlag(false);
