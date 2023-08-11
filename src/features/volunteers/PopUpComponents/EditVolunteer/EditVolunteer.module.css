@@ -39,8 +39,9 @@
   gap: 20px;
 }
 
-.add-volunteer-body .box button{
+.edit-volunteer-body .box button{
   margin: 0;
+  padding: 0;
 }
 
 .break{

@@ -42,7 +42,7 @@ function EditVacancy({ id }) {
     });
 
     const { fields , append , remove } = useFieldArray({
-        name: 'question',
+        name: 'questions',
         control, 
     });
 
@@ -56,7 +56,7 @@ function EditVacancy({ id }) {
 
     const handelAdd = () => {
         append({
-            question: '',
+            type: '',
         });
     }
 
@@ -179,7 +179,7 @@ function EditVacancy({ id }) {
                                 <SelectInputField
                                     width='443px'
                                     height='40px'
-                                    name={`question.${index}.value`}
+                                    name={`questions.${index}.type`}
                                     placeholder='Select Question'
                                     options={Object.values(questionTypeData)}
                                     control={control}

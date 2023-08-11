@@ -1,6 +1,6 @@
 // import react
 import React , { useRef, useState }  from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm , useFieldArray } from 'react-hook-form';
 
 // import components 
 import InputField from '../../../../common/components/Inputs/InputField/InputField';
@@ -27,22 +27,25 @@ function AddVolunteer({handleClose}) {
             email : '',
             password: '',
         }
-    })
+    });
+
+    const { fields , append , remove } = useFieldArray({
+        name: 'positionAndSquad',
+        control, 
+    });
 
     const [isLoading , setIsLoading] = useState(false);
-    const positionsAndSquadsNumber = useRef(1);
-    const [positionsAndSquads , setPositionsAndSquads] = useState([0]);
 
-    const handelDelete = (positionsAndSquadsId) => {
-        const newPositionsAndSquads = positionsAndSquads.filter((id) => {return id !== positionsAndSquadsId});
-        unregister([`positions${positionsAndSquadsId}`]);
-        unregister([`squads${positionsAndSquadsId}`]);
-        setPositionsAndSquads(newPositionsAndSquads);
+    const handelDelete = (index) => {
+        console.log(index);
+        remove(index);
     };
 
     const handelAdd = () => {
-        setPositionsAndSquads([...positionsAndSquads , positionsAndSquadsNumber.current]);
-        positionsAndSquadsNumber.current++;
+        append({
+            position: '',
+            squad: '',
+        });
     }
 
     const onSubmit = async (values) => {
@@ -139,13 +142,13 @@ function AddVolunteer({handleClose}) {
                 <div className={style.break}></div>
                 <div className={style.positions}>
                     { 
-                        positionsAndSquads.map((id) => (
-                            <div key={id}>
+                        fields?.map((field , index) => (
+                            <div key={field.id}>
                                 <div className={style.box}>
                                     <SelectInputField
                                         width='180px'
                                         height='40px'
-                                        name={`squads${id}`}
+                                        name={`positionAndSquad.${index}.squad`}
                                         placeholder='All Squads'
                                         options={Object.values(levelData)}
                                         control={control}
@@ -156,7 +159,7 @@ function AddVolunteer({handleClose}) {
                                     <SelectInputField
                                         width='210px'
                                         height='40px'
-                                        name={`positions${id}`}
+                                        name={`positionAndSquad.${index}.position`}
                                         placeholder='All Positions'
                                         options={Object.values(levelData)}
                                         control={control}
@@ -164,7 +167,7 @@ function AddVolunteer({handleClose}) {
                                         errors={errors}
                                         border={true}
                                     />
-                                    <Button backgroundColor="var(--error-background)" width="40px" height="40px" onClick={() => handelDelete(id)}>
+                                    <Button backgroundColor="var(--error-background)" width="40px" height="40px" onClick={() => handelDelete(index)}>
                                         <BsTrash size="18px" color='var(--error-main)'/>
                                     </Button>
                                 </div>
