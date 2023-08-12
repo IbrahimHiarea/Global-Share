@@ -204,7 +204,7 @@ const squadSlice = createSlice({
 export const {
     selectAll: selectAllSquad,
     selectById: selectSquadById,
-
+    selectTotal: selectSquadCount,
 } = squadAdapter.getSelectors(state => state.squad);
 export const selectSquadStatus = state => state.squad.status;
 export const selectSquadError = state => state.squad.error;

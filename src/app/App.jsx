@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 //import redux
 import { useDispatch } from 'react-redux';
 import {tokenAdded  , checkToken} from '../features/auth/AuthSlice';
+import { showMessage } from '../features/snackBar/snackBarSlice';
 
 //import route
 import AllRoute from '../routes/allRoutes';
@@ -18,16 +19,20 @@ function App() {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		const checkToken = async () => {
+		const tokenCheck = async () => {
 			if(localStorage.length!==0){
 				const token = localStorage.getItem('token');
 				dispatch(tokenAdded(token));
-				// dispatch(checkToken());
+				try{
+					await dispatch(checkToken()).unwrap();
+				}catch(error){
+					dispatch(showMessage({message: error , severity: 2}));
+				}
 			}
 			setFlag(false);
 		}
 
-		checkToken();
+		tokenCheck();
 	} , []);
 
 	return (

@@ -35,9 +35,10 @@ function LoginPage (){
     const onSubmit = async (data) => {
         try{
             const response = await dispatch(login({...data})).unwrap();
-            localStorage.setItem("token" , response);
+            localStorage.setItem("token" , response.token);
             nav('/dashboard/home');
         }catch(error){
+            if(error?.name==="ConditionError") return;
             dispatch(showMessage({message: error , severity: 2}));
         }
     }

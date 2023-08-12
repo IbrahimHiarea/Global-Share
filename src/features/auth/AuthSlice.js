@@ -17,9 +17,7 @@ const initialState = {
     error: null,
     isAuthorized: false,
     token: null,
-    info: {
-        name: 'Twfek Ajeneh',
-    },
+    info: {},
 }
 
 // thunks actions
@@ -28,10 +26,15 @@ export const login = createAsyncThunk(
     async (data , thunkAPI) => {
         try{
             const response = await authRequest.loginRequest(data , thunkAPI.signal);
-            return response.data.token;
+            return response.data;
         } catch(error){
             let message = "Network connection error"
-            if(error?.response?.data?.message) message = error.response.data.message[0]
+            if(error?.response?.data?.message){
+                if(typeof error.response.data.message === 'string') 
+                    message = error.response.data.message;
+                else 
+                    message = error.response.data.message[0];
+            }
             return thunkAPI.rejectWithValue(message);
         }
     }, 
@@ -51,10 +54,10 @@ export const checkToken = createAsyncThunk(
     async (_ , thunkAPI) => {
         try{
             const token = thunkAPI.getState().auth.token;
-            console.log(token);
             const response = await authRequest.checkToken(token , thunkAPI.signal);
             return response.data;
         } catch(error){
+            localStorage.clear();
             const message = 'unAuthorized';
             return thunkAPI.rejectWithValue(message);
         }
@@ -82,12 +85,18 @@ const authSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(login.pending , (state , action) => {
+            .addCase(login.pending , (state , _) => {
                 state.status = status.loading;
             })
             .addCase(login.fulfilled , (state , action) => {
-                state.token = action.payload;
+                const {firstName , lastName , role , id} = action.payload.user;
+                state.token = action.payload.token;
                 state.isAuthorized = true;
+                state.info = {
+                    id: id,
+                    name: firstName + " " + lastName,
+                    role: role,
+                }
                 state.status = status.succeeded;
             })
             .addCase(login.rejected , (state , action) => {
@@ -95,14 +104,20 @@ const authSlice = createSlice({
                 state.isAuthorized = false;
                 state.status = status.failed;
             })
-            .addCase(checkToken.pending , (state , action) => {
+            .addCase(checkToken.pending , (state , _) => {
                 state.status = status.loading;
             })
             .addCase(checkToken.fulfilled , (state , action) => {
-                state.info = action.payload;
+                const {firstName , lastName , role , id} = action.payload;
+                state.info = {
+                    id: id,
+                    name: firstName + " " + lastName,
+                    role: role,
+                };
+                state.isAuthorized = true;
                 state.status = status.succeeded;
             })  
-            .addCase(checkToken.rejected , (state , action) => {
+            .addCase(checkToken.rejected , (state , _) => {
                 state.token = null;
                 state.info = null;
                 state.isAuthorized = false;
@@ -122,6 +137,9 @@ export const selectAllAuth = state => state.auth;
 export const selectAuthStatus = state => state.auth.status;
 export const selectAuthToken = state => state.auth.token;
 export const selectAuthError = state => state.auth.error;
+export const selectIsAuthorized = state => state.auth.isAuthorized;
+export const selectAuthInfo = state => state.auth.info;
+
 
 // actions
 export const { tokenAdded } = authSlice.actions;

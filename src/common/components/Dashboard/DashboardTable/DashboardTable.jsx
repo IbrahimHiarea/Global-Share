@@ -89,6 +89,7 @@ function DashboardTable ({
                     noRowsPerPage: true,
                 }
             }
+            paginationPerPage={10}
             paginationIconFirstPage={null}
             paginationIconLastPage={null}
             paginationIconNext={<NextArrow />}

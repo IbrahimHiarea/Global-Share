@@ -78,7 +78,6 @@ export async function updateSquad(id , values , token , signal){
 }
 
 export async function deleteSquad(id , token , signal){
-    console.log(id);
     return axiosApi.delete(
         `/squad/${id}`,
         {

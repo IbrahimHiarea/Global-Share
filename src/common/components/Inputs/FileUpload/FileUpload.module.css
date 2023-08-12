@@ -21,6 +21,13 @@
     font-weight: 300;
 }
 
+.upload-content div{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .upload-label{
     color: var(--natural-alpha-2);
     font-weight: 500;

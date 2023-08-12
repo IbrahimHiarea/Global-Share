@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 //import redux 
 import { useSelector , useDispatch} from 'react-redux';
 import {selectSquadById, updateSquad} from '../../squadSlice';
+import { showMessage } from '../../../snackBar/snackBarSlice';
 
 //import components
 import InputField from '../../../../common/components/Inputs/InputField/InputField';
@@ -18,7 +19,6 @@ import { IoCloseOutline } from "react-icons/io5";
 
 //import style
 import style from './EditSquad.module.css';
-import { showMessage } from '../../../snackBar/snackBarSlice';
 
 function EditSquad({id , handleClose}){
     const dispatch = useDispatch();
@@ -47,7 +47,7 @@ function EditSquad({id , handleClose}){
             }
             if(values.image) changed.image = values.image;
             try{
-                await dispatch(updateSquad(changed)).unwrap();
+                await dispatch(updateSquad({id , ...changed})).unwrap();
                 dispatch(showMessage({message: 'Squad Edited successfully' , severity: 1}));
                 handleClose();
             }catch(error){
@@ -131,7 +131,7 @@ function EditSquad({id , handleClose}){
                         height='40px'
                         disabled={(isLoading || (isDirty===false && watch('image')===null))}
                     >
-                        Add squad   
+                        edit squad   
                     </SubmitButton>
                 </div>
             </form>

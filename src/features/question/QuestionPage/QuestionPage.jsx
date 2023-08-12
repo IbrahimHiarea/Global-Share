@@ -1,9 +1,18 @@
 //import react
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 
 //import redux
 import { useDispatch , useSelector } from 'react-redux';
-import {addManyQuestion , selectQuestionStatus , selectAllQuestion} from '../questionSlice';
+import {
+    getQuestions,
+    getQuestionsPage,
+    selectAllQuestion,
+    selectQuestionCount,
+    selectQuestionResetTable,
+    selectQuestionTotalCount,
+    selectQuestionStatus,
+} from '../questionSlice';
+import { showMessage } from '../../snackBar/snackBarSlice';
 
 //import components
 import Error from '../../../common/components/Error/Error';
@@ -46,81 +55,6 @@ const columns = [
     }
 ];
 
-const fakeData = [
-    {
-        id: 1,
-        text: 'what do you want',
-        type: questionTypeData.checkbox, //type of questions
-        options: ['twfek' , 'ahmad' , 'ibrahim'] 
-    },
-    {
-        id: 2,
-        text: 'what do you want',
-        type: questionTypeData.short, //type of questions
-        options: ['twfek' , 'ahmad' , 'ibrahim'] 
-    },
-    {
-        id: 3,
-        text: 'what do you want',
-        type: questionTypeData.short, //type of questions
-        options: ['twfek' , 'ahmad' , 'ibrahim'] 
-    },
-    {
-        id: 4,
-        text: 'what do you want',
-        type: questionTypeData.short, //type of questions
-        options: ['twfek' , 'ahmad' , 'ibrahim'] 
-    },
-    {
-        id: 5,
-        text: 'what do you want',
-        type: questionTypeData.short, //type of questions
-        options: ['twfek' , 'ahmad' , 'ibrahim'] 
-    },
-    {
-        id: 6,
-        text: 'what do you want',
-        type: questionTypeData.short, //type of questions
-        options: ['twfek' , 'ahmad' , 'ibrahim'] 
-    },
-    {
-        id: 7,
-        text: 'what do you want',
-        type: questionTypeData.short, //type of questions
-        options: ['twfek' , 'ahmad' , 'ibrahim'] 
-    },
-    {
-        id: 8,
-        text: 'what do you want',
-        type: questionTypeData.short, //type of questions
-        options: ['twfek' , 'ahmad' , 'ibrahim'] 
-    },
-    {
-        id: 9,
-        text: 'what do you want',
-        type: questionTypeData.short, //type of questions
-        options: ['twfek' , 'ahmad' , 'ibrahim'] 
-    },
-    {
-        id: 9,
-        text: 'what do you want',
-        type: questionTypeData.short, //type of questions
-        options: ['twfek' , 'ahmad' , 'ibrahim'] 
-    },
-    {
-        id: 10,
-        text: 'what do you want',
-        type: questionTypeData.short, //type of questions
-        options: ['twfek' , 'ahmad' , 'ibrahim'] 
-    },
-    {
-        id: 11,
-        text: 'what do you want',
-        type: questionTypeData.short, //type of questions
-        options: ['twfek' , 'ahmad' , 'ibrahim'] 
-    },
-];
-
 const initPopUpOption = {
     id: 0,
     isOpen: false,
@@ -158,30 +92,43 @@ const popUpReducer = (state , action) => {
 function QuestionPage(){
     const [popUpOption , popUpDispatch] = useReducer(popUpReducer , initPopUpOption);
     const dispatch = useDispatch();
+    const [curSkip , setCurSkip] = useState(0);
 
     const data = useSelector(selectAllQuestion);
     const status = useSelector(selectQuestionStatus);
+    const totalCount = useSelector(selectQuestionTotalCount);
+    const resetTable = useSelector(selectQuestionResetTable);
+    const questionCount = useSelector(selectQuestionCount);
 
     const handleAdd = () => {
         popUpDispatch({type: 'add'});
     }
 
-    //TODO::
-    const onChangePage = (page , totalRow) => {
-        console.log(page, totalRow);
+    const onChangePage = async (page , _) => {
+        const skip = (page-1)*10;
+        setCurSkip(skip);
+        if(questionCount <= skip){
+            try{
+                await dispatch(getQuestionsPage({skip})).unwrap();
+            }catch(error){
+                if(error?.name==="ConditionError") return;
+                dispatch(showMessage({message: error , severity: 2}));
+            }
+        }
     }
 
     useEffect(() => {
-        dispatch(addManyQuestion(fakeData));
-    } , []);
+        const req = async () => {
+            try{
+                await dispatch(getQuestions({search: ''})).unwrap();
+            }catch(error){
+                if(error?.name==="ConditionError") return;
+                dispatch(showMessage({message: error , severity: 2}));
+            }
+        }
 
-    if(status==='failed'){
-        return (
-            <div className={style['question-page']}>
-                <Error />
-            </div>
-        );
-    }
+        req();
+    } , []);
 
     return (
         <div className={style['question-page']}>
@@ -191,12 +138,14 @@ function QuestionPage(){
 
             <DashboardTable 
                 columns={columns}
-                data={data}
+                data={data.slice(curSkip , curSkip+10)}
                 pending={status==='loading' || status ==='idle' ? true : false}
-                rowClick={(row) => console.log(row)}
+                rowClick={(row) => {console.log(row)}}
                 handleDelete={(row) => popUpDispatch({type:'delete' , id: row.id})}
                 handleEdit={(row) => popUpDispatch({type:'edit' , id: row.id})}
                 onChangePage={onChangePage}
+                totalCount={totalCount}
+                resetTable={resetTable}
             />
 
             <PopUp open={popUpOption.isOpen} handleClose={() => popUpDispatch({type:'close'})} index={popUpOption.index}>

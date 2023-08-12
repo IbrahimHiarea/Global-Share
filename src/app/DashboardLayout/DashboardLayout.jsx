@@ -2,6 +2,10 @@
 import React, { useState } from 'react';
 import { useNavigate , Outlet , NavLink } from 'react-router-dom';
 
+//import redux
+import { useSelector } from 'react-redux';
+import { selectAuthInfo } from '../../features/auth/AuthSlice';
+
 //import components
 import Avatar from '@mui/material/Avatar';
 
@@ -74,6 +78,7 @@ const drawerList = [
 function Navbar(){
     const nav = useNavigate();
     const [isOpen , setIsOpen] = useState(false);
+    const authInfo = useSelector(selectAuthInfo);
 
     const handleToggle = (e) => {
         e.stopPropagation();
@@ -105,7 +110,7 @@ function Navbar(){
                         onClick={handleInfoClick}
                     >
                         <Avatar 
-                            alt="Twfek Ajeneh" 
+                            alt={authInfo.name} 
                             src={profileImage}
                             variant="rounded"
                             sx={{
@@ -119,7 +124,7 @@ function Navbar(){
                             {[style['navbar-profile-info-name-open']] : isOpen}
                             )}>
                             <span>hello 👋</span>
-                            <p>Twfek Ajeneh</p>
+                            <p>{authInfo.name}</p>
                         </div>
                     </div>
                     <span onClick={handleToggle}> <IoIosArrowForward size='21px'/> </span>

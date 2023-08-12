@@ -23,8 +23,8 @@ export async function loginRequest({username: email , password} , signal){
 
 
 export async function checkToken(token , signal){
-    return axiosApi.post(
-        'auth/check',
+    return axiosApi.get(
+        '/auth/verifyToken',
         {
             signal: signal,
             headers: {

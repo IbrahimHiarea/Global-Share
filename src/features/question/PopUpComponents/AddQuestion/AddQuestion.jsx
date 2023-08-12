@@ -2,6 +2,11 @@
 import React, { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
+//import redux
+import { useDispatch } from 'react-redux';
+import {createQuestion} from '../../questionSlice';
+import { showMessage } from '../../../snackBar/snackBarSlice';
+
 //import components
 import Loader from '../../../../common/components/Loader/Loader';
 import TextAreaField from '../../../../common/components/Inputs/TextAreaField/TextAreaField';
@@ -20,6 +25,7 @@ import {questionTypeData} from '../../../../common/utils/selectorData';
 import style from './AddQuestion.module.css';
 
 function AddQuestion({handleClose}){
+    const dispatch = useDispatch();
     const {register , formState : {errors} , handleSubmit , control , watch , setError} = useForm({
         defaultValues:{
             text: '',
@@ -43,10 +49,15 @@ function AddQuestion({handleClose}){
                 return;
             }
         }
-        setIsLoading(true);
-        console.log(values);
-        //TODO:: 
-        // dispatch add action to redux
+        try{
+            setIsLoading(true);
+            await dispatch(createQuestion({...values , type: values.type.value})).unwrap();
+            dispatch(showMessage({message: 'Question Added successfully' , severity: 1}));
+            handleClose();
+        }catch(error){
+            dispatch(showMessage({message: error , severity: 2}));
+            setIsLoading(false);
+        }
     }
 
     useEffect(() => {

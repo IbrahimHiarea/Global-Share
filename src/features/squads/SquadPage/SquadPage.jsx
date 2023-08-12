@@ -1,15 +1,16 @@
 //import react
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 
 //import redux
 import { useDispatch , useSelector } from 'react-redux';
 import { 
-    selectAllSquad, 
     selectSquadStatus,
     getSquads, 
     selectSquadTotalCount, 
     selectSquadResetTable, 
-    getSquadsPage
+    getSquadsPage,
+    selectSquadCount,
+    selectAllSquad
 } from '../squadSlice';
 import { showMessage } from '../../snackBar/snackBarSlice';
 
@@ -87,19 +88,22 @@ const popUpReducer = (state , action) => {
 function SquadPage(){
     const [popUpOption , popUpDispatch] = useReducer(popUpReducer , initPopUpOption);
     const dispatch = useDispatch();
+    const [curSkip , setCurSkip] = useState(0);
 
     const data = useSelector(selectAllSquad);
     const status = useSelector(selectSquadStatus);
     const totalCount = useSelector(selectSquadTotalCount);
     const resetTable = useSelector(selectSquadResetTable);
-
+    const squadCount = useSelector(selectSquadCount);
+    
     const handleAdd = () => {
         popUpDispatch({type:'add'});
     }
 
-    const onChangePage = async (page , totalRow) => {
+    const onChangePage = async (page , _) => {
         const skip = (page-1)*10;
-        if(data.length <= skip){
+        setCurSkip(skip);
+        if(squadCount <= skip){
             try{
                 await dispatch(getSquadsPage({skip})).unwrap();
             }catch(error){
@@ -131,7 +135,7 @@ function SquadPage(){
 
             <DashboardTable 
                 columns={columns}
-                data={data}
+                data={data.slice(curSkip , curSkip+10)}
                 pending={status==='loading' || status ==='idle' ? true : false}
                 rowClick={(row) => {}}
                 handleDelete={(row) => popUpDispatch({type:'delete' , id: row.id})}

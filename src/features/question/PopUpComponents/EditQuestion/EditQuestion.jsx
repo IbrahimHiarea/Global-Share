@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
 //import redux
-import { useSelector } from 'react-redux';
-import {selectQuestionById} from '../../questionSlice';
+import { useSelector , useDispatch} from 'react-redux';
+import {selectQuestionById , updateQuestion} from '../../questionSlice';
+import { showMessage } from '../../../snackBar/snackBarSlice';
 
 //import components
 import Loader from '../../../../common/components/Loader/Loader';
@@ -24,6 +25,7 @@ import {questionTypeData} from '../../../../common/utils/selectorData';
 import style from './EditQuestion.module.css';
 
 function EditQuestion({id , handleClose}){
+    const dispatch = useDispatch();    
     const data = useSelector(state => selectQuestionById(state , id));
 
     const {
@@ -36,13 +38,13 @@ function EditQuestion({id , handleClose}){
     } = useForm({
         defaultValues:{
             text: data.text,
-            type: {value: data?.type , label: data?.type},
-            options: data?.options?.map(item => ({value: item})),
+            type: {value: data?.type?.toLowerCase() , label: data?.type?.toLowerCase()},
+            options: data?.options ? data?.options?.map(item => ({value: item})) : [],
         },
         values: {
             text: data.text, 
-            type: {value: data.type , label: data.type}, 
-            options: data.options?.map(item => ({value: item}))
+            type: {value: data?.type?.toLowerCase() , label: data?.type?.toLowerCase()},
+            options: data?.options ? data?.options?.map(item => ({value: item})) : [],
         }
     });
 
@@ -67,10 +69,18 @@ function EditQuestion({id , handleClose}){
             const changed = {};
             for(let key of Object.keys(dirtyFields)){
                 if(dirtyFields[key]){
-                    changed[key] = values[key];
+                    if(key==='type') changed[key] = values[key].value;
+                    else changed[key] = values[key];
                 }
             }
-            console.log(changed);
+            try{
+                await dispatch(updateQuestion({id , ...changed})).unwrap();
+                dispatch(showMessage({message: 'Question Edited successfully' , severity: 1}));
+                handleClose();
+            }catch(error){
+                dispatch(showMessage({message: error , severity: 2}));
+                setIsLoading(false);
+            }
         }
         //TODO:: 
         // dispatch add action to redux
