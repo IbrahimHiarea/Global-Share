@@ -25,7 +25,7 @@ import { format } from 'date-fns';
 import style from './ProfilePage.module.css';
 
 //static data
-const period = ['day' , 'week'];
+const period = ['all'];
 
 function ProfilePage (){
     const nav = useNavigate();
@@ -60,6 +60,9 @@ function ProfilePage (){
     }
 
     else{
+        
+        const otherPosition = data.positions.map((position) => {return position.position.name}).join(" • ");
+
         return (
             <div className={style['profile-page']}>
                 <div className={style['profile-header']}>
@@ -112,9 +115,8 @@ function ProfilePage (){
                             {period.map((item) => (
                                 <WorkTimeCard 
                                     key={item}
-                                    periodic= {item}
-                                    hours={17}
-                                    tasks={14}
+                                    hours={data.volunteeredHours}
+                                    tasks={data.tasksCompleted}
                                 />
                             ))}
                         </div>
@@ -180,7 +182,7 @@ function ProfilePage (){
                         </div>
                         <BoxInfo
                             title="other positions"
-                            info={"Specialist UI Designer • Specialist Coordinator • Intern Analysist"}
+                            info={otherPosition}
                             isLink={false}
                             icon={<BsYinYang />}
                         />
@@ -191,14 +193,14 @@ function ProfilePage (){
     }
 }
 
-function WorkTimeCard({periodic , hours , tasks}){
+function WorkTimeCard({hours , tasks}){
     return (
         <>
-            <h4>This {periodic}</h4>
+            <h4>Overall Performance</h4>
             <div className={style['work-time']}>
                 <div className={style.hour}>
                     <div>Working Hours</div>
-                    <div>{hours}H</div>
+                    <div>{hours} H</div>
                 </div>
                 <div className={style.task}>
                     <div>Tasks</div>
