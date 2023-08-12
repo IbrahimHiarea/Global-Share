@@ -18,8 +18,8 @@ const status = {
 
 const EmailModel = {
     id: 0,
-    subject: '',
-    nextRecruitmentStatus: '',
+    title: '',
+    recruitmentStatus: '',
     body: '',
     cc: []
 }
@@ -31,6 +31,114 @@ const emailAdapter = createEntityAdapter({
 
 
 //thunk actions
+export const getEmails = createAsyncThunk(
+    'email/getEmails',
+    async (data , thunkAPI) =>{
+        try{
+            const {auth: {token}} = thunkAPI.getState();
+            const response = await emailAPI.getEmails(data.search , 0 , token , thunkAPI.signal);
+            return {search : data.search , ...(response.data)};
+        } catch(error){
+            let message = "Network connection error";
+            if(error?.response?.data?.message){
+                if(typeof error.response.data.message === 'string') 
+                    message = error.response.data.message;
+                else 
+                    message = error.response.data.message[0];
+            }
+            return thunkAPI.rejectWithValue(message);
+        }
+    },
+    {
+        condition: (data, {getState}) => {
+            const { email : {searchTerms , status} } = getState()
+            if (status === status.loading || searchTerms.search===data.search) {
+                return false;
+            }
+        },
+    }
+);
+
+export const getEmailsPage = createAsyncThunk(
+    'email/getEmailsPage',
+    async (data , thunkAPI) => {
+        try{    
+            const {auth: {token} , email: {searchTerms : {search}}} = thunkAPI.getState();
+            const response = await emailAPI.getEmails(search , data.skip , token , thunkAPI.signal);
+            return response.data;
+        }catch(error){
+            let message = "Network connection error";
+            if(error?.response?.data?.message){
+                if(typeof error.response.data.message === 'string') 
+                    message = error.response.data.message;
+                else 
+                    message = error.response.data.message[0];
+            }
+            return thunkAPI.rejectWithValue(message);
+        }
+    },  
+);
+
+export const createEmail = createAsyncThunk(
+    `email/createEmail`,
+    async (data , thunkAPI) => {
+        try{    
+            const {auth: {token}} = thunkAPI.getState();
+            const response = await emailAPI.createEmail(data , token , thunkAPI.signal);
+            return response.data;
+        }catch(error){
+            let message = "Network connection error";
+            if(error?.response?.data?.message){
+                if(typeof error.response.data.message === 'string') 
+                    message = error.response.data.message;
+                else 
+                    message = error.response.data.message[0];
+            }
+            return thunkAPI.rejectWithValue(message);
+        }
+    }, 
+);
+
+export const updateEmail= createAsyncThunk(
+    'email/updateEmail',
+    async (data , thunkAPI) => {
+        try{
+            const {id , ...values} = data;
+            const {auth : {token}} = thunkAPI.getState();
+            const response = await emailAPI.updateEmail(id , values , token , thunkAPI.signal);
+            return response.data;
+        }catch(error){
+            let message = "Network connection error";
+            if(error?.response?.data?.message){
+                if(typeof error.response.data.message === 'string') 
+                    message = error.response.data.message;
+                else 
+                    message = error.response.data.message[0];
+            }
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+);
+
+export const deleteEmail = createAsyncThunk(
+    'email/deleteEmail',
+    async (data , thunkAPI) => {
+        try{    
+            const {auth : {token}} = thunkAPI.getState();
+            await emailAPI.deleteEmail(data.id , token , thunkAPI.signal);
+            return data.id;
+        }catch(error){
+            let message = "Network connection error";
+            if(error?.response?.data?.message){
+                if(typeof error.response.data.message === 'string') 
+                    message = error.response.data.message;
+                else 
+                    message = error.response.data.message[0];
+            }
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+);
 
 
 //create slice
@@ -39,34 +147,62 @@ const emailSlice = createSlice({
     initialState: emailAdapter.getInitialState({
         status: status.idle,
         error: null,
-        isSearched: false
-    }),
-    reducers: {
-        addEmail: (state , action) => {
-            emailAdapter.addOne(state , action.payload);
-            state.status = status.succeeded;
+        searchTerms: {
+            search: undefined
         },
-        addManyEmail: (state , action) => {
-            emailAdapter.addMany(state , action.payload);
-            state.status = status.succeeded;
-        }
-    },
+        totalCount: 0,
+        resetTable: false
+    }),
+    reducers: {},
     extraReducers: (builder) => {
-        
+        builder
+            .addCase(getEmails.pending , (state , _) => {
+                state.status = status.loading;
+            })
+            .addCase(getEmails.fulfilled , (state , action) => {
+                emailAdapter.setAll(state , action.payload.data);
+                state.totalCount = action.payload.count;
+                state.searchTerms.search = action.payload.search;
+                state.resetTable = !(state.resetTable);
+                state.status = status.succeeded;
+            })
+            .addCase(getEmails.rejected , (state , action) => {
+                state.error = action.payload;
+                state.status = status.failed;
+            })
+            .addCase(getEmailsPage.pending , (state , _) => {
+                state.status = status.loading;
+            })
+            .addCase(getEmailsPage.fulfilled , (state , action) => {
+                emailAdapter.setMany(state , action.payload.data);
+                state.totalCount = action.payload.count;
+                state.status = status.succeeded;
+            })
+            .addCase(getEmailsPage.rejected , (state , action) => {
+                state.error = action.payload;
+                state.status = status.failed;
+            })
+            .addCase(updateEmail.fulfilled , (state , action) => {
+                emailAdapter.upsertOne(state , action.payload);
+            })
+            .addCase(deleteEmail.fulfilled , (state , action) => {
+                emailAdapter.removeOne(state , action.payload);
+            })
     }
 })
-
 
 //selector
 export const {
     selectAll: selectAllEmail,
     selectById: selectEmailById,
+    selectTotal: selectEmailCount,
 } = emailAdapter.getSelectors(state => state.email);
 export const selectEmailStatus = state => state.email.status;
 export const selectEmailError = state => state.email.error;
+export const selectEmailTotalCount = state => state.email.totalCount;
+export const selectEmailResetTable = state => state.email.resetTable;
 
-//actions
-export const {addManyEmail, addEmail} = emailSlice.actions;
+//action
 
-// reducer
+//reducer
 export default emailSlice.reducer;

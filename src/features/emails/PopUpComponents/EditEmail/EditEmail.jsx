@@ -3,8 +3,9 @@ import React , { useState }  from 'react';
 import { useForm } from 'react-hook-form';
 
 //import redux
-import { useSelector } from 'react-redux';
-import { selectEmailById } from '../../EmailSlice';
+import { useSelector , useDispatch} from 'react-redux';
+import {selectEmailById , updateEmail} from '../../EmailSlice';
+import { showMessage } from '../../../snackBar/snackBarSlice';
 
 // import components 
 import InputField from '../../../../common/components/Inputs/InputField/InputField';
@@ -24,31 +25,37 @@ import style from './EditEmail.module.css';
 
 function EditEmail({id , handleClose}) {
     const data = useSelector((state) => selectEmailById(state , id));
-
+    const dispatch = useDispatch();
     const {control , register , formState: {errors , isDirty , dirtyFields} , handleSubmit} = useForm({
         defaultValues:{
-            nextRecruitmentStatus : null,
-            cc : null,
-            subject : '',
+            title : '',
             body: '',
+            recruitmentStatus : '',
+            cc : null,
         },
-        values: {body: data.body , subject: data.subject , nextRecruitmentStatus: {label: data.nextRecruitmentStatus , value: data.nextRecruitmentStatus} , cc: []}
+        values: {title: data.title , body: data.body , recruitmentStatus: {label: data.recruitmentStatus , value: data.recruitmentStatus} , cc: []}
     })
 
     const [isLoading , setIsLoading] = useState(false);
 
     const onSubmit = async (values) => {
         setIsLoading(true);
-        if(isDirty){
+        if(isDirty || values.image){
             const changed = {};
             for(let key of Object.keys(dirtyFields)){
                 if(dirtyFields[key]){
                     changed[key] = values[key];
                 }
             }
-            console.log(changed);
-            //TODO::
-            // dispatch update action to redux
+            if(values.image) changed.image = values.image;
+            try{
+                await dispatch(updateEmail({id , ...changed})).unwrap();
+                dispatch(showMessage({message: 'Email Edited successfully' , severity: 1}));
+                handleClose();
+            }catch(error){
+                dispatch(showMessage({message: error , severity: 2}));
+                setIsLoading(false);
+            }
         }
     }
 
@@ -76,7 +83,7 @@ function EditEmail({id , handleClose}) {
                 <SelectInputField
                         width='300px'
                         height='40px'
-                        name='nextRecruitmentStatus'
+                        name='recruitmentStatus'
                         placeholder='Next Recruitment Status'
                         options={Object.values(recruitmentStatusData)}
                         control={control}
@@ -99,16 +106,12 @@ function EditEmail({id , handleClose}) {
                     />
                     <InputField 
                         type='text'
-                        placeholder='Subject'
-                        name='subject'
+                        placeholder='title'
+                        name='title'
                         width='300px'
                         height='40px'  
-                        control={register('subject' , {
-                            required: 'Please enter the subject',
-                            pattern: {
-                                value: /^[a-zA-Z0-9 ]+$/,
-                                message: 'Please an English Character and Number'
-                            }
+                        control={register('title' , {
+                            required: 'Please enter the title',
                         })}
                         errors={errors}
                     />

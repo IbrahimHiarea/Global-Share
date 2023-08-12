@@ -1,9 +1,18 @@
 //import react
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 
 //import redux
 import { useDispatch , useSelector } from 'react-redux';
-import { addManyEmail , selectAllEmail , selectEmailStatus} from '../EmailSlice';
+import { 
+    selectEmailStatus,
+    getEmails, 
+    selectEmailTotalCount, 
+    selectEmailResetTable, 
+    getEmailsPage,
+    selectEmailCount,
+    selectAllEmail
+} from '../EmailSlice';
+import { showMessage } from '../../snackBar/snackBarSlice';
 
 //import components
 import DashboardTable from '../../../common/components/Dashboard/DashboardTable/DashboardTable';
@@ -24,13 +33,13 @@ const columns = [
         type: 'id',
     },
     {
-        name: 'subject',
-        keys: ['subject'],
+        name: 'title',
+        keys: ['title'],
         type: 'normal'
     },
     {
         name: 'next recruitment status',
-        keys: ['nextRecruitmentStatus'],
+        keys: ['recruitmentStatus'],
         type: 'recruitmentStatus'
     },
     {
@@ -41,86 +50,6 @@ const columns = [
         keys: ['delete'],
         type: 'button',
     }
-]
-
-const fakeData = [
-    {
-        id: 1,
-        subject: "Volunteering Role",
-        nextRecruitmentStatus : "HR Approved",
-        body: "Hamdi is a good person",
-        cc : ['ahmad', 'ibrahim'],
-    },
-    {
-        id: 2,
-        subject: "Volunteering Role",
-        nextRecruitmentStatus : "refused",
-        body: "Hamdi is a good person",
-        cc : ['ahmad', 'ibrahim'],
-    },
-    {
-        id: 3,
-        subject: "Volunteering Role",
-        nextRecruitmentStatus : "HR Approved",
-        body: "Hamdi is a good person",
-        cc : ['ahmad', 'ibrahim'],
-    },
-    {
-        id: 4,
-        subject: "Volunteering Role",
-        nextRecruitmentStatus : "tech-interview approved",
-        body: "Hamdi is a good person",
-        cc : ['ahmad', 'ibrahim'],
-    },
-    {
-        id: 5,
-        subject: "Volunteering Role",
-        nextRecruitmentStatus : "HR Approved",
-        body: "Hamdi is a good person",
-        cc : ['ahmad', 'ibrahim'],
-    },
-    {
-        id: 6,
-        subject: "Volunteering Role",
-        nextRecruitmentStatus : "HR Approved",
-        body: "Hamdi is a good person",
-        cc : ['ahmad', 'ibrahim'],
-    },
-    {
-        id: 7,
-        subject: "Volunteering Role",
-        nextRecruitmentStatus : "HR Approved",
-        body: "Hamdi is a good person",
-        cc : ['ahmad', 'ibrahim'],
-    },
-    {
-        id: 8,
-        subject: "Volunteering Role",
-        nextRecruitmentStatus : "HR Approved",
-        body: "Hamdi is a good person",
-        cc : ['ahmad', 'ibrahim'],
-    },
-    {
-        id: 9,
-        subject: "Volunteering Role",
-        nextRecruitmentStatus : "HR Approved",
-        body: "Hamdi is a good person",
-        cc : ['ahmad', 'ibrahim'],
-    },
-    {
-        id: 10,
-        subject: "Volunteering Role",
-        nextRecruitmentStatus : "HR Approved",
-        body: "Hamdi is a good person",
-        cc : ['ahmad', 'ibrahim'],
-    },
-    {
-        id: 11,
-        subject: "Volunteering Role",
-        nextRecruitmentStatus : "HR Approved",
-        body: "Hamdi is a good person",
-        cc : ['ahmad', 'ibrahim'],
-    },
 ]
 
 const initPopUpOption = {
@@ -160,31 +89,45 @@ const popUpReducer = (state , action) => {
 function EmailPage() {
     const [popUpOption , popUpDispatch] = useReducer(popUpReducer , initPopUpOption);
     const dispatch = useDispatch();
+    const [curSkip , setCurSkip] = useState(0);
 
     const data = useSelector(selectAllEmail);
     const status = useSelector(selectEmailStatus);
+    const totalCount = useSelector(selectEmailTotalCount);
+    const resetTable = useSelector(selectEmailResetTable);
+    const emailCount = useSelector(selectEmailCount);
 
     const handleAdd = () => {
-        popUpDispatch({type:'add'});
+        popUpDispatch({type: 'add'});
     }
 
-    //TODO::
-    const onChangePage = (page , totalRow) => {
-        console.log(page , totalRow);
+    const onChangePage = async (page , _) => {
+        const skip = (page-1)*10;
+        setCurSkip(skip);
+        if(emailCount <= skip){
+            try{
+                await dispatch(getEmailsPage({skip})).unwrap();
+            }catch(error){
+                if(error?.name==="ConditionError") return;
+                dispatch(showMessage({message: error , severity: 2}));
+            }
+        }
     }
 
     useEffect(() => {
-        dispatch(addManyEmail(fakeData));
+        const req = async () => {
+            try{
+                await dispatch(getEmails({search: ''})).unwrap();
+            }catch(error){
+                if(error?.name==="ConditionError") return;
+                console.log(error);
+                dispatch(showMessage({message: error , severity: 2}));
+            }
+        }
+
+        req();
     } , []);
 
-
-    if(status==='failed'){
-        return (
-            <div className={style['email-page']}>
-                <Error />
-            </div>
-        );
-    }
 
     return (
         <div className={style['email-page']}>
@@ -194,12 +137,14 @@ function EmailPage() {
 
             <DashboardTable 
                 columns={columns}
-                data={data}
+                data={data.slice(curSkip , curSkip+10)}
                 pending={status==='loading' || status==='idle' ? true : false}
-                rowClick={(row) => console.log(row)}
+                rowClick={(row) => {console.log(row)}}
                 handleDelete={(row) => popUpDispatch({type:'delete' , id: row.id})}
                 handleEdit={(row) => popUpDispatch({type:'edit' , id: row.id})}
                 onChangePage={onChangePage}
+                totalCount={totalCount}
+                resetTable={resetTable}
             />  
 
             <PopUp open={popUpOption.isOpen} handleClose={() => popUpDispatch({type:'close'})} index={popUpOption.index}>
