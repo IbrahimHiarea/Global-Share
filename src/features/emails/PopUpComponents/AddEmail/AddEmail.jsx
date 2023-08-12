@@ -2,6 +2,11 @@
 import React , { useState }  from 'react';
 import { useForm } from 'react-hook-form';
 
+//import redux
+import { useDispatch } from 'react-redux';
+import {createEmail} from '../../EmailSlice';
+import { showMessage } from '../../../snackBar/snackBarSlice';
+
 // import components 
 import InputField from '../../../../common/components/Inputs/InputField/InputField';
 import SelectInputField from "../../../../common/components/Inputs/SelectInputField/SelectInputField";
@@ -19,22 +24,29 @@ import {recruitmentStatusData} from '../../../../common/utils/selectorData'
 import style from './AddEmail.module.css';
 
 function AddEmail({handleClose}) {
+    const dispatch = useDispatch();
     const {control , register , formState : {errors} , handleSubmit} = useForm({
         defaultValues:{
-            nextRecruitmentStatus : null,
-            cc : null,
-            subject : '',
+            title : '',
             body: '',
+            recruitmentStatus : '',
+            cc : null,
         }
     })
 
     const [isLoading , setIsLoading] = useState(false);
 
     const onSubmit = async (values) => {
-        setIsLoading(true);
-        console.log(values);
-        //TODO:: 
-        // dispatch add action to redux
+        try{
+            setIsLoading(true);
+            console.log(values);
+            await dispatch(createEmail(values)).unwrap();
+            dispatch(showMessage({message: 'Email Added successfully' , severity: 1}));
+            handleClose();
+        }catch(error){
+            dispatch(showMessage({message: error , severity: 2}));
+            setIsLoading(false);
+        }
     }
 
     if(isLoading===true){
@@ -61,7 +73,7 @@ function AddEmail({handleClose}) {
                     <SelectInputField
                         width='300px'
                         height='40px'
-                        name='nextRecruitmentStatus'
+                        name='recruitmentStatus'
                         placeholder='Next Recruitment Status'
                         options={Object.values(recruitmentStatusData)}
                         control={control}
@@ -84,16 +96,12 @@ function AddEmail({handleClose}) {
                     />
                     <InputField 
                         type='text'
-                        placeholder='Subject'
-                        name='subject'
+                        placeholder='title'
+                        name='title'
                         width='300px'
                         height='40px'  
-                        control={register('subject' , {
-                            required: 'Please enter the subject',
-                            pattern: {
-                                value: /^[a-zA-Z0-9 ]+$/,
-                                message: 'Please an English Character and Number'
-                            }
+                        control={register('title' , {
+                            required: 'Please enter the title',
                         })}
                         errors={errors}
                     />
