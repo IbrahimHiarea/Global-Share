@@ -34,8 +34,9 @@ const initialState = {
         bio: "",
         gsStatus: "",
         joinDate: "2000-1-1",
-        positionId: "",
-        position: {}
+        tasksCompleted: 0,
+        volunteeredHours: 0,
+        position: {},
     }
 }
 
@@ -44,14 +45,20 @@ export const fetchProfileDetails = createAsyncThunk(
     'profile/fetchProfileDetails',
     async ( _ , {rejectWithValue , getState , signal}) => {
         try{
-            // const token = selectAuthToken(getState());
-            const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiYWhtYWQuYWxzaGFoYWwyQGdtYWlsLmNvbSIsImlhdCI6MTY4OTYxNTYyMSwiZXhwIjoxNjkwMjIwNDIxfQ.3YHg0ANmNnP9EX8ueFySgmboTNTC3YLhFZ8-sYBkl3M";
+            const token = selectAuthToken(getState());
+            // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiYWhtYWQuYWxzaGFoYWwyQGdtYWlsLmNvbSIsImlhdCI6MTY4OTYxNTYyMSwiZXhwIjoxNjkwMjIwNDIxfQ.3YHg0ANmNnP9EX8ueFySgmboTNTC3YLhFZ8-sYBkl3M";
             const response = await profileAPI.fetchProfileDetails(token , signal);
+            console.log(response.data);
             return response.data;
         }
         catch(error){
-            let message = "Network connection error"
-            if(error?.response?.data?.message) message = error.response.data.message
+            let message = "Network connection error";
+            if(error?.response?.data?.message){
+                if(typeof error.response.data.message === 'string') 
+                    message = error.response.data.message;
+                else 
+                    message = error.response.data.message[0];
+            }
             return rejectWithValue(message);
         }
     },
@@ -68,16 +75,21 @@ export const fetchProfileDetails = createAsyncThunk(
 
 export const updateProfileDetails = createAsyncThunk(
     'profile/updateProfileDetails',
-    async (data , {rejectWithValue , signal}) => {
+    async (data , {rejectWithValue , getState ,  signal}) => {
         try{
-            // const token = selectAuthToken(getState());
-            const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImVtYWlsIjoiYWhtYWQuYWxzaGFoYWwyQGdtYWlsLmNvbSIsImlhdCI6MTY4ODU3Nzc5NCwiZXhwIjoxNjg5MTgyNTk0fQ.lGrFVOfTWn0pfsGHnOUGpUH-8k6SjuIwWZsJCM4zaXU";
+            const token = selectAuthToken(getState());
+            // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImVtYWlsIjoiYWhtYWQuYWxzaGFoYWwyQGdtYWlsLmNvbSIsImlhdCI6MTY4ODU3Nzc5NCwiZXhwIjoxNjg5MTgyNTk0fQ.lGrFVOfTWn0pfsGHnOUGpUH-8k6SjuIwWZsJCM4zaXU";
             await profileAPI.updateProfileDetails(data , token , signal);
             return data;
         }
         catch(error){
-            let message = "Network connection error"
-            if(error?.response?.data?.message) message = error.response.data.message[0];
+            let message = "Network connection error";
+            if(error?.response?.data?.message){
+                if(typeof error.response.data.message === 'string') 
+                    message = error.response.data.message;
+                else 
+                    message = error.response.data.message[0];
+            }
             return rejectWithValue(message);
         }
     },  
