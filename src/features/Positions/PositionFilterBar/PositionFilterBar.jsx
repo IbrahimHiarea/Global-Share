@@ -3,8 +3,9 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 
 //import redux
-import { useSelector } from 'react-redux';
-import {selectPositionStatus} from '../PositionSlice'
+import { useSelector , useDispatch } from 'react-redux';
+import {selectPositionStatus , getPositions} from '../PositionSlice'
+import { showMessage } from '../../snackBar/snackBarSlice';
 
 //import components
 import InputField from '../../../common/components/Inputs/InputField/InputField';
@@ -24,20 +25,35 @@ import { levelData } from '../../../common/utils/selectorData.js';
 import style from './PositionFilterBar.module.css';
 
 function PositionFilterBar({ handleAdd }) {
+    const dispatch = useDispatch();
     const {control , register , formState , reset , handleSubmit} = useForm({
         defaultValues:{
             search: '',
-            squad: null,
-            level: null,
+            squad: [],
+            level: [],
         }
     });
 
     const status = useSelector(selectPositionStatus);
 
-    const onSubmit = (values) => {
-        console.log(values)
-        //TODO::
-        //dispatch search action to redux
+    const handleReset = async () => {
+        try{
+            await dispatch(getPositions({search: '' , level: '' , squad: ''})).unwrap();
+            reset(formState.defaultValues);
+        }catch(error){
+            if(error?.name==="ConditionError") return;
+            dispatch(showMessage({message: error , severity: 2}));
+        }
+    }
+
+    const onSubmit = async (values) => {
+        const {search , level , squad} = values;
+        try{
+            await dispatch(getPositions({search , level: level.map(item => item.value).join(',') , squad: squad.map(item => item.value).join(',')})).unwrap();
+        }catch(error){
+            if(error?.name==="ConditionError") return;
+            dispatch(showMessage({message: error , severity: 2}));
+        }
     }
 
     return (
@@ -52,20 +68,22 @@ function PositionFilterBar({ handleAdd }) {
                     control={register('search')}
                 />
                 <SelectInputField
-                    width='150px'
+                    width='250px'
                     height='40px'
                     name='level'
                     placeholder='All levels'
                     options={Object.values(levelData)}
                     control={control}
+                    isMulti={true}
                 />
                 <SelectInputField
-                    width='150px'
+                    width='250px'
                     height='40px'
                     name='squad'
                     placeholder='All squads'
                     options={Object.values(levelData)}
                     control={control}
+                    isMulti={true}
                 />
                 <span className={style['bar-buttons']}>
                     <SubmitButton 
@@ -75,7 +93,13 @@ function PositionFilterBar({ handleAdd }) {
                     >
                         <FiSearch size='15px'/>
                     </SubmitButton> 
-                    <span className={style.reset} onClick={() => reset(formState.defaultValues)}>
+                    <span 
+                        className={style.reset} 
+                        style={{
+                            pointerEvents: (status==='loading' || status==='idle') ? 'none' : 'auto'
+                        }}
+                        onClick={handleReset}
+                    >
                         <RxReset size='15px'/>    
                     </span>
                 </span>

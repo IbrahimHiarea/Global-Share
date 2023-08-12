@@ -14,7 +14,7 @@ function SelectInputField({
         name, options, placeholder,
         control, errors , disabled,
         required , border , menuHeight,
-        isMulti
+        isMulti, placement
     }){
     const selectOptions = [].concat( options.map((item) => {
             return {'value': item , "label": item}
@@ -114,6 +114,7 @@ function SelectInputField({
                                 textTransform:'capitalize'
                             })
                         }}
+                        menuPlacement={placement}
                         isMulti={isMulti ? isMulti : false}
                         components={isMulti ? {ValueContainer} : {}}
                     />
@@ -135,13 +136,16 @@ const ValueContainer = props => {
                         <span 
                             style={{
                                 textTransform: 'capitalize',
+                                display: 'inline',
+                                fontSize: '14px'
                             }}
                         >
                             {props.children[0][0]?.props?.data?.value}
                         </span>
                         <span
                             style={{
-                                fontSize: '12px'
+                                fontSize: '12px',
+                                display: 'inline'
                             }}
                         >
                             &nbsp;

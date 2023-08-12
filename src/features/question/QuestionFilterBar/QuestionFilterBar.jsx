@@ -32,8 +32,8 @@ function QuestionFilterBar({handleAdd}){
 
     const handleReset = async () => {
         try{
-            reset(formState.defaultValues);
             await dispatch(getQuestions({search: ''})).unwrap();
+            reset(formState.defaultValues);
         }catch(error){
             if(error?.name==="ConditionError") return;
             dispatch(showMessage({message: error , severity: 2}));

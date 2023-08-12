@@ -1,13 +1,21 @@
 //import react
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer , useState} from 'react';
 
 //import redux
 import { useDispatch , useSelector } from 'react-redux';
-import { addManyPosition , selectAllPosition , selectPositionStatus} from '../PositionSlice';
+import {
+    getPositions,
+    getPositionPage,
+    selectAllPosition,
+    selectPositionCount,
+    selectPositionResetTable,
+    selectPositionTotalCount,
+    selectPositionStatus
+} from '../PositionSlice';
+import { showMessage } from '../../snackBar/snackBarSlice';
 
 //import components
 import DashboardTable from '../../../common/components/Dashboard/DashboardTable/DashboardTable';
-import Error from '../../../common/components/Error/Error';
 import PopUp from '../../../common/components/PopUp/PopUp';
 import DeletePosition from '../PopUpComponents/DeletePosition/DeletePosition';
 import PositionFilterBar from '../PositionFilterBar/PositionFilterBar';
@@ -58,153 +66,6 @@ const columns = [
     }
 ]
 
-const fakeData = [
-    {
-        id: 1,
-        name: 'Android Developer',
-        gsName: 'Kotlin Hero',
-        jobDescription: '',
-        weeklyHours: 11,
-        gsLevel: 'Specialist',
-        squadId: 0,
-        squad: {
-            name: 'Radioactive'
-        }, //squad model
-        users: [],
-    },
-    {
-        id: 2,
-        name: 'Android Developer',
-        gsName: 'Kotlin Hero',
-        jobDescription: '',
-        weeklyHours: 12,
-        gsLevel: 'intern',
-        squadId: 0,
-        squad: {
-            name: 'Radioactive'
-        }, //squad model
-        users: [],
-    },
-    {
-        id: 3,
-        name: 'Android Developer',
-        gsName: 'Kotlin Hero',
-        jobDescription: '',
-        weeklyHours: 11,
-        gsLevel: 'Specialist',
-        squadId: 0,
-        squad: {
-            name: 'Radioactive'
-        }, //squad model
-        users: [],
-    },
-    {
-        id: 4,
-        name: 'Android Developer',
-        gsName: 'Kotlin Hero',
-        jobDescription: '',
-        weeklyHours: 11,
-        gsLevel: 'Specialist',
-        squadId: 0,
-        squad: {
-            name: 'Radioactive'
-        }, //squad model
-        users: [],
-    },
-    {
-        id: 5,
-        name: 'Android Developer',
-        gsName: 'Kotlin Hero',
-        jobDescription: '',
-        weeklyHours: 11,
-        gsLevel: 'Specialist',
-        squadId: 0,
-        squad: {
-            name: 'Radioactive'
-        }, //squad model
-        users: [],
-    },
-    {
-        id: 6,
-        name: 'Android Developer',
-        gsName: 'Kotlin Hero',
-        jobDescription: '',
-        weeklyHours: 11,
-        gsLevel: 'Specialist',
-        squadId: 0,
-        squad: {
-            name: 'Radioactive'
-        }, //squad model
-        users: [],
-    },
-    {
-        id: 7,
-        name: 'Android Developer',
-        gsName: 'Kotlin Hero',
-        jobDescription: '',
-        weeklyHours: 11,
-        gsLevel: 'Specialist',
-        squadId: 0,
-        squad: {
-            name: 'Radioactive'
-        }, //squad model
-        users: [],
-    },
-    {
-        id: 8,
-        name: 'Android Developer',
-        gsName: 'Kotlin Hero',
-        jobDescription: '',
-        weeklyHours: 11,
-        gsLevel: 'Specialist',
-        squadId: 0,
-        squad: {
-            name: 'Radioactive'
-        }, //squad model
-        users: [],
-    },
-    {
-        id: 9,
-        name: 'Android Developer',
-        gsName: 'Kotlin Hero',
-        jobDescription: '',
-        weeklyHours: 11,
-        gsLevel: 'Specialist',
-        squadId: 0,
-        squad: {
-            name: 'Radioactive'
-        }, //squad model
-        users: [],
-    },
-    {
-        id: 10,
-        name: 'Android Developer',
-        gsName: 'Kotlin Hero',
-        jobDescription: '',
-        weeklyHours: 11,
-        gsLevel: 'Specialist',
-        squadId: 0,
-        squad: {
-            name: 'Radioactive'
-        }, //squad model
-        users: [],
-    },
-    {
-        id: 11,
-        name: 'Android Developer',
-        gsName: 'Kotlin Hero',
-        jobDescription: '',
-        weeklyHours: 11,
-        gsLevel: 'Specialist',
-        squadId: 0,
-        squad: {
-            name: 'Radioactive'
-        }, //squad model
-        users: [],
-    },
-    
-]
-
 const initPopUpOption = {
     id: 0,
     isOpen: false,
@@ -242,32 +103,44 @@ const popUpReducer = (state , action) => {
 function PositionPage() {
     const [popUpOption , popUpDispatch] = useReducer(popUpReducer , initPopUpOption);
     const dispatch = useDispatch();
+    const [curSkip , setCurSkip] = useState(0);
 
     const data = useSelector(selectAllPosition);
     const status = useSelector(selectPositionStatus);
+    const totalCount = useSelector(selectPositionTotalCount);
+    const resetTable = useSelector(selectPositionResetTable);
+    const positionCount = useSelector(selectPositionCount);
 
     const handleAdd = () => {
         popUpDispatch({type:'add'});
     }
 
-    //TODO::
-    const onChangePage = (page , totalRow) => {
-        console.log(page , totalRow);
+    const onChangePage = async (page , _) => {
+        const skip = (page-1)*10;
+        setCurSkip(skip);
+        if(positionCount <= skip){
+            try{
+                await dispatch(getPositionPage({skip})).unwrap();
+            }catch(error){
+                if(error?.name==="ConditionError") return;
+                dispatch(showMessage({message: error , severity: 2}));
+            }
+        }
     }
 
 
     useEffect(() => {
-        dispatch(addManyPosition(fakeData));
+        const req = async () => {
+            try{
+                await dispatch(getPositions({search: '' , level: '' , squad: ''})).unwrap();
+            }catch(error){
+                if(error?.name==="ConditionError") return;
+                dispatch(showMessage({message: error , severity: 2}));
+            }
+        }
+
+        req();
     } , []);
-
-
-    if(status==='failed'){
-        return (
-            <div className={style['position-page']}>
-                <Error />
-            </div>
-        );
-    }
 
     return (
         <div className={style['position-page']}>
@@ -277,12 +150,14 @@ function PositionPage() {
 
             <DashboardTable 
                 columns={columns}
-                data={data}
+                data={data.slice(curSkip , curSkip+10)}
                 pending={status==='loading' || status==='idle' ? true : false}
-                rowClick={(row) => console.log(row)}
+                rowClick={(row) => {console.log(row)}}
                 handleDelete={(row) => popUpDispatch({type:'delete' , id: row.id})}
                 handleEdit={(row) => popUpDispatch({type:'edit' , id: row.id})}
                 onChangePage={onChangePage}
+                totalCount={totalCount}
+                resetTable={resetTable}
             />  
 
             <PopUp open={popUpOption.isOpen} handleClose={() => popUpDispatch({type:'close'})} index={popUpOption.index}>

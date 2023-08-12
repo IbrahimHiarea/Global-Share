@@ -27,7 +27,7 @@ export const IdCell = ({id}) => {
 
 export const NormalCell = ({value}) => {
     return (    
-        <div className={style['normal-cell']}> {value} </div>
+        <div className={style['normal-cell']}> {value?.toLowerCase()} </div>
     );
 }
 

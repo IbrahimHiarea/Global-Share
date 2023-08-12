@@ -24,4 +24,5 @@
 .text-area::placeholder{
     color: var(--natural-alpha-3);
     font-weight: 300;
+    text-transform: capitalize;
 }

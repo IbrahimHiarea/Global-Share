@@ -3,8 +3,9 @@ import React , { useState }  from 'react';
 import { useForm } from 'react-hook-form';
 
 //import redux
-import { useSelector } from 'react-redux';
-import { selectPositionById } from '../../PositionSlice';
+import { useSelector , useDispatch} from 'react-redux';
+import { selectPositionById , updatePosition} from '../../PositionSlice';
+import { showMessage } from '../../../snackBar/snackBarSlice';
 
 // import components 
 import InputField from '../../../../common/components/Inputs/InputField/InputField';
@@ -20,34 +21,54 @@ import {levelData} from '../../../../common/utils/selectorData'
 
 //import style 
 import style from './EditPosition.module.css';
+import TextAreaField from '../../../../common/components/Inputs/TextAreaField/TextAreaField';
+import FileUpload from '../../../../common/components/Inputs/FileUpload/FileUpload';
 
 function EditPosition({id , handleClose}) {
+    const dispatch = useDispatch();
     const data = useSelector((state) => selectPositionById(state , id));
 
-    const {control , register , formState: {errors , isDirty , dirtyFields} , handleSubmit } = useForm({
+    const {control , register , formState: {errors , isDirty , dirtyFields} , handleSubmit , watch , setValue} = useForm({
         defaultValues:{
             name : '',
             gsName : '',
-            level : null,
+            gsLevel : null,
             weeklyHours: '',
+            jobDescription: null,
+            squadId: null,
         },
-        values: {name: data.name , gsName: data.gsName , weeklyHours: data.weeklyHours , level: {label: data.gsLevel , value: data.gsLevel}}
+        values: {
+            name: data.name, 
+            gsName: data.gsName, 
+            weeklyHours: data.weeklyHours?.toString(), 
+            gsLevel: {label: data.gsLevel?.toLowerCase() , value: data.gsLevel?.toLowerCase()},
+            jobDescription: null,    
+            squadId: {value: data.squadId , label: data.squad?.name},
+        }
     })
 
     const [isLoading , setIsLoading] = useState(false);
 
     const onSubmit = async (values) => {
         setIsLoading(true);
-        if(isDirty){
+        if(isDirty || values.jobDescription){
             const changed = {};
             for(let key of Object.keys(dirtyFields)){
                 if(dirtyFields[key]){
-                    changed[key] = values[key];
+                    if(key==='gsLevel') changed[key] = values[key]?.value?.toUpperCase();
+                    if(key==='squadId') changed[key] = values[key]?.value;
+                    else changed[key] = values[key];
                 }
             }
-            console.log(changed);
-            //TODO::
-            // dispatch update action to redux
+            if(values.jobDescription) changed.jobDescription = values.jobDescription;
+            try{
+                await dispatch(updatePosition({id , ...changed})).unwrap();
+                dispatch(showMessage({message: 'Position Edited successfully' , severity: 1}));
+                handleClose();
+            }catch(error){
+                dispatch(showMessage({message: error , severity: 2}));
+                setIsLoading(false);
+            }
         }
     }
 
@@ -80,10 +101,6 @@ function EditPosition({id , handleClose}) {
                         height='40px'
                         control={register('name' , {
                             required: 'Please Enter the Name',
-                            pattern: {
-                                value: /^[A-Za-z ]+$/,
-                                message: "The name don't match the pattern"
-                            }
                         })}
                         errors={errors}
                     />
@@ -95,10 +112,6 @@ function EditPosition({id , handleClose}) {
                         height='40px'
                         control={register('gsName' , {
                             required: 'Please Enter The Gs Name',
-                            pattern: {
-                                value: /^[A-Za-z ]+$/,
-                                message: "The name don't match the pattern"
-                            }
                         })}
                         errors={errors}
                     />
@@ -107,7 +120,7 @@ function EditPosition({id , handleClose}) {
                     <SelectInputField
                         width='185px'
                         height='40px'
-                        name='level'
+                        name='gsLevel'
                         placeholder='Levels'
                         options={Object.values(levelData)}
                         control={control}
@@ -132,11 +145,35 @@ function EditPosition({id , handleClose}) {
                         errors={errors}
                     />
                 </div>
+                <FileUpload
+                    name='jobDescription'
+                    file={watch("jobDescription")}
+                    setValue={setValue}
+                    width="422px"   
+                    height='40px'
+                    label={data.jobDescription ? data.jobDescription : 'Upload the job Description'}
+                    types={["pdf", "docx"]}
+                    row={true}
+                />
                 <div className={style.buttons}>
+                    <div className={style.squad}>
+                        <SelectInputField
+                            width='200px'
+                            height='40px'
+                            name='squadId'
+                            placeholder='squad'
+                            options={Object.values(levelData)}
+                            control={control}
+                            required={'enter the squad'}
+                            errors={errors}
+                            border={true}
+                            placement='top'
+                        />
+                    </div>
                     <SubmitButton 
                         width='157px' 
                         height='40px'
-                        disabled={isLoading || !isDirty}
+                        disabled={(isLoading || (isDirty===false && watch('jobDescription')===null))}
                     >
                         Edit Position
                     </SubmitButton>

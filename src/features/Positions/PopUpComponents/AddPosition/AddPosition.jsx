@@ -2,11 +2,17 @@
 import React , { useState }  from 'react';
 import { useForm } from 'react-hook-form';
 
+//import redux
+import { useDispatch } from 'react-redux';
+import {createPosition} from '../../PositionSlice';
+import { showMessage } from '../../../snackBar/snackBarSlice';
+
 // import components 
 import InputField from '../../../../common/components/Inputs/InputField/InputField';
 import SelectInputField from "../../../../common/components/Inputs/SelectInputField/SelectInputField";
 import SubmitButton from '../../../../common/components/Inputs/SubmitButton/SubmitButton';
 import Loader from '../../../../common/components/Loader/Loader';
+import FileUpload from '../../../../common/components/Inputs/FileUpload/FileUpload';
 
 // import icons
 import { IoCloseOutline } from "react-icons/io5";
@@ -18,22 +24,31 @@ import {levelData} from '../../../../common/utils/selectorData'
 import style from './AddPosition.module.css';
 
 function AddPosition({handleClose}) {
-    const {control , register , formState : {errors} , handleSubmit } = useForm({
+    const dispatch = useDispatch();
+    const {control , register , formState : {errors} , handleSubmit , watch , setValue} = useForm({
         defaultValues:{
             name : '',
             gsName : '',
-            level : null,
+            gsLevel : null,
             weeklyHours: '',
+            jobDescription: null,
+            squadId: null,
         }
     })
 
     const [isLoading , setIsLoading] = useState(false);
 
     const onSubmit = async (values) => {
-        setIsLoading(true);
         console.log(values);
-        //TODO:: 
-        // dispatch add action to redux
+        try{
+            setIsLoading(true);
+            await dispatch(createPosition({...values , gsLevel: values.gsLevel?.value , squadId: values.squadId?.value})).unwrap();
+            dispatch(showMessage({message: 'Position Added successfully' , severity: 1}));
+            handleClose();
+        }catch(error){
+            dispatch(showMessage({message: error , severity: 2}));
+            setIsLoading(false);
+        }
     }
 
     if(isLoading===true){
@@ -61,14 +76,10 @@ function AddPosition({handleClose}) {
                         type='text'
                         name='name'
                         placeholder='Name'
-                        width='185px'
+                        width='200px'
                         height='40px'
                         control={register('name' , {
                             required: 'Please Enter the Name',
-                            pattern: {
-                                value: /^[A-Za-z ]+$/,
-                                message: "The name don't match the pattern"
-                            }
                         })}
                         errors={errors}
                     />
@@ -76,39 +87,35 @@ function AddPosition({handleClose}) {
                         type='text'
                         name='gsName'
                         placeholder='Gs Name'
-                        width='185px'
+                        width='200px'
                         height='40px'
                         control={register('gsName' , {
                             required: 'Please Enter The Gs Name',
-                            pattern: {
-                                value: /^[A-Za-z ]+$/,
-                                message: "The GS name don't match the pattern"
-                            }
                         })}
                         errors={errors}
                     />
                 </div>
                 <div className={style.box}>
                     <SelectInputField
-                        width='185px'
+                        width='200px'
                         height='40px'
-                        name='level'
+                        name='gsLevel'
                         placeholder='Levels'
                         options={Object.values(levelData)}
                         control={control}
                         required={'enter the level'}
                         errors={errors}
                         border={true}
-                        menuHeight={100}
+                        menuHeight={150}
                     />
                     <InputField 
                         type='text'
                         placeholder='Weekly Hours'
                         name='weeklyHours'
-                        width='185px'
+                        width='200px'
                         height='40px'  
                         control={register('weeklyHours' , {
-                            required: 'Please enter the weekly Hours',
+                            required: 'enter the weekly Hours',
                             pattern: {
                                 value: /^\d+$/,
                                 message: 'should be a Number'
@@ -117,7 +124,32 @@ function AddPosition({handleClose}) {
                         errors={errors}
                     />
                 </div>
+                <FileUpload
+                    name='jobDescription'
+                    file={watch("jobDescription")}
+                    setValue={setValue}
+                    width="422px"   
+                    height='40px'
+                    label='Upload the job Description'
+                    types={["pdf", "docx"]}
+                    row={true}
+                    required={true}
+                />
                 <div className={style.buttons}>
+                    <div className={style.squad}>
+                        <SelectInputField
+                            width='200px'
+                            height='40px'
+                            name='squadId'
+                            placeholder='squad'
+                            options={Object.values(levelData)}
+                            control={control}
+                            required={'enter the squad'}
+                            errors={errors}
+                            border={true}
+                            placement='top'
+                        />
+                    </div>
                     <SubmitButton 
                         width='157px' 
                         height='40px'

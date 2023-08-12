@@ -13,7 +13,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 function formatString(message){
-    return message.charAt(0).toUpperCase() + message.slice(1);
+    return message?.charAt(0).toUpperCase() + message?.slice(1);
 }
 
 function SnackBar (){

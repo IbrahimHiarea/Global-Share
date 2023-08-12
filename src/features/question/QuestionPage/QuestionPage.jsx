@@ -15,16 +15,12 @@ import {
 import { showMessage } from '../../snackBar/snackBarSlice';
 
 //import components
-import Error from '../../../common/components/Error/Error';
 import DashboardTable from '../../../common/components/Dashboard/DashboardTable/DashboardTable';
 import PopUp from '../../../common/components/PopUp/PopUp';
 import QuestionFilterBar from '../QuestionFilterBar/QuestionFilterBar';
 import DeleteQuestion from '../PopUpComponents/DeleteQuestion/DeleteQuestion';
 import AddQuestion from '../PopUpComponents/AddQuestion/AddQuestion';
 import EditQuestion from '../PopUpComponents/EditQuestion/EditQuestion';
-
-//import static data
-import { questionTypeData } from '../../../common/utils/selectorData';
 
 //import style
 import style from './QuestionPage.module.css';
@@ -140,7 +136,7 @@ function QuestionPage(){
                 columns={columns}
                 data={data.slice(curSkip , curSkip+10)}
                 pending={status==='loading' || status ==='idle' ? true : false}
-                rowClick={(row) => {console.log(row)}}
+                rowClick={(row) => {}}
                 handleDelete={(row) => popUpDispatch({type:'delete' , id: row.id})}
                 handleEdit={(row) => popUpDispatch({type:'edit' , id: row.id})}
                 onChangePage={onChangePage}
