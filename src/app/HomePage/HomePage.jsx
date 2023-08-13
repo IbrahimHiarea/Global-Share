@@ -8,6 +8,18 @@ function HomePage (){
     return (
         <div className={style.home}>
             this is home
+            {/* <AsyncSelectInputField
+                width='240px'
+                height='40px'
+                name='position'
+                placeholder='Position'
+                defaultOptions={[]}
+                control={control}
+                required={'enter the position'}
+                errors={errors}
+                border={true}
+                callBack={getSquadsData}
+            /> */}
         </div>
     );
 }

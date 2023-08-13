@@ -12,7 +12,7 @@ function RadioView({ title , options , answer}){
             <h2>{title}?</h2>
             <div className={style.options}>
                 {
-                    options.map((opt , index) =>(
+                    options?.map((opt , index) =>(
                         <div key={opt+index} className={style.option}>
                             {   
                                 answer?.toLowerCase()===opt?.toLowerCase() ? 

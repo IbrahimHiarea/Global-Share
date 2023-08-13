@@ -1,31 +1,50 @@
 //import react
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
+
+//import redux
+import { useSelector } from "react-redux";
+import { selectAuthToken } from '../../../../features/auth/AuthSlice';
 
 //import components
 import InputWrapper from '../InputWrapper/InputWrapper';
 import Select , { components } from 'react-select';
 
 //import style
-import style from './SelectInputField.module.css';
+import style from './AsyncSelectInputField.module.css';
 
-function SelectInputField({
+function AsyncSelectInputField({
         children, width, height,
-        name, options, placeholder,
+        name, defaultOptions , placeholder,
         control, errors , disabled,
         required , border , menuHeight,
-        isMulti, placement
+        isMulti, placement , callBack
     }){
-    const selectOptions = [].concat( options?.map((item) => {
-            return {'value': item , "label": item}
-        }));
-        
+    
+    const token = useSelector(selectAuthToken);
+
+    const [
+        selectOptions, 
+        setSelectOptions
+    ] = useState(() => [].concat(defaultOptions?.map(item => ({'value': item , "label": item}))));
 
     let borderColor = 'transparent';
     if(border) borderColor = 'var(--border-color)';
     if(errors && errors[name]) borderColor = 'var(--error-main)';
 
-    return(
+    useEffect(() => {
+        const controller = new AbortController();
+        callBack(
+            token, 
+            controller.signal
+        ).then(options => {
+            if(options?.length!==0) setSelectOptions(options);
+        }).catch(() => {});
+
+        return () =>  controller.abort();  
+    } , [callBack , token])
+
+    return (
         <InputWrapper name={name} label={children} errors={errors}>
             <Controller 
                 name={name}
@@ -163,4 +182,4 @@ const ValueContainer = props => {
     );
 };
 
-export default SelectInputField;
+export default AsyncSelectInputField;
