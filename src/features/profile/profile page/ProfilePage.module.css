@@ -60,14 +60,6 @@
 	font-weight: 500;
 }
 
-.header-name div{
-	color: var(--secondary-main);
-	background-color: var(--secondary-white);
-	padding: 5px 10px;
-	border-radius: 4px;
-	text-transform: uppercase;
-}
-
 .header-info h3{
 	margin: 0;
 	font-weight: 500;

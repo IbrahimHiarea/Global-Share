@@ -18,6 +18,7 @@ import ApplicationDetails from '../features/application/ApplicationDetails/Appli
 import VacancyPage from '../features/vacancies/VacancyPage/VacancyPage';
 import AddVacancy from '../features/vacancies/AddVacancy/AddVacancy';
 import QuestionPage from '../features/question/QuestionPage/QuestionPage';
+import ErrorNotFound from '../app/NotFound/ErrorNotFound';
 
 function AllRoute () {
     return (
@@ -71,6 +72,7 @@ function AllRoute () {
                 {/* Question section */}
                 <Route path='question' element={<QuestionPage />}/>
 
+                <Route path="*" element={<ErrorNotFound />}/>
             </Route>
         </Routes>
     );  
