@@ -13,9 +13,12 @@ function RadioView({ title , options , answer}){
             <div className={style.options}>
                 {
                     options.map((opt , index) =>(
-                        <div key={index} className={style.option}>
-                            {index===0 && <BsSquareFill size='14px' color='var(--word-color)'/>}
-                            {index!==0 && <BsSquare size='14px' color='var(--word-color)'/>}
+                        <div key={opt+index} className={style.option}>
+                            {   
+                                answer?.toLowerCase()===opt?.toLowerCase() ? 
+                                <BsSquareFill size='14px' color='var(--word-color)'/>
+                                : <BsSquare size='14px' color='var(--word-color)'/>
+                            }
                             <div>{opt}</div>
                         </div>
                     ))

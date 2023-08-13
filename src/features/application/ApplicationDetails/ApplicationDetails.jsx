@@ -4,7 +4,8 @@ import { useParams } from 'react-router';
 
 //import redux
 import { useSelector , useDispatch} from 'react-redux';
-import { selectApplicationById , addApplication , selectApplicationStatus} from '../ApplicationSlice'
+import { getApplicationById, selectApplicationById , selectApplicationStatus } from '../ApplicationSlice'
+import {showMessage}from '../../snackBar/snackBarSlice';
 
 //import components
 import Loader from '../../../common/components/Loader/Loader';
@@ -28,57 +29,10 @@ import RadioView from '../../../common/components/QuestionsView/RadioView/RadioV
 import FileView from '../../../common/components/QuestionsView/FileView/FileView';
 
 //import static data
-import { recruitmentStatusData } from '../../../common/utils/selectorData';
+import { questionTypeData, recruitmentStatusData } from '../../../common/utils/selectorData';
 
 // import style 
 import style from './ApplicationDetails.module.css';
-
-const fakeData = [
-    {
-        id: 1,
-        vacancyId: 200,
-        vacancy: {
-            position: {
-                name: 'Specialist Android Developer',
-                squad: {
-                    name: 'Radioactive',
-                }
-            }
-        },
-        status: 'applied',
-        feedbacks: [
-            {
-                id: 1,
-                applicationId: 0,
-                application: {},
-                type: 'orch_approved', // recruitmentStatus,
-                text: 'this is feedback this is feedback this is feedback this is feedback this is feedback this is feedback this is feedback this is feedback this is feedback this is feedback this is feedback this is feedback this is feedback this is feedback this is feedback this is feedback this is feedback this is feedback this is feedback',
-            },
-            {
-                id: 2,
-                applicationId: 0,
-                application: {},
-                type: 'hr_approved', // recruitmentStatus,
-                text: 'this is feedback this is feedback this is feedback this is feedback this is feedback this is feedback this is feedback this is feedbackthis is feedback ',
-            },
-            {
-                id: 3,
-                applicationId: 0,
-                application: {},
-                type: 'hr_interview_approved', // recruitmentStatus,
-                text: 'this is feedback this is feedback this is feedback this is feedback this is feedback this is feedback this is feedback this is feedbackthis is feedback ',
-            },
-            {
-                id: 4,
-                applicationId: 0,
-                application: {},
-                type: 'tech_interview_approved', // recruitmentStatus,
-                text: 'this is feedback this is feedback this is feedback this is feedback this is feedback this is feedback this is feedback this is feedbackthis is feedback ',
-            },
-        ],
-        answers: [],
-    },
-]
 
 const getTitle = (status) => {
     switch(status.toLowerCase()){
@@ -139,9 +93,17 @@ function ApplicationDetails(){
     const handlePopUpClose = () => popUpDispatch({type:'close'});
 
     useEffect(() => {
-        dispatch(addApplication(fakeData[0]));
-    } , []);
+        const req = async () => {
+            try{
+                await dispatch(getApplicationById({id})).unwrap();
+            }catch(error){
+                if(error?.name==="ConditionError") return;
+                dispatch(showMessage({message: error , severity: 2}));
+            }
+        }
 
+        req();
+    } , []);
 
     if(status==='loading' || status==='idle'){
         return (
@@ -163,21 +125,21 @@ function ApplicationDetails(){
         <div className={style['application-details-page']}> 
             <div className={style['application-details']}>
                 <h1 className={style['application-details-title']}>
-                    Application #{data.id}
+                    Application #{data?.id}
                 </h1>   
                 <div className={style['application-details-info']}>
-                    {data.vacancy.position.name} 
+                    {data?.vacancy?.position?.name} 
                     <span>&#9679;</span>
-                    {data.vacancy.position.squad.name}
-                    <RecruitmentStatus recruitmentStatus={data.status}/>
+                    {data?.vacancy?.position?.squad?.name}
+                    <RecruitmentStatus recruitmentStatus={data?.status}/>
                 </div>
 
-                { data.feedbacks.length!==0 && 
+                { data?.feedbacks?.length!==0 && 
                     <>
                     <Divider textAlign='center' role="presentation"><span className={style.divider}>feedbacks</span></Divider>
                     <Masonry className={style['application-feedbacks']} columnsCount={2} gutter='30px' >
                         {
-                            data.feedbacks.map((feedback) => (
+                            data?.feedbacks?.map((feedback) => (
                                 <FeedbackView key={feedback.id} feedback={feedback}/>
                             ))
                         }
@@ -187,10 +149,24 @@ function ApplicationDetails(){
 
                 <Divider textAlign='center'><span className={style.divider}>results</span></Divider>
                 <Masonry className={style['application-questions']} columnsCount={2} gutter='30px'>
-                    <div></div>
+                    {
+                        data?.answers?.map((answer) => {
+                            if(answer?.question?.type?.toLowerCase()===questionTypeData.long || 
+                                answer?.question?.type?.toLowerCase()===questionTypeData.short){
+                                    return <TextView key={answer?.id} title={answer?.question?.text} answer={answer?.content[0]}/>
+                                }
+                            else if(answer?.question?.type?.toLowerCase()===questionTypeData.radio){
+                                return <RadioView key={answer?.id} title={answer?.question?.text} options={answer?.question?.options} answer={answer?.content[0]} />
+                            }   
+                            else if(answer?.question?.type?.toLowerCase()===questionTypeData.checkbox){
+                                return <CheckboxView key={answer?.id} title={answer?.question?.text} options={answer?.question?.options} answer={answer?.content}/>
+                            }
+                            return <FileView key={answer?.id} title={answer?.question?.text} link={answer?.content[0]} name={answer?.content[0]}/>
+                        })
+                    }
                 </Masonry>
 
-                { (data.status.toLowerCase()!==recruitmentStatusData.done && data.status.toLowerCase()!==recruitmentStatusData.refused) &&
+                { (data?.status?.toLowerCase()!==recruitmentStatusData.done && data?.status?.toLowerCase()!==recruitmentStatusData.refused) &&
                     <div className={style['application-buttons']}>
                         <Button 
                             backgroundColor='var(--error-main)'
@@ -201,7 +177,7 @@ function ApplicationDetails(){
                         >
                             refuse
                         </Button>
-                        {data.status.toLowerCase()===recruitmentStatusData.applied && 
+                        {data?.status?.toLowerCase()===recruitmentStatusData.applied && 
                             <Button 
                                 backgroundColor='var(--word-color)'
                                 color='white'
@@ -217,16 +193,16 @@ function ApplicationDetails(){
                             color='white'
                             width='150px'
                             height='40px'
-                            onClick={() => popUpDispatch({type: 'approve' , index: getTitle(data.status).index})}
+                            onClick={() => popUpDispatch({type: 'approve' , index: getTitle(data?.status).index})}
                         >
-                            {getTitle(data.status).title}
+                            {getTitle(data?.status).title}
                         </Button>
                     </div>
                 }
 
                 <PopUp open={popUpOption.isOpen} handleClose={handlePopUpClose} index={popUpOption.index}>
                     <RefuseApplication id={id} handleClose={handlePopUpClose}/>
-                    <ChangeApplicationPosition id={id} position={data.vacancy.position.name}  handleClose={handlePopUpClose}/>
+                    <ChangeApplicationPosition id={id} position={data?.vacancy?.position?.name}  handleClose={handlePopUpClose}/>
                     <ApproveAsHr id={id} handleClose={handlePopUpClose}/>
                     <ApproveAsOrch id={id} handleClose={handlePopUpClose}/>
                     <ApproveHRInterview id={id} handleClose={handlePopUpClose}/>

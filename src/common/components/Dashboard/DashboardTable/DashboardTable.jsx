@@ -17,8 +17,9 @@ import { CircularProgress } from '@mui/material';
 
 function getProp(object , keys){
     let value = object;
-    for(let i of keys)
-        value = value[i];
+    for(let i of keys){
+        if(value) value = value[i];
+    }
     return value;
 }
 

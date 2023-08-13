@@ -12,10 +12,13 @@ function CheckboxView ({title , options , answer}){
             <h2>{title}?</h2>
             <div className={style.options}>
                 {
-                    options.map((opt , index) => ( //change the key of the element and the answers
-                        <div key={index} className={style.option}>
-                            {index%2!==0 && <BsSquare size='14px' color='var(--word-color)'  style={{marginLeft: '.1rem'}}/>}
-                            {index%2===0 && <BsCheck2Square size='17px' color='var(--word-color)'/> }
+                    options.map((opt , index) => (
+                        <div key={opt+index} className={style.option}>
+                            {
+                                answer?.indexOf(opt)===-1 ? 
+                                <BsSquare size='14px' color='var(--word-color)'  style={{marginLeft: '.1rem'}}/>
+                                : <BsCheck2Square size='17px' color='var(--word-color)'/> 
+                            }
                             <div>{opt}</div>
                         </div>
                     ))

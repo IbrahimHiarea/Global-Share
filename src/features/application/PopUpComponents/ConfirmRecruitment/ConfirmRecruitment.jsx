@@ -1,6 +1,12 @@
 // import react
 import React , { useState }  from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router';
+
+//import redux
+import { useDispatch } from 'react-redux';
+import {updateApplication} from '../../ApplicationSlice';
+import {showMessage} from '../../../snackBar/snackBarSlice';
 
 // import components 
 import InputField from '../../../../common/components/Inputs/InputField/InputField';
@@ -12,10 +18,15 @@ import Loader from '../../../../common/components/Loader/Loader';
 import { IoCloseOutline } from "react-icons/io5";
 import { HiOutlineMail } from "react-icons/hi";
 
+//import static data
+import { recruitmentStatusData } from '../../../../common/utils/selectorData';
+
 //import style 
 import style from './ConfirmRecruitment.module.css';
 
-function ConfirmRecruitment({handleClose}) {
+function ConfirmRecruitment({id , handleClose}) {
+    const dispatch = useDispatch();
+    const nav = useNavigate();
     const {register , watch , formState : {errors} , handleSubmit } = useForm({
         defaultValues:{
             firstName : '',
@@ -28,10 +39,16 @@ function ConfirmRecruitment({handleClose}) {
     const [isLoading , setIsLoading] = useState(false);
 
     const onSubmit = async (values) => {
-        setIsLoading(true);
-        console.log(values);
-        //TODO:: 
-        // dispatch add action to redux
+        try{
+            setIsLoading(true);
+            await dispatch(updateApplication({id , ...values , status: recruitmentStatusData.done.toUpperCase()})).unwrap();
+            dispatch(showMessage({message: 'Application done successfully' , severity: 1}));
+            handleClose();
+            nav('/application');
+        }catch(error){
+            dispatch(showMessage({message: error , severity: 2}));
+            setIsLoading(false);
+        }
     }
 
     if(isLoading===true){
@@ -63,10 +80,6 @@ function ConfirmRecruitment({handleClose}) {
                         height='40px'
                         control={register('firstName' , {
                             required: 'Please Enter The First Name',
-                            pattern: {
-                                value: /^[A-Za-z ]+$/,
-                                message: "The First name doesn't match the pattern"
-                            }
                         })}
                         errors={errors}
                     />
@@ -78,10 +91,6 @@ function ConfirmRecruitment({handleClose}) {
                         height='40px'
                         control={register('lastName' , {
                             required: 'Please Enter The Last Name',
-                            pattern: {
-                                value: /^[A-Za-z ]+$/,
-                                message: "The Last name doesn't match the pattern"
-                            }
                         })}
                         errors={errors}
                     />
@@ -95,10 +104,6 @@ function ConfirmRecruitment({handleClose}) {
                         height='40px'  
                         control={register('password' , {
                             required: 'Please enter the password',
-                            pattern: {
-                                value: /^(?!\s)(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,10}$/,
-                                message: 'Please enter a valid password'
-                            }
                         })}
                         errors={errors}
                     />

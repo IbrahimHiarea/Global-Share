@@ -54,7 +54,7 @@ export const RecruitmentStatusCell = ({recruitmentStatus}) => {
                 {[style['recruitment-status-cell-warning']] : recruitmentStatus.toLowerCase()===recruitmentStatusData.applied}
             )
         }>
-            {recruitmentStatus}
+            {recruitmentStatus.toLowerCase()}
         </div>
     );
 }

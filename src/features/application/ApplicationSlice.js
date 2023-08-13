@@ -57,7 +57,103 @@ const applicationAdapter = createEntityAdapter({
 
 
 //thunk actions
+export const getApplications = createAsyncThunk(
+    'application/getApplication',
+    async (data , thunkAPI) =>{
+        try{
+            const {auth: {token}} = thunkAPI.getState();
+            const response = await applicationAPI.getApplications(data.search , 0 , token , thunkAPI.signal);
+            return {search : data.search , ...(response.data)};
+        } catch(error){
+            let message = "Network connection error";
+            if(error?.response?.data?.message){
+                if(typeof error.response.data.message === 'string') 
+                    message = error.response.data.message;
+                else 
+                    message = error.response.data.message[0];
+            }
+            return thunkAPI.rejectWithValue(message);
+        }
+    },
+    {
+        condition: (data, {getState}) => {
+            const { application : {searchTerms , status} } = getState()
+            if (status === status.loading || searchTerms.search===data.search) {
+                return false;
+            }
+        },
+    }
+);
 
+export const getApplicationsPage = createAsyncThunk(
+    'application/getApplicationsPage',
+    async (data , thunkAPI) => {
+        try{    
+            const {auth: {token} , application: {searchTerms : {search}}} = thunkAPI.getState();
+            const response = await applicationAPI.getApplications(search , data.skip , token , thunkAPI.signal);
+            return response.data;
+        }catch(error){
+            let message = "Network connection error";
+            if(error?.response?.data?.message){
+                if(typeof error.response.data.message === 'string') 
+                    message = error.response.data.message;
+                else 
+                    message = error.response.data.message[0];
+            }
+            return thunkAPI.rejectWithValue(message);
+        }
+    },  
+);
+
+export const getApplicationById = createAsyncThunk(
+    'application/getApplicationByID',
+    async (data , thunkAPI) =>{
+        try{
+            const {auth: {token}} = thunkAPI.getState();
+            const response = await applicationAPI.getApplicationById(data.id , token , thunkAPI.signal);
+            return response.data;
+        } catch(error){
+            let message = "Network connection error";
+            if(error?.response?.data?.message){
+                if(typeof error.response.data.message === 'string') 
+                    message = error.response.data.message;
+                else 
+                    message = error.response.data.message[0];
+            }
+            return thunkAPI.rejectWithValue(message);
+        }
+    },
+    {
+        condition: (data, {getState}) => {
+            const { application : {status , ids} } = getState()
+            if (status === status.loading || ids.indexOf(parseInt(data.id))!==-1) {
+                return false;
+            }
+        },
+    }
+);
+
+
+export const updateApplication = createAsyncThunk(
+    'application/updateApplication',
+    async (data , thunkAPI) => {
+        try{
+            const {id , ...values} = data;
+            const {auth : {token}} = thunkAPI.getState();
+            const response = await applicationAPI.updateApplication(id , values , token , thunkAPI.signal);
+            return response.data;
+        }catch(error){
+            let message = "Network connection error";
+            if(error?.response?.data?.message){
+                if(typeof error.response.data.message === 'string') 
+                    message = error.response.data.message;
+                else 
+                    message = error.response.data.message[0];
+            }
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+);
 
 //create slice
 const applicationSlice = createSlice({
@@ -65,21 +161,56 @@ const applicationSlice = createSlice({
     initialState: applicationAdapter.getInitialState({
         status: status.idle,
         error: null,
-        isSearched: false
-    }),
-    reducers: {
-        addApplication: (state , action) => {
-            applicationAdapter.addOne(state , action.payload);
-            state.status = status.succeeded;
+        searchTerms: {
+            search: undefined
         },
-        addManyApplication: (state , action) => {
-            applicationAdapter.addMany(state , action.payload);
-            state.status = status.succeeded;
-        }
-    },
+        totalCount: 0,
+        resetTable: false
+    }),
+    reducers: {},
     extraReducers: (builder) => {
-
-    }
+        builder
+            .addCase(getApplications.pending , (state , _) => {
+                state.status = status.loading;
+            })
+            .addCase(getApplications.fulfilled , (state , action) => {
+                applicationAdapter.setAll(state , action.payload.data);
+                state.totalCount = action.payload.count;
+                state.searchTerms.search = action.payload.search;
+                state.resetTable = !(state.resetTable);
+                state.status = status.succeeded;
+            })
+            .addCase(getApplications.rejected , (state , action) => {
+                state.error = action.payload;
+                state.status = status.failed;
+            })
+            .addCase(getApplicationsPage.pending , (state , _) => {
+                state.status = status.loading;
+            })
+            .addCase(getApplicationsPage.fulfilled, (state , action) => {
+                applicationAdapter.setMany(state , action.payload.data);
+                state.totalCount = action.payload.count;
+                state.status = status.succeeded;
+            })
+            .addCase(getApplicationsPage.rejected , (state , action) => {
+                state.error = action.payload;
+                state.status = status.failed;
+            })
+            .addCase(updateApplication.fulfilled , (state , action) => {
+                applicationAdapter.upsertOne(state , action.payload);
+            })
+            .addCase(getApplicationById.pending , (state , _) => {
+                state.status = status.loading;
+            })
+            .addCase(getApplicationById.fulfilled , (state , action) => {
+                applicationAdapter.upsertOne(state , action.payload);
+                state.status = status.succeeded;
+            })
+            .addCase(getApplicationById.rejected , (state , action) => {
+                state.error = action.payload;
+                state.status = status.failed;
+            })
+    }   
 });
 
 
@@ -87,12 +218,14 @@ const applicationSlice = createSlice({
 export const {
     selectAll: selectAllApplication,
     selectById: selectApplicationById,
+    selectTotal: selectApplicationCount
 } = applicationAdapter.getSelectors(state => state.application);
 export const selectApplicationStatus = state => state.application.status;
 export const selectApplicationError = state => state.application.error;
+export const selectApplicationTotalCount = state => state.application.totalCount;
+export const selectApplicationResetTable = state => state.application.resetTable;
 
 //action
-export const {addManyApplication , addApplication} = applicationSlice.actions;
 
 //reducer
 export default applicationSlice.reducer;

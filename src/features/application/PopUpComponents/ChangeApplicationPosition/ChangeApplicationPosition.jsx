@@ -2,6 +2,11 @@
 import React , { useState }  from 'react';
 import { useForm } from 'react-hook-form';
 
+//import redux
+import { useDispatch } from 'react-redux';
+import {updateApplication} from '../../ApplicationSlice';
+import {showMessage} from '../../../snackBar/snackBarSlice';
+
 // import components 
 import SelectInputField from '../../../../common/components/Inputs/SelectInputField/SelectInputField';
 import SubmitButton from '../../../../common/components/Inputs/SubmitButton/SubmitButton';
@@ -19,6 +24,7 @@ import {levelData} from '../../../../common/utils/selectorData'
 import style from './ChangeApplicationPosition.module.css';
 
 function ChangeApplicationPosition({id , position , handleClose}) {
+    const dispatch = useDispatch();
     const {control , formState : {errors , isDirty} , handleSubmit} = useForm({
         defaultValues:{
             position : {value: position , label: position},
@@ -28,10 +34,15 @@ function ChangeApplicationPosition({id , position , handleClose}) {
     const [isLoading , setIsLoading] = useState(false);
 
     const onSubmit = async (values) => {
-        setIsLoading(true);
-        console.log(values);
-        //TODO:: 
-        // dispatch add action to redux
+        try{
+            setIsLoading(true);
+            await dispatch(updateApplication({id , position: values?.position?.value})).unwrap();
+            dispatch(showMessage({message: 'Application Edited successfully' , severity: 1}));
+            handleClose();
+        }catch(error){
+            dispatch(showMessage({message: error , severity: 2}));
+            setIsLoading(false);
+        }
     }
 
     if(isLoading===true){
