@@ -10,6 +10,7 @@ import {selectProfileStatus , fetchProfileDetails, selectProfileData} from '../p
 import Loader from '../../../common/components/Loader/Loader';
 import Error from '../../../common/components/Error/Error';
 import Button from '../../../common/components/Inputs/Button/Button'
+import VolunteerStatus from '../../../common/components/StatusBoxes/VolunteerStatus/VolunteerStatus'
 import { Avatar } from '@mui/material';
 
 //import icon
@@ -82,14 +83,7 @@ function ProfilePage (){
                         <div className={style['header-info']}>
                             <div className={style['header-name']}>
                                 <h2>{`${data.firstName} ${data.middleName} ${data.lastName}`} <span>• {data.arabicFullName}</span></h2>
-                                <div 
-                                    style={{
-                                        color: data.gsStatus.toLowerCase() !== "active" ? 'var(--error-main)' : null,
-                                        backgroundColor: data.gsStatus.toLowerCase() !== "active" ? 'var(--error-background)' : null
-                                    }}
-                                >
-                                    {data.gsStatus}
-                                </div>
+                                <VolunteerStatus width="70px" height="24px" volunteerStatus={data.gsStatus} />
                             </div>
                             <h3>Specialist Android Developer <span>• {data.email}</span></h3>
                         </div>
