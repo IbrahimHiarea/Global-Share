@@ -1,10 +1,19 @@
 //import react
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 //import redux
 import { useDispatch , useSelector } from 'react-redux';
-import { addManyVacancy , selectAllVacancy , selectVacancyStatus } from '../VacancySlice';
+import { 
+    selectVacancyStatus,
+    getVacancies, 
+    selectVacancyTotalCount, 
+    selectVacancyResetTable, 
+    getVacanciesPage,
+    selectVacancyCount,
+    selectAllVacancy
+} from '../VacancySlice';
+import { showMessage } from '../../snackBar/snackBarSlice';
 
 //import components
 import Error from '../../../common/components/Error/Error';
@@ -25,18 +34,18 @@ const columns = [
     },
     {
         name: 'position',
-        keys: ['position'],
+        keys: ['position' , 'name'],
         type: 'normal'
     },
     {
         name: 'squad',
-        keys: ['squad'],
+        keys: ['position' , 'squad' ,'name'],
         type: 'normal'
     },
     {   
         name: 'status',
-        keys: ['status'],
-        type: 'recruitmentStatus'
+        keys: ['isOpen'],
+        type: 'vacancyStatus'
     },
     {
         keys: ['edit'],
@@ -47,77 +56,6 @@ const columns = [
         type: 'button',
     }
 ];
-
-const fakeData = [
-    {
-        id: 1,
-        position: 'Specialist Android Developer',
-        squad: 'Radioactive',
-        status: 'open'
-    },
-    {
-        id: 2,
-        position: 'Specialist Android Developer',
-        squad: 'Radioactive',
-        status: 'open'
-    },
-    {
-        id: 3,
-        position: 'Specialist Android Developer',
-        squad: 'Radioactive',
-        status: 'closed'
-    },
-    {
-        id: 4,
-        position: 'Specialist Android Developer',
-        squad: 'Radioactive',
-        status: 'closed'
-    },
-    {
-        id: 5,
-        position: 'Specialist Android Developer',
-        squad: 'Radioactive',
-        status: 'open'
-    },
-    {
-        id: 6,
-        position: 'Specialist Android Developer',
-        squad: 'Radioactive',
-        status: 'open'
-    },
-    {
-        id: 7,
-        position: 'Specialist Android Developer',
-        squad: 'Radioactive',
-        status: 'closed'
-    },
-    {
-        id: 8,
-        position: 'Specialist Android Developer',
-        squad: 'Radioactive',
-        status: 'open'
-    },
-    {
-        id: 9,
-        vacancyId: 9,
-        position: 'Specialist Android Developer',
-        squad: 'Radioactive',
-        status: 'open'
-    },
-    {
-        id: 10,
-        position: 'Specialist Android Developer',
-        squad: 'Radioactive',
-        status: 'open'
-    },
-    {
-        id: 11,
-        position: 'Specialist Android Developer',
-        squad: 'Radioactive',
-        status: 'closed'
-    },
-];
-
 
 const initPopUpOption = {
     id: 0,
@@ -156,9 +94,13 @@ const popUpReducer = (state , action) => {
 function VacancyPage(){
     const [popUpOption , popUpDispatch] = useReducer(popUpReducer , initPopUpOption);
     const dispatch = useDispatch();
+    const [curSkip , setCurSkip] = useState(0);
 
     const data = useSelector(selectAllVacancy);
     const status = useSelector(selectVacancyStatus);
+    const totalCount = useSelector(selectVacancyTotalCount);
+    const resetTable = useSelector(selectVacancyResetTable);
+    const vacancyCount = useSelector(selectVacancyCount);
 
     const nav = useNavigate();
 
@@ -167,27 +109,31 @@ function VacancyPage(){
         nav('/dashboard/vacancy/add');
     }
 
-    //TODO::
-    const onChangePage = (page , totalRow) => {
-        console.log(page , totalRow);
-    }
-
-    //TODO::
-    const onChangeRowsPerPage = (currentRowsPerPage, currentPage) => {
-        console.log( currentRowsPerPage , currentPage);
+    const onChangePage = async (page , _) => {
+        const skip = (page-1)*10;
+        setCurSkip(skip);
+        if(vacancyCount <= skip){
+            try{
+                await dispatch(getVacanciesPage({skip})).unwrap();
+            }catch(error){
+                if(error?.name==="ConditionError") return;
+                dispatch(showMessage({message: error , severity: 2}));
+            }
+        }
     }
 
     useEffect(() => {
-        dispatch(addManyVacancy(fakeData));
+        const req = async () => {
+            try{
+                await dispatch(getVacancies({search: ''})).unwrap();
+            }catch(error){
+                if(error?.name==="ConditionError") return;
+                console.log(error);
+                dispatch(showMessage({message: error , severity: 2}));
+            }
+        }
+        req();
     } , []);
-
-    if(status==='failed'){
-        return (
-            <div className={style['vacancies-page']}>
-                <Error />
-            </div>
-        );
-    }
 
     return (
         <div className={style['vacancies-page']}>
@@ -197,18 +143,18 @@ function VacancyPage(){
 
             <DashboardTable 
                 columns={columns}
-                data={data}
-                pending={status==='loading' || status ==='idle' ? true : false}
-                rowClick={(row) => console.log(row)}
+                data={data.slice(curSkip , curSkip+10)}
+                pending={status==='loading' || status==='idle' ? true : false}
+                rowClick={(row) => {console.log(row)}}
                 handleDelete={(row) => popUpDispatch({type:'delete' , id: row.id})}
-                handleEdit={(row) => popUpDispatch({type:'edit' , id: row.id})}
+                handleEdit={(row) => nav(`${row.id}/edit`)}
                 onChangePage={onChangePage}
-                onChangeRowsPerPage={onChangeRowsPerPage}
+                totalCount={totalCount}
+                resetTable={resetTable}
             />
             
             <PopUp open={popUpOption.isOpen} handleClose={() => popUpDispatch({type:'close'})} index={popUpOption.index}>
                 <DeleteVacancy id={popUpOption.id}  handleClose={() => popUpDispatch({type:'close'})}/>
-                // TODO :: nav to edit page
             </PopUp>
         </div>
     );

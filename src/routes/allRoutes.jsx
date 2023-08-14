@@ -17,6 +17,7 @@ import ApplicationPage from '../features/application/ApplicationPage/Application
 import ApplicationDetails from '../features/application/ApplicationDetails/ApplicationDetails';
 import VacancyPage from '../features/vacancies/VacancyPage/VacancyPage';
 import AddVacancy from '../features/vacancies/AddVacancy/AddVacancy';
+import EditVacancy from '../features/vacancies/EditVacancy/EditVacancy';
 import QuestionPage from '../features/question/QuestionPage/QuestionPage';
 import ErrorNotFound from '../app/NotFound/ErrorNotFound';
 
@@ -67,6 +68,7 @@ function AllRoute () {
                 <Route path='vacancy/'>
                     <Route index element={<VacancyPage />}/>
                     <Route path='add' element={<AddVacancy />}/>
+                    <Route path=':vacancyId/edit' element={<EditVacancy />} />
                 </Route>
 
                 {/* Question section */}
