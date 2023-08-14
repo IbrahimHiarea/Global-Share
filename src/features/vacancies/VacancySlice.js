@@ -86,6 +86,27 @@ export const getVacanciesPage = createAsyncThunk(
     },  
 );
 
+export const getVacancyById = createAsyncThunk(
+    'vacancy/getVacancyByID',
+    async (data , thunkAPI) =>{
+        try{
+            const {auth: {token}} = thunkAPI.getState();
+            const response = await vacancyAPI.getVacancyById(data.id , token , thunkAPI.signal);
+            return response.data;
+        } catch(error){
+            let message = "Network connection error";
+            if(error?.response?.data?.message){
+                if(typeof error.response.data.message === 'string') 
+                    message = error.response.data.message;
+                else 
+                    message = error.response.data.message[0];
+            }
+            return thunkAPI.rejectWithValue(message);
+        }
+    },
+);
+
+
 export const createVacancy = createAsyncThunk(
     `vacancy/createVacancy`,
     async (data , thunkAPI) => {
@@ -194,6 +215,17 @@ const vacancySlice = createSlice({
             })
             .addCase(deleteVacancy.fulfilled , (state , action) => {
                 vacancyAdapter.removeOne(state , action.payload);
+            })
+            .addCase(getVacancyById.pending , (state , _) => {
+                state.status = status.loading;
+            })
+            .addCase(getVacancyById.fulfilled , (state , action) => {
+                vacancyAdapter.upsertOne(state , action.payload);
+                state.status = status.succeeded;
+            })
+            .addCase(getVacancyById.rejected , (state , action) => {
+                state.error = action.payload;
+                state.status = status.failed;
             })
     }
 });

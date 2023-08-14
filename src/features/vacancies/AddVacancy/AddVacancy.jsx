@@ -62,6 +62,8 @@ function AddVacancy() {
             console.log(values);
             await dispatch(createVacancy(values)).unwrap();
             dispatch(showMessage({message: 'Vacancy Added successfully' , severity: 1}));
+            setIsLoading(false);
+            navigate(-1);
         }catch(error){
             dispatch(showMessage({message: error , severity: 2}));
             setIsLoading(false);
@@ -92,7 +94,7 @@ function AddVacancy() {
                         defaultOptions={[]}
                         control={control}
                         required={'enter the squad'}
-                        errors={errors}
+                        errors={{[`squad.value`]: errors.squad?.value}}
                         border={true}
                         callBack={getSquadsData}
                     />
@@ -104,7 +106,7 @@ function AddVacancy() {
                         defaultOptions={[]}
                         control={control}
                         required={'enter the position'}
-                        errors={errors}
+                        errors={{[`positionId.value`]: errors.positionId?.value}}
                         border={true}
                         callBack={getSquadsData} //getPositionData
                     />
@@ -179,7 +181,7 @@ function AddVacancy() {
                                     defaultOptions={[]}
                                     control={control}
                                     required={'enter the question'}
-                                    errors={errors}
+                                    errors={{[`questionsIds.${index}.value`]: errors.questionsIds?.at(index)?.value}}
                                     border={true}
                                     callBack={getQuestionsData}
                                 />

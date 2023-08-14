@@ -1,12 +1,12 @@
 // import react
-import React , { useRef, useState }  from 'react';
+import React , { useEffect, useState }  from 'react';
 import { useForm , useFieldArray } from 'react-hook-form';
 import { useParams } from 'react-router';
 import {useNavigate} from "react-router-dom"
 
 //import redux
 import { useSelector , useDispatch} from 'react-redux';
-import {selectVacancyById , updateVacancy} from '../VacancySlice';
+import {selectVacancyById , updateVacancy , getVacancyById , selectVacancyStatus} from '../VacancySlice';
 import { showMessage } from '../../snackBar/snackBarSlice';
 import {getSquadsData , getQuestionsData} from '../../../common/utils/selectorAPI'
 
@@ -16,6 +16,7 @@ import SubmitButton from '../../../common/components/Inputs/SubmitButton/SubmitB
 import TextAreaField from '../../../common/components/Inputs/TextAreaField/TextAreaField'
 import Loader from '../../../common/components/Loader/Loader';
 import AsyncSelectInputField from '../../../common/components/Inputs/AsyncSelectInputField/AsyncSelectInputField';
+import Error from '../../../common/components/Error/Error';
 
 // import icons
 import { CiSquareChevLeft } from "react-icons/ci";
@@ -28,19 +29,31 @@ function EditVacancy() {
     const {vacancyId : id} = useParams();
     const dispatch = useDispatch();
 
+    const status = useSelector(selectVacancyStatus);
     const data = useSelector(state => selectVacancyById(state , id));
-    console.log(data);
-    const {control , register , formState: {errors , isDirty , dirtyFields} , handleSubmit , unregister } = useForm({
+
+
+    const {control , register , watch , formState: {errors , isDirty , dirtyFields} , handleSubmit , unregister  } = useForm({
         defaultValues:{
-            effect: '',
-            brief: '',
-            tasks: '',
-            required: '',
-            preferred: '',
-            positionId: 0,
-            questionsIds: [], //questions Id
+            effect: data?.effect,
+            brief: data?.brief,
+            tasks: data?.tasks,
+            required: data?.required,
+            preferred: data?.preferred,
+            positionId: {value: data?.positionId , label: data?.position.name},
+            squad: {value: data?.position.squad.id , label: data?.position.squad.name},
+            questionsIds: data?.questions ? data?.questions?.map((question) => {return {value : {value: question.question.id , label: question.question.text.toLowerCase() + ' - ' + question.question.type.toLowerCase()}}}) : [],
         },
-        values: {...data}
+        values: {
+            effect: data?.effect,
+            brief: data?.brief,
+            tasks: data?.tasks,
+            required: data?.required,
+            preferred: data?.preferred,
+            positionId: {value: data?.positionId , label: data?.position.name},
+            squad: {value: data?.position.squad.id , label: data?.position.squad.name},
+            questionsIds: data?.questions ? data?.questions?.map((question) => {return {value : {value: question.question.id , label: question.question.text.toLowerCase() + ' - ' + question.question.type.toLowerCase()}}}) : [],
+        }
     });
     
     const { fields , append , remove } = useFieldArray({
@@ -62,12 +75,25 @@ function EditVacancy() {
         });
     }
 
+    useEffect(() => {
+        const req = async () => {
+            try{
+                await dispatch(getVacancyById({id})).unwrap();
+            }catch(error){
+                if(error?.name==="ConditionError") return;
+                dispatch(showMessage({message: error , severity: 2}));
+            }
+        }
+
+        req();
+    } , []);
+
     const onSubmit = async (values) => {
         setIsLoading(true);
         if(isDirty){
             const changed = {};
             for(let key of Object.keys(dirtyFields)){
-                if(dirtyFields[key]){
+                if(dirtyFields[key]  ||  key==='questionsIds'){
                     changed[key] = values[key];
                 }
             }
@@ -75,6 +101,8 @@ function EditVacancy() {
             try{
                 await dispatch(updateVacancy({id , ...changed})).unwrap();
                 dispatch(showMessage({message: 'Vacancy Edited successfully' , severity: 1}));
+                setIsLoading(false);
+                navigate(-1);
             }catch(error){
                 dispatch(showMessage({message: error , severity: 2}));
                 setIsLoading(false);
@@ -82,13 +110,22 @@ function EditVacancy() {
         }
     }
 
-    if(isLoading===true){
+    if(status==='loading' || status==='idle'  ||  isLoading){
         return (
             <div className={style['edit-vacancy-loader']}>
-                <Loader  transparent={true}/>
+                <Loader />
             </div>
         );
     }
+
+    else if(status==='failed'){
+        return (
+            <div className={style['edit-vacancy-loader']}>
+                <Error />
+            </div>
+        );
+    }
+
 
     return (
         <div className={style['edit-vacancy']}>
@@ -106,7 +143,7 @@ function EditVacancy() {
                         defaultOptions={[]}
                         control={control}
                         required={'enter the squad'}
-                        errors={errors}
+                        errors={{[`squad.value`]: errors.squad?.value}}
                         border={true}
                         callBack={getSquadsData}
                     />
@@ -118,7 +155,7 @@ function EditVacancy() {
                         defaultOptions={[]}
                         control={control}
                         required={'enter the position'}
-                        errors={errors}
+                        errors={{[`positionId.value`]: errors.positionId?.value}}
                         border={true}
                         callBack={getSquadsData} //getPositionData
                     />
@@ -193,7 +230,7 @@ function EditVacancy() {
                                     defaultOptions={[]}
                                     control={control}
                                     required={'enter the question'}
-                                    errors={errors}
+                                    errors={{[`questionsIds.${index}.value`]: errors.questionsIds?.at(index)?.value}}
                                     border={true}
                                     callBack={getQuestionsData}
                                 />
