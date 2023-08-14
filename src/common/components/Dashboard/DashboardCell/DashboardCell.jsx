@@ -59,6 +59,19 @@ export const RecruitmentStatusCell = ({recruitmentStatus}) => {
     );
 }
 
+export const VacancyStatusCell = ({vacancyStatus}) => {
+    return (
+        <div className={
+            clsx(
+                style['vacancy-status-cell'],
+                {[style['vacancy-status-cell-error']] : vacancyStatus===false},
+            )
+        }>
+            {vacancyStatus === true ? 'Open' : 'Closed'}
+        </div>
+    );
+}
+
 export const ColoredCell = ({value}) => {
     return (
         <div className={style['colored-cell']} >{value}</div>

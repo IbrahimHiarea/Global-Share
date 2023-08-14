@@ -95,3 +95,22 @@
     color: var(--warning-main);
     background-color: var(--warning-background);
 }
+
+.vacancy-status-cell{
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: capitalize;
+    color: var(--active-main);
+    background-color: var(--active-background);
+    padding: 5px 10px;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
+}
+
+.vacancy-status-cell-error{
+    color: var(--error-main);
+    background-color: var(--error-background);
+}

@@ -34,3 +34,28 @@ export async function getSquadsData(token , signal){
     }
     return options;
 }
+
+export async function getQuestionsData(token , signal){
+    const options = [];
+    try{
+        const response = await axiosApi.get(
+            `/question?skip=0&take=0&search=`,
+            {
+                signal : signal,
+                headers: {
+                    Authorization : `Bearer ${token}`,
+                }
+            }
+        ); 
+        // console.log(response);
+        response.data.data.forEach(question => {
+            options.push({value: question.id , label: question.text.toLowerCase() + ' - ' + question.type.toLowerCase()});
+        });
+        return options;
+    }catch(error){
+        console.log('filed to load questions');
+    }
+    return options;
+}
+
+//TODO :: getPositionData

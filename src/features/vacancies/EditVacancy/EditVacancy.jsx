@@ -1,48 +1,50 @@
 // import react
 import React , { useRef, useState }  from 'react';
 import { useForm , useFieldArray } from 'react-hook-form';
+import { useParams } from 'react-router';
 import {useNavigate} from "react-router-dom"
 
 //import redux
-import { useSelector } from 'react-redux';
-import {selectVacancyById } from '../VacancySlice';
+import { useSelector , useDispatch} from 'react-redux';
+import {selectVacancyById , updateVacancy} from '../VacancySlice';
+import { showMessage } from '../../snackBar/snackBarSlice';
+import {getSquadsData , getQuestionsData} from '../../../common/utils/selectorAPI'
 
 // import components 
-import SelectInputField from "../../../common/components/Inputs/SelectInputField/SelectInputField";
 import Button from '../../../common/components/Inputs/Button/Button';
 import SubmitButton from '../../../common/components/Inputs/SubmitButton/SubmitButton';
 import TextAreaField from '../../../common/components/Inputs/TextAreaField/TextAreaField'
 import Loader from '../../../common/components/Loader/Loader';
+import AsyncSelectInputField from '../../../common/components/Inputs/AsyncSelectInputField/AsyncSelectInputField';
 
 // import icons
 import { CiSquareChevLeft } from "react-icons/ci";
 import { BsTrash } from "react-icons/bs";
 
-//import static data
-import {levelData, questionTypeData} from '../../../common/utils/selectorData'
-
 //import style 
 import style from './EditVacancy.module.css';
 
-function EditVacancy({ id }) {
+function EditVacancy() {
+    const {vacancyId : id} = useParams();
+    const dispatch = useDispatch();
 
-    const data = useSelector(() => selectVacancyById(id));
-
+    const data = useSelector(state => selectVacancyById(state , id));
+    console.log(data);
     const {control , register , formState: {errors , isDirty , dirtyFields} , handleSubmit , unregister } = useForm({
         defaultValues:{
-            squad : '',
-            position : '',
-            brief : '',
-            tasks : '',
-            requiredQualifications: '',
-            preferredQualifications: '',
             effect: '',
+            brief: '',
+            tasks: '',
+            required: '',
+            preferred: '',
+            positionId: 0,
+            questionsIds: [], //questions Id
         },
         values: {...data}
     });
-
+    
     const { fields , append , remove } = useFieldArray({
-        name: 'questions',
+        name: 'questionsIds',
         control, 
     });
 
@@ -56,7 +58,7 @@ function EditVacancy({ id }) {
 
     const handelAdd = () => {
         append({
-            type: '',
+            value: '',
         });
     }
 
@@ -70,14 +72,19 @@ function EditVacancy({ id }) {
                 }
             }
             console.log(changed);
-            //TODO::
-            // dispatch update action to redux
+            try{
+                await dispatch(updateVacancy({id , ...changed})).unwrap();
+                dispatch(showMessage({message: 'Vacancy Edited successfully' , severity: 1}));
+            }catch(error){
+                dispatch(showMessage({message: error , severity: 2}));
+                setIsLoading(false);
+            }
         }
     }
 
     if(isLoading===true){
         return (
-            <div className={style['add-vacancy-loader']}>
+            <div className={style['edit-vacancy-loader']}>
                 <Loader  transparent={true}/>
             </div>
         );
@@ -91,27 +98,29 @@ function EditVacancy({ id }) {
             </div>
             <form className={style["edit-vacancy-body"]} onSubmit={handleSubmit(onSubmit)}>
                 <div className={style.box}>
-                    <SelectInputField
+                    <AsyncSelectInputField
                         width='243px'
                         height='40px'
                         name='squad'
                         placeholder='Squad'
-                        options={Object.values(levelData)}
+                        defaultOptions={[]}
                         control={control}
                         required={'enter the squad'}
                         errors={errors}
                         border={true}
+                        callBack={getSquadsData}
                     />
-                    <SelectInputField
+                    <AsyncSelectInputField
                         width='243px'
                         height='40px'
-                        name='position'
+                        name='positionId'
                         placeholder='Position'
-                        options={Object.values(levelData)}
+                        defaultOptions={[]}
                         control={control}
                         required={'enter the position'}
                         errors={errors}
                         border={true}
+                        callBack={getSquadsData} //getPositionData
                     />
                 </div>
                 <div className={style.break}></div>
@@ -139,21 +148,21 @@ function EditVacancy({ id }) {
                 </div>
                 <div className={style.box}>
                     <TextAreaField 
-                        name='requiredQualifications'
+                        name='required'
                         placeholder='Required Qualifications'
                         width='386px'
                         height='120px'
-                        control={register('requiredQualifications' , {
+                        control={register('required' , {
                             required: 'Please enter the Required Qualifications',
                         })}
                         errors={errors}
                     />
                     <TextAreaField 
-                        name='preferredQualifications'
+                        name='preferred'
                         placeholder='Preferred Qualifications'
                         width='386px'
                         height='120px'
-                        control={register('preferredQualifications' , {
+                        control={register('preferred' , {
                             required: 'Please enter the Preferred Qualifications',
                         })}
                         errors={errors}
@@ -176,16 +185,17 @@ function EditVacancy({ id }) {
                     {
                         fields?.map((field , index) => (
                             <div className={style.question} key={field.id}>
-                                <SelectInputField
+                                <AsyncSelectInputField
                                     width='443px'
                                     height='40px'
-                                    name={`questions.${index}.type`}
+                                    name={`questionsIds.${index}.value`}
                                     placeholder='Select Question'
-                                    options={Object.values(questionTypeData)}
+                                    defaultOptions={[]}
                                     control={control}
-                                    required='enter the question'
+                                    required={'enter the question'}
                                     errors={errors}
                                     border={true}
+                                    callBack={getQuestionsData}
                                 />
                                 <div className={style['delete-button']} onClick={() => handelDelete(index)}>
                                     <BsTrash size="18px" color='var(--error-main)'/>
@@ -198,6 +208,7 @@ function EditVacancy({ id }) {
                     <SubmitButton 
                         width='192px' 
                         height='40px'
+                        backgroundColor='var(--secondary-dark)'
                         disabled={isLoading || !isDirty}
                     >
                         Edit Vacancy

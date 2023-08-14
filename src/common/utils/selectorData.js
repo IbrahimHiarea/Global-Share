@@ -42,3 +42,8 @@ export const questionTypeData = {
     checkbox: 'checkbox',
     file: 'file'
 };
+
+export const vacancyStatus = {
+    open: 'open',
+    closed: 'closed'
+};

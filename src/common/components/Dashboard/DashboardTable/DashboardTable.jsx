@@ -3,7 +3,7 @@ import React from 'react';
 
 //import components
 import DataTable from 'react-data-table-component';
-import { ColoredCell, HeaderCell, IdCell, NextArrow, NormalCell, PreviousArrow, RecruitmentStatusCell, StatusCell } from '../DashboardCell/DashboardCell';
+import { ColoredCell, HeaderCell, IdCell, NextArrow, NormalCell, PreviousArrow, RecruitmentStatusCell, StatusCell , VacancyStatusCell } from '../DashboardCell/DashboardCell';
 import Button from '../../Inputs/Button/Button';
 
 // import icon & image
@@ -29,6 +29,7 @@ const formatCell = (value , type) => {
     else if(type==='status') return <StatusCell status={value} />;
     else if(type==='colored') return <ColoredCell value={value} />;
     else if(type==='recruitmentStatus') return <RecruitmentStatusCell recruitmentStatus={value} />;
+    else if(type === 'vacancyStatus')  return <VacancyStatusCell vacancyStatus={value} />
     return value;
 }
 
