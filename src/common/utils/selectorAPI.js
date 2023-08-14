@@ -53,7 +53,7 @@ export async function getPositionDataBySquad({squadId , token , signal}){
         });
         return options;
     }catch(error){
-        // console.log('filed to load position option')
+        // console.log('filed to load position options')
     }
     return options;
 }
@@ -88,19 +88,16 @@ export async function getQuestionsData(token , signal){
             {
                 signal : signal,
                 headers: {
-                    Authorization : `Bearer ${token}`,
+                    Authorization : `Bearer ${token.token}`,
                 }
             }
         ); 
-        // console.log(response);
         response.data.data.forEach(question => {
             options.push({value: question.id , label: question.text.toLowerCase() + ' - ' + question.type.toLowerCase()});
         });
         return options;
     }catch(error){
-        console.log('filed to load questions');
+        // console.log('filed to load questions options');
     }
     return options;
 }
-
-//TODO :: getPositionData

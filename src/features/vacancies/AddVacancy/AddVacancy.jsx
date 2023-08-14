@@ -7,7 +7,7 @@ import {useNavigate} from "react-router-dom"
 import { useDispatch } from 'react-redux';
 import {createVacancy} from '../VacancySlice';
 import { showMessage } from '../../snackBar/snackBarSlice';
-import {getSquadsData , getQuestionsData} from '../../../common/utils/selectorAPI'
+import {getSquadsData , getQuestionsData , getPositionDataBySquad} from '../../../common/utils/selectorAPI'
 
 // import components 
 import Button from '../../../common/components/Inputs/Button/Button';
@@ -25,7 +25,7 @@ import style from './AddVacancy.module.css';
 
 function AddVacancy() {
     const dispatch = useDispatch();
-    const {control , register , formState : {errors} , handleSubmit } = useForm({
+    const {control , watch , register , formState : {errors} , handleSubmit } = useForm({
         defaultValues:{
             effect: '',
             brief: '',
@@ -33,6 +33,7 @@ function AddVacancy() {
             required: '',
             preferred: '',
             positionId: 0,
+            squad: null,
             questionsIds: [], //questions Id
         }
     });
@@ -59,7 +60,6 @@ function AddVacancy() {
     const onSubmit = async (values) => {
         try{
             setIsLoading(true);
-            console.log(values);
             await dispatch(createVacancy(values)).unwrap();
             dispatch(showMessage({message: 'Vacancy Added successfully' , severity: 1}));
             setIsLoading(false);
@@ -96,7 +96,7 @@ function AddVacancy() {
                         required={'enter the squad'}
                         errors={{[`squad.value`]: errors.squad?.value}}
                         border={true}
-                        callBack={getSquadsData}
+                        callBack={(data) => getSquadsData({...data})}
                     />
                     <AsyncSelectInputField
                         width='243px'
@@ -108,7 +108,7 @@ function AddVacancy() {
                         required={'enter the position'}
                         errors={{[`positionId.value`]: errors.positionId?.value}}
                         border={true}
-                        callBack={getSquadsData} //getPositionData
+                        callBack={(data) => getPositionDataBySquad({...data , squadId: watch(`squad`)?.value })}
                     />
                 </div>
                 <div className={style.break}></div>
@@ -183,7 +183,7 @@ function AddVacancy() {
                                     required={'enter the question'}
                                     errors={{[`questionsIds.${index}.value`]: errors.questionsIds?.at(index)?.value}}
                                     border={true}
-                                    callBack={getQuestionsData}
+                                    callBack={(data) => getQuestionsData({...data})}
                                 />
                                 <div className={style['delete-button']} onClick={() => handelDelete(index)}>
                                     <BsTrash size="18px" color='var(--error-main)'/>

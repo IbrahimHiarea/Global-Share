@@ -8,7 +8,7 @@ import {useNavigate} from "react-router-dom"
 import { useSelector , useDispatch} from 'react-redux';
 import {selectVacancyById , updateVacancy , getVacancyById , selectVacancyStatus} from '../VacancySlice';
 import { showMessage } from '../../snackBar/snackBarSlice';
-import {getSquadsData , getQuestionsData} from '../../../common/utils/selectorAPI'
+import {getSquadsData , getQuestionsData , getPositionDataBySquad} from '../../../common/utils/selectorAPI'
 
 // import components 
 import Button from '../../../common/components/Inputs/Button/Button';
@@ -97,7 +97,6 @@ function EditVacancy() {
                     changed[key] = values[key];
                 }
             }
-            console.log(changed);
             try{
                 await dispatch(updateVacancy({id , ...changed})).unwrap();
                 dispatch(showMessage({message: 'Vacancy Edited successfully' , severity: 1}));
@@ -145,7 +144,7 @@ function EditVacancy() {
                         required={'enter the squad'}
                         errors={{[`squad.value`]: errors.squad?.value}}
                         border={true}
-                        callBack={getSquadsData}
+                        callBack={(data) => getSquadsData({...data})}
                     />
                     <AsyncSelectInputField
                         width='243px'
@@ -157,7 +156,7 @@ function EditVacancy() {
                         required={'enter the position'}
                         errors={{[`positionId.value`]: errors.positionId?.value}}
                         border={true}
-                        callBack={getSquadsData} //getPositionData
+                        callBack={(data) => getPositionDataBySquad({...data , squadId: watch(`squad`)?.value })}
                     />
                 </div>
                 <div className={style.break}></div>
@@ -232,7 +231,7 @@ function EditVacancy() {
                                     required={'enter the question'}
                                     errors={{[`questionsIds.${index}.value`]: errors.questionsIds?.at(index)?.value}}
                                     border={true}
-                                    callBack={getQuestionsData}
+                                    callBack={(data) => getQuestionsData({...data})}
                                 />
                                 <div className={style['delete-button']} onClick={() => handelDelete(index)}>
                                     <BsTrash size="18px" color='var(--error-main)'/>
