@@ -8,7 +8,7 @@
 .filter-bar {
 	display: flex;
 	align-items: center;
-	gap: 24px;
+	gap: 10px;
 }
 
 .filter-bar  input:first-of-type{

@@ -110,7 +110,7 @@ function Navbar(){
                         onClick={handleInfoClick}
                     >
                         <Avatar 
-                            alt={authInfo.name} 
+                            alt={authInfo?.name} 
                             src={profileImage}
                             variant="rounded"
                             sx={{
@@ -124,7 +124,7 @@ function Navbar(){
                             {[style['navbar-profile-info-name-open']] : isOpen}
                             )}>
                             <span>hello 👋</span>
-                            <p>{authInfo.name}</p>
+                            <p>{authInfo?.name}</p>
                         </div>
                     </div>
                     <span onClick={handleToggle}> <IoIosArrowForward size='21px'/> </span>

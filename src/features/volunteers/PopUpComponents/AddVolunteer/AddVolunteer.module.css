@@ -1,6 +1,6 @@
 .add-volunteer{
   width: 526px;
-  height: 550px;
+  height: 610px;
   background-color: white;
   padding: 24px;
   border-radius: 9px;
@@ -55,7 +55,7 @@
   display: flex;
   position: absolute;
   right: 30px;
-  bottom: 30px;
+  bottom: 20px;
 }
 
 .buttons input{
@@ -65,7 +65,7 @@
 .add-button{
   position: absolute;
   right: 210px;
-  bottom: 30px;
+  bottom: 20px;
 }
 
 .add-button button{

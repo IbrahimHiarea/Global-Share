@@ -35,7 +35,10 @@ function QuestionFilterBar({handleAdd}){
             await dispatch(getQuestions({search: ''})).unwrap();
             reset(formState.defaultValues);
         }catch(error){
-            if(error?.name==="ConditionError") return;
+            if(error?.name==="ConditionError"){
+                reset(formState.defaultValues);
+                return;
+            }
             dispatch(showMessage({message: error , severity: 2}));
         }
     }
@@ -44,7 +47,9 @@ function QuestionFilterBar({handleAdd}){
         try{
             await dispatch(getQuestions(values)).unwrap();
         }catch(error){
-            if(error?.name==="ConditionError") return;
+            if(error?.name==="ConditionError"){
+                return;
+            }
             dispatch(showMessage({message: error , severity: 2}));
         }
     }

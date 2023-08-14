@@ -1,13 +1,21 @@
 //import react
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer , useState} from 'react';
 
 //import redux
 import { useDispatch , useSelector } from 'react-redux';
-import { addManyVolunteer , selectAllVolunteer , selectVolunteerStatus} from '../VolunteerSlice';
+import {
+    getVolunteers,
+    getVolunteerPage,
+    selectAllVolunteer,
+    selectVolunteerCount,
+    selectVolunteerResetTable,
+    selectVolunteerTotalCount,
+    selectVolunteerStatus,
+} from '../VolunteerSlice';
+import { showMessage } from '../../snackBar/snackBarSlice';
 
 //import components
 import DashboardTable from '../../../common/components/Dashboard/DashboardTable/DashboardTable';
-import Error from '../../../common/components/Error/Error';
 import PopUp from '../../../common/components/PopUp/PopUp';
 import DeleteVolunteer from '../PopUpComponents/DeleteVolunteer/DeleteVolunteer';
 import VolunteerFilterBar from '../VolunteerFilterBar/VolunteerFilterBar';
@@ -30,17 +38,17 @@ const columns = [
     },
     {
         name: 'squad',
-        keys: ['position' , 'squad' , 'name'],
+        keys: ['positions' , '0' , 'position' , 'squadId'],
         type: 'normal'
     },
     {
         name: 'position',
-        keys: ['position' , 'name'],
+        keys: ['positions' , '0' , 'position' , 'name'],
         type: 'normal'
     },
     {
         name: 'level',
-        keys: ['level'],
+        keys: ['positions' , '0' , 'position' , 'gsLevel'],
         type: 'normal'
     },
     {
@@ -56,241 +64,7 @@ const columns = [
         keys: ['delete'],
         type: 'button',
     }
-]
-
-const fakeData = [
-    {
-        id: 1,
-        email: "twfekajeneh@gmail.com",
-        phoneNumber: "0988311840",
-        firstName: "Twfek",
-        lastName: "Ajeneh",
-        additionalEmail: "",
-        middleName: "Moustafa",
-        arabicFullName: "توفيق عجينة",
-        appointlet: "",
-        bio: "",
-        gsStatus: "left",
-        joinDate: "2000-1-1",
-        positionId: "",
-        position: {
-            name: 'react dev',
-            squad: {
-                name: 'Radioactive'
-            }
-        },
-    },
-    {
-        id: 2,
-        email: "twfekajeneh@gmail.com",
-        phoneNumber: "0988311840",
-        firstName: "Twfek",
-        lastName: "Ajeneh",
-        additionalEmail: "",
-        middleName: "Moustafa",
-        arabicFullName: "توفيق عجينة",
-        appointlet: "",
-        bio: "",
-        gsStatus: "freeze",
-        joinDate: "2000-1-1",
-        positionId: "",
-        position: {
-            name: 'react dev',
-            squad: {
-                name: 'Radioactive'
-            }
-        },
-    },
-    {
-        id: 3,
-        email: "twfekajeneh@gmail.com",
-        phoneNumber: "0988311840",
-        firstName: "Twfek",
-        lastName: "Ajeneh",
-        additionalEmail: "",
-        middleName: "Moustafa",
-        arabicFullName: "توفيق عجينة",
-        appointlet: "",
-        bio: "",
-        gsStatus: "left",
-        joinDate: "2000-1-1",
-        positionId: "",
-        position: {
-            name: 'react dev',
-            squad: {
-                name: 'Radioactive'
-            }
-        },
-    },
-    {
-        id: 4,
-        email: "twfekajeneh@gmail.com",
-        phoneNumber: "0988311840",
-        firstName: "Twfek",
-        lastName: "Ajeneh",
-        additionalEmail: "",
-        middleName: "Moustafa",
-        arabicFullName: "توفيق عجينة",
-        appointlet: "",
-        bio: "",
-        gsStatus: "active",
-        joinDate: "2000-1-1",
-        positionId: "",
-        position: {
-            name: 'react dev',
-            squad: {
-                name: 'Radioactive'
-            }
-        },
-    },
-    {
-        id: 5,
-        email: "twfekajeneh@gmail.com",
-        phoneNumber: "0988311840",
-        firstName: "Twfek",
-        lastName: "Ajeneh",
-        additionalEmail: "",
-        middleName: "Moustafa",
-        arabicFullName: "توفيق عجينة",
-        appointlet: "",
-        bio: "",
-        gsStatus: "active",
-        joinDate: "2000-1-1",
-        positionId: "",
-        position: {
-            name: 'react dev',
-            squad: {
-                name: 'Radioactive'
-            }
-        },
-    },
-    {
-        id: 6,
-        email: "twfekajeneh@gmail.com",
-        phoneNumber: "0988311840",
-        firstName: "Twfek",
-        lastName: "Ajeneh",
-        additionalEmail: "",
-        middleName: "Moustafa",
-        arabicFullName: "توفيق عجينة",
-        appointlet: "",
-        bio: "",
-        gsStatus: "active",
-        joinDate: "2000-1-1",
-        positionId: "",
-        position: {
-            name: 'react dev',
-            squad: {
-                name: 'Radioactive'
-            }
-        },
-    },
-    {
-        id: 7,
-        email: "twfekajeneh@gmail.com",
-        phoneNumber: "0988311840",
-        firstName: "Twfek",
-        lastName: "Ajeneh",
-        additionalEmail: "",
-        middleName: "Moustafa",
-        arabicFullName: "توفيق عجينة",
-        appointlet: "",
-        bio: "",
-        gsStatus: "active",
-        joinDate: "2000-1-1",
-        positionId: "",
-        position: {
-            name: 'react dev',
-            squad: {
-                name: 'Radioactive'
-            }
-        },
-    },
-    {
-        id: 8,
-        email: "twfekajeneh@gmail.com",
-        phoneNumber: "0988311840",
-        firstName: "Twfek",
-        lastName: "Ajeneh",
-        additionalEmail: "",
-        middleName: "Moustafa",
-        arabicFullName: "توفيق عجينة",
-        appointlet: "",
-        bio: "",
-        gsStatus: "active",
-        joinDate: "2000-1-1",
-        positionId: "",
-        position: {
-            name: 'react dev',
-            squad: {
-                name: 'Radioactive'
-            }
-        },
-    },
-    {
-        id: 9,
-        email: "twfekajeneh@gmail.com",
-        phoneNumber: "0988311840",
-        firstName: "Twfek",
-        lastName: "Ajeneh",
-        additionalEmail: "",
-        middleName: "Moustafa",
-        arabicFullName: "توفيق عجينة",
-        appointlet: "",
-        bio: "",
-        gsStatus: "left",
-        joinDate: "2000-1-1",
-        positionId: "",
-        position: {
-            name: 'react dev',
-            squad: {
-                name: 'Radioactive'
-            }
-        },
-    },
-    {
-        id: 10,
-        email: "twfekajeneh@gmail.com",
-        phoneNumber: "0988311840",
-        firstName: "Twfek",
-        lastName: "Ajeneh",
-        additionalEmail: "",
-        middleName: "Moustafa",
-        arabicFullName: "توفيق عجينة",
-        appointlet: "",
-        bio: "",
-        gsStatus: "active",
-        joinDate: "2000-1-1",
-        positionId: "",
-        position: {
-            name: 'react dev',
-            squad: {
-                name: 'Radioactive'
-            }
-        },
-    },
-    {
-        id: 11,
-        email: "twfekajeneh@gmail.com",
-        phoneNumber: "0988311840",
-        firstName: "Twfek",
-        lastName: "Ajeneh",
-        additionalEmail: "",
-        middleName: "Moustafa",
-        arabicFullName: "توفيق عجينة",
-        appointlet: "",
-        bio: "",
-        gsStatus: "active",
-        joinDate: "2000-1-1",
-        positionId: "",
-        position: {
-            name: 'react dev',
-            squad: {
-                name: 'Radioactive'
-            }
-        },
-    },
-]
+];
 
 const initPopUpOption = {
     id: 0,
@@ -329,31 +103,41 @@ const popUpReducer = (state , action) => {
 function VolunteerPage(){
     const [popUpOption , popUpDispatch] = useReducer(popUpReducer , initPopUpOption);
     const dispatch = useDispatch();
+    const [curSkip , setCurSkip] = useState(0);
 
     const data = useSelector(selectAllVolunteer);
     const status = useSelector(selectVolunteerStatus);
+    const totalCount = useSelector(selectVolunteerTotalCount);
+    const resetTable = useSelector(selectVolunteerResetTable);
+    const volunteerCount = useSelector(selectVolunteerCount);
 
-    const handleAdd = () => {
-        popUpDispatch({type:'add'});
-    }
+    const handleAdd = () => popUpDispatch({type:'add'});
 
-    //TODO::
-    const onChangePage = (page , totalRow) => {
-        console.log(page , totalRow);
+    const onChangePage = async (page , _) => {
+        const skip = (page-1)*10;
+        setCurSkip(skip);
+        if(volunteerCount <= skip){
+            try{
+                await dispatch(getVolunteerPage({skip})).unwrap();
+            }catch(error){
+                if(error?.name==="ConditionError") return;
+                dispatch(showMessage({message: error , severity: 2}));
+            }
+        }
     }
 
     useEffect(() => {
-        dispatch(addManyVolunteer(fakeData));
+        const req = async () => {
+            try{
+                await dispatch(getVolunteers({search:'' , level: '' ,status: '' , position: '' , squad: ''})).unwrap();
+            }catch(error){
+                if(error?.name==="ConditionError") return;
+                dispatch(showMessage({message: error , severity: 2}));
+            }
+        }
+        
+        req();
     } , []);
-
-
-    if(status==='failed'){
-        return (
-            <div className={style['volunteer-page']}>
-                <Error />
-            </div>
-        );
-    }
 
     return (
         <div className={style['volunteer-page']}>
@@ -363,12 +147,14 @@ function VolunteerPage(){
 
             <DashboardTable 
                 columns={columns}
-                data={data}
+                data={data.slice(curSkip , curSkip+10)}
                 pending={status==='loading' || status==='idle' ? true : false}
-                rowClick={(row) => console.log(row)}
+                rowClick={(row) => {console.log(row)}}
                 handleDelete={(row) => popUpDispatch({type:'delete' , id: row.id})}
                 handleEdit={(row) => popUpDispatch({type:'edit' , id: row.id})}
                 onChangePage={onChangePage}
+                totalCount={totalCount}
+                resetTable={resetTable}
             />  
 
             <PopUp open={popUpOption.isOpen} handleClose={() => popUpDispatch({type:'close'})} index={popUpOption.index}>

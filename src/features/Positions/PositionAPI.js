@@ -15,9 +15,8 @@ const axiosApi = axios.create({
 
 //position api
 export async function getPositions({search , level , squad} , skip , token , signal){
-    console.log(level);
     return axiosApi.get(
-        `/position?skip=${skip}&take=10&search=${search}&level=${level}&squad=${squad}`,
+        `/position?skip=${skip}&take=10&search=${search}&level=${level}&squads=${squad}`,
         {
             signal : signal,
             headers: {

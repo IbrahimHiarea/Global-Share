@@ -47,6 +47,116 @@ const volunteerAdapter = createEntityAdapter({
 
 
 //thunk actions
+export const getVolunteers = createAsyncThunk(
+    'volunteer/getVolunteers',
+    async (data , thunkAPI) =>{
+        try{
+            const {auth: {token}} = thunkAPI.getState();
+            const response = await volunteerAPI.getVolunteers(data, 0 , token , thunkAPI.signal);
+            return {search: data , ...(response.data)};
+        } catch(error){
+            let message = "Network connection error";
+            if(error?.response?.data?.message){
+                if(typeof error.response.data.message === 'string') 
+                    message = error.response.data.message;
+                else 
+                    message = error.response.data.message[0];
+            }
+            return thunkAPI.rejectWithValue(message);
+        }
+    },
+    {
+        condition: (data, {getState}) => {
+            const { volunteer : {searchTerms , status} } = getState()
+            if (status === status.loading || (searchTerms.search===data.search
+                && searchTerms.status===data.status && searchTerms.level===data.level
+                && searchTerms.position===data.position && searchTerms.squad===data.squad)) {
+                return false;
+            }
+        },
+    }
+);
+
+export const getVolunteerPage = createAsyncThunk(
+    'volunteer/getVolunteerPage',
+    async (data , thunkAPI) => {
+        try{    
+            const {auth: {token} , volunteer: {searchTerms}} = thunkAPI.getState();
+            const response = await volunteerAPI.getVolunteers(searchTerms , data.skip , token , thunkAPI.signal);
+            return response.data;
+        }catch(error){
+            let message = "Network connection error";
+            if(error?.response?.data?.message){
+                if(typeof error.response.data.message === 'string') 
+                    message = error.response.data.message;
+                else 
+                    message = error.response.data.message[0];
+            }
+            return thunkAPI.rejectWithValue(message);
+        }
+    },  
+);
+
+export const createVolunteer = createAsyncThunk(
+    `volunteer/createVolunteer`,
+    async (data , thunkAPI) => {
+        try{    
+            const {auth: {token}} = thunkAPI.getState();
+            const response = await volunteerAPI.createVolunteer(data , token , thunkAPI.signal);
+            return response.data;
+        }catch(error){
+            let message = "Network connection error";
+            if(error?.response?.data?.message){
+                if(typeof error.response.data.message === 'string') 
+                    message = error.response.data.message;
+                else 
+                    message = error.response.data.message[0];
+            }
+            return thunkAPI.rejectWithValue(message);
+        }
+    }, 
+);
+
+export const updateVolunteer = createAsyncThunk(
+    'volunteer/updateVolunteer',
+    async (data , thunkAPI) => {
+        try{
+            const {id , ...values} = data;
+            const {auth : {token}} = thunkAPI.getState();
+            const response = await volunteerAPI.updateVolunteer(id , values , token , thunkAPI.signal);
+            return response.data;
+        }catch(error){
+            let message = "Network connection error";
+            if(error?.response?.data?.message){
+                if(typeof error.response.data.message === 'string') 
+                    message = error.response.data.message;
+                else 
+                    message = error.response.data.message[0];
+            }
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+);
+
+export const deleteVolunteer= createAsyncThunk(
+    'volunteer/deleteVolunteer',
+    async (data , thunkAPI) => {
+        try{    
+            const {auth : {token}} = thunkAPI.getState();
+            await volunteerAPI.deleteVolunteer(data.id , token , thunkAPI.signal);
+            return data.id;
+        }catch(error){
+            let message = "Network connection error";
+            if(error?.response?.data?.message){
+                if(typeof error.response.data.message === 'string') 
+                    message = error.response.data.message;
+                else 
+                    message = error.response.data.message[0];
+            }
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+);
 
 
 //create slice
@@ -55,34 +165,66 @@ const volunteerSlice = createSlice({
     initialState: volunteerAdapter.getInitialState({
         status: status.idle,
         error: null,
-        isSearched: false
-    }),
-    reducers: {
-        addVolunteer: (state , action) => {
-            volunteerAdapter.addOne(state , action.payload);
-            state.status = status.succeeded;
+        searchTerms: {
+            search: undefined,
+            level: undefined,
+            status: undefined,
+            position: undefined,
+            squad: undefined
         },
-        addManyVolunteer: (state , action) => {
-            volunteerAdapter.addMany(state , action.payload);
-            state.status = status.succeeded;
-        }
-    },
+        totalCount: 0,
+        resetTable: false
+    }),
+    reducers: {},
     extraReducers: (builder) => {
-        
+        builder
+            .addCase(getVolunteers.pending , (state , _) => {
+                state.status = status.loading;
+            })
+            .addCase(getVolunteers.fulfilled, (state , action) => {
+                volunteerAdapter.setAll(state , action.payload.data);
+                state.totalCount = action.payload.count;
+                state.searchTerms = action.payload.search;
+                state.resetTable = !(state.resetTable);
+                state.status = status.succeeded;
+            })
+            .addCase(getVolunteers.rejected , (state , action) => {
+                state.error = action.payload;
+                state.status = status.failed;
+            })
+            .addCase(getVolunteerPage.pending , (state , _) => {
+                state.status = status.loading;
+            })
+            .addCase(getVolunteerPage.fulfilled , (state , action) => {
+                volunteerAdapter.setMany(state , action.payload.data);
+                state.totalCount = action.payload.count;
+                state.status = status.succeeded
+            })
+            .addCase(getVolunteerPage.rejected , (state , action) => {
+                state.error = action.payload;
+                state.status = status.failed;
+            })
+            .addCase(updateVolunteer.fulfilled , (state , action) => {
+                volunteerAdapter.upsertOne(state , action.payload);
+            })
+            .addCase(deleteVolunteer.fulfilled , (state, action) => {
+                volunteerAdapter.removeOne(state, action.payload);
+            })
     }
 })
-
 
 //selector
 export const {
     selectAll: selectAllVolunteer,
     selectById: selectVolunteerById,
+    selectTotal: selectVolunteerCount,
 } = volunteerAdapter.getSelectors(state => state.volunteer);
 export const selectVolunteerStatus = state => state.volunteer.status;
 export const selectVolunteerError = state => state.volunteer.error;
+export const selectVolunteerTotalCount = state => state.volunteer.totalCount;
+export const selectVolunteerResetTable = state => state.volunteer.resetTable;
 
 //actions
-export const {addManyVolunteer, addVolunteer} = volunteerSlice.actions;
 
 // reducer
 export default volunteerSlice.reducer;

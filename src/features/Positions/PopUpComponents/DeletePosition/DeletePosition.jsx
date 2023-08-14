@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 //import redux
 import { useDispatch } from 'react-redux';
 import {deletePosition} from '../../PositionSlice';
-
+import { showMessage } from '../../../snackBar/snackBarSlice';
 
 //import components
 import ConfirmPopUp from '../../../../common/components/ConfirmPopUp/ConfirmPopUp';
@@ -12,7 +12,6 @@ import Loader from '../../../../common/components/Loader/Loader';
 
 //import style
 import style from './DeletePosition.module.css';
-import { showMessage } from '../../../snackBar/snackBarSlice';
 
 function DeletePosition({id , handleClose}) {
     const dispatch = useDispatch();

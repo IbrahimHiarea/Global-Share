@@ -18,7 +18,7 @@ function HomePage (){
                 required={'enter the position'}
                 errors={errors}
                 border={true}
-                callBack={getSquadsData}
+                callBack={(data) => getSquadsData({...data})}
             /> */}
         </div>
     );

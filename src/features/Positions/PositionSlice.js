@@ -53,9 +53,9 @@ export const getPositions = createAsyncThunk(
     },
     {
         condition: (data, {getState}) => {
-            const { question : {searchTerms , status} } = getState()
-            if (status === status.loading || searchTerms.search===data.search
-                || searchTerms.squad===data.squad || searchTerms.level===data.level) {
+            const { position : {searchTerms , status} } = getState()
+            if (status === status.loading || (searchTerms.search===data.search
+                && searchTerms.squad===data.squad && searchTerms.level===data.level)) {
                 return false;
             }
         },

@@ -39,7 +39,6 @@ function AddPosition({handleClose}) {
     const [isLoading , setIsLoading] = useState(false);
 
     const onSubmit = async (values) => {
-        console.log(values);
         try{
             setIsLoading(true);
             await dispatch(createPosition({...values , gsLevel: values.gsLevel?.value , squadId: values.squadId?.value})).unwrap();

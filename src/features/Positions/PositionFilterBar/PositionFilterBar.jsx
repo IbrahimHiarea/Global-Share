@@ -49,7 +49,11 @@ function PositionFilterBar({ handleAdd }) {
     const onSubmit = async (values) => {
         const {search , level , squad} = values;
         try{
-            await dispatch(getPositions({search , level: level.map(item => item.value).join(',') , squad: squad.map(item => item.value).join(',')})).unwrap();
+            await dispatch(getPositions({
+                search, 
+                level: level?.map(item => item.value).join(','), 
+                squad: squad?.map(item => item.value).join(',')
+            })).unwrap();
         }catch(error){
             if(error?.name==="ConditionError") return;
             dispatch(showMessage({message: error , severity: 2}));

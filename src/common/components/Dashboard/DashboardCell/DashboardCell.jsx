@@ -27,7 +27,7 @@ export const IdCell = ({id}) => {
 
 export const NormalCell = ({value}) => {
     return (    
-        <div className={style['normal-cell']}> {value?.toLowerCase()} </div>
+        <div className={style['normal-cell']}> {value?.toString()?.toLowerCase()} </div>
     );
 }
 
@@ -36,11 +36,11 @@ export const StatusCell = ({status}) => {
         <div className={
             clsx(
                 style['status-cell'], 
-                {[style['status-cell-warning']]: status.toLowerCase()===statusesData.freeze},
-                {[style['status-cell-error']]: status.toLowerCase()===statusesData.left}
+                {[style['status-cell-warning']]: status?.toLowerCase()===statusesData.freeze},
+                {[style['status-cell-error']]: status?.toLowerCase()===statusesData.left}
             )
         }> 
-        {status} 
+        {status?.toLowerCase()} 
         </div>
     );
 }
@@ -50,18 +50,18 @@ export const RecruitmentStatusCell = ({recruitmentStatus}) => {
         <div className={
             clsx(
                 style['recruitment-status-cell'],
-                {[style['recruitment-status-cell-error']] : recruitmentStatus.toLowerCase()===recruitmentStatusData.refused},
-                {[style['recruitment-status-cell-warning']] : recruitmentStatus.toLowerCase()===recruitmentStatusData.applied}
+                {[style['recruitment-status-cell-error']] : recruitmentStatus?.toLowerCase()===recruitmentStatusData.refused},
+                {[style['recruitment-status-cell-warning']] : recruitmentStatus?.toLowerCase()===recruitmentStatusData.applied}
             )
         }>
-            {recruitmentStatus.toLowerCase()}
+            {recruitmentStatus?.toLowerCase()}
         </div>
     );
 }
 
 export const ColoredCell = ({value}) => {
     return (
-        <div className={style['colored-cell']} >{value}</div>
+        <div className={style['colored-cell']} >{value.toString()?.toLowerCase()}</div>
     );
 }
 

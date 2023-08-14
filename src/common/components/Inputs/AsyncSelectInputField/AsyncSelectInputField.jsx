@@ -34,11 +34,11 @@ function AsyncSelectInputField({
 
     useEffect(() => {
         const controller = new AbortController();
-        callBack(
-            token, 
-            controller.signal
-        ).then(options => {
-            if(options?.length!==0) setSelectOptions(options);
+        callBack({
+            token: token, 
+            signal: controller.signal
+        }).then(options => {
+            setSelectOptions(options);
         }).catch(() => {});
 
         return () =>  controller.abort();  
@@ -159,7 +159,7 @@ const ValueContainer = props => {
                                 fontSize: '14px'
                             }}
                         >
-                            {props.children[0][0]?.props?.data?.value}
+                            {props.children[0][0]?.props?.data?.label}
                         </span>
                         <span
                             style={{

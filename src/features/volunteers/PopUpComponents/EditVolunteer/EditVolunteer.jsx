@@ -1,59 +1,67 @@
 // import react
-import React , { useRef, useState }  from 'react';
+import React , { useState }  from 'react';
 import { useForm , useFieldArray } from 'react-hook-form';
 
 //import redux
-import { useSelector } from 'react-redux';
-import {selectVolunteerById } from '../../VolunteerSlice';
+import { useSelector , useDispatch} from 'react-redux';
+import {selectVolunteerById , updateVolunteer } from '../../VolunteerSlice';
+import { showMessage } from '../../../snackBar/snackBarSlice';
 
 // import components 
 import InputField from '../../../../common/components/Inputs/InputField/InputField';
-import SelectInputField from "../../../../common/components/Inputs/SelectInputField/SelectInputField";
 import Button from '../../../../common/components/Inputs/Button/Button';
 import SubmitButton from '../../../../common/components/Inputs/SubmitButton/SubmitButton';
+import Loader from '../../../../common/components/Loader/Loader';
+import AsyncSelectInputField from '../../../../common/components/Inputs/AsyncSelectInputField/AsyncSelectInputField';
 
 // import icons
 import { IoCloseOutline } from "react-icons/io5";
 import { BsTrash } from "react-icons/bs";
 
-//import static data
-import { levelData } from '../../../../common/utils/selectorData';
+//import static data request
+import { getPositionDataBySquad, getRolesData, getSquadsData } from '../../../../common/utils/selectorAPI';
 
 //import style 
 import style from './EditVolunteer.module.css';
-import Loader from '../../../../common/components/Loader/Loader';
 
 function EditVolunteer({id , handleClose}) {
+    const dispatch = useDispatch();
     const data = useSelector((state) => selectVolunteerById(state , id));
 
-    const {control , register , formState: {errors , isDirty , dirtyFields} , handleSubmit , unregister } = useForm({
+    const {setError, control , register , formState: {errors , isDirty , dirtyFields} , handleSubmit , watch } = useForm({
         defaultValues:{
-            firstName : '',
-            lastName : '',
-            email : '',
+            firstName: data?.firstName,
+            lastName: data?.lastName,
+            email: data?.email,
             password: '',
+            positions: data?.positions?.map(
+                    element => ({
+                            position: {value: element.position.id , label: element.position.name}, 
+                            squad:{value: element.position.squadId , label: element.position.squadId} //gsName
+                        })),
+            roleId: {value: data?.roleId , label: data?.roleId}
         },
-        values: {...data}
     });
 
-    const { fields , append , remove } = useFieldArray({
-        name: 'positionAndSquad',
+    const { 
+        fields: positionsFields, 
+        append: appendPosition, 
+        remove: removePosition 
+    } = useFieldArray({
+        name: 'positions',
         control, 
     });
 
-    const [isLoading , setIsLoading] = useState(false);
-
-    const handelDelete = (index) => {
-        console.log(index);
-        remove(index);
-    };
-
-    const handelAdd = () => {
-        append({
-            position: '',
-            squad: '',
-        });
+    const handleDelete = (e , index) => {
+        e.preventDefault();
+        if(positionsFields.length===1){
+            setError(`positions.0.position` , { type: 'custom', message: 'at least one position required' })
+            return;
+        }
+        removePosition(index)
     }
+
+    const [isLoading , setIsLoading] = useState(false);
 
     const onSubmit = async (values) => {
         setIsLoading(true);
@@ -64,9 +72,14 @@ function EditVolunteer({id , handleClose}) {
                     changed[key] = values[key];
                 }
             }
-            console.log(changed);
-            //TODO::
-            // dispatch update action to redux
+            try{
+                await dispatch(updateVolunteer({id , ...changed})).unwrap();
+                dispatch(showMessage({message: 'Volunteer Edited successfully' , severity: 1}));
+                handleClose();
+            }catch(error){
+                dispatch(showMessage({message: error , severity: 2}));
+                setIsLoading(false);
+            }
         }
     }
 
@@ -99,10 +112,6 @@ function EditVolunteer({id , handleClose}) {
                         height='40px'
                         control={register('firstName' , {
                             required: 'Please Enter The First Name',
-                            pattern: {
-                                value: /^[A-Za-z ]+$/,
-                                message: "The name don't match the pattern"
-                            }
                         })}
                         errors={errors}
                     />
@@ -114,10 +123,6 @@ function EditVolunteer({id , handleClose}) {
                         height='40px'
                         control={register('lastName' , {
                             required: 'Please Enter The Last Name',
-                            pattern: {
-                                value: /^[A-Za-z ]+$/,
-                                message: "The name don't match the pattern"
-                            }
                         })}
                         errors={errors}
                     />
@@ -144,44 +149,58 @@ function EditVolunteer({id , handleClose}) {
                         name='password'
                         width='200px'
                         height='40px'  
-                        control={register('password' , {
-                            pattern: {
-                                value: /^(?!\s)(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,10}$/,
-                                message: 'Please enter a valid password'
-                            }
-                        })}
+                        control={register('password')}
                         errors={errors}
+                    />
+                </div>
+                <div className={style.box}>
+                    <AsyncSelectInputField
+                        width='180px'
+                        height='40px'
+                        name='roleId'
+                        placeholder='Role'
+                        defaultOptions={[]}
+                        control={control}
+                        required={'enter the role'}
+                        errors={errors}
+                        border={true}
+                        menuHeight={150}
+                        callBack={(data) => getRolesData({...data})}
                     />
                 </div>
                 <div className={style.break}></div>
                 <div className={style.positions}>
                     { 
-                        fields?.map((field , index) => (
+                        positionsFields?.map((field , index) => (
                             <div key={field.id}>
                                 <div className={style.box}>
-                                    <SelectInputField
+                                <AsyncSelectInputField
                                         width='180px'
                                         height='40px'
-                                        name={`positionAndSquad.${index}.squad`}
+                                        name={`positions.${index}.squad`}
                                         placeholder='All Squads'
-                                        options={Object.values(levelData)}
+                                        defaultOptions={[]}
                                         control={control}
                                         required={'enter the squad'}
-                                        errors={errors}
+                                        errors={{[`positions.${index}.squad`]: errors.positions?.at(index)?.squad}}
                                         border={true}
+                                        menuHeight={100}
+                                        callBack={(data) => getSquadsData({...data})}
                                     />
-                                    <SelectInputField
+                                    <AsyncSelectInputField
                                         width='210px'
                                         height='40px'
-                                        name={`positionAndSquad.${index}.position`}
+                                        name={`positions.${index}.position`}
                                         placeholder='All Positions'
-                                        options={Object.values(levelData)}
+                                        defaultOptions={[]}
                                         control={control}
                                         required='enter the position'
-                                        errors={errors}
+                                        errors={{[`positions.${index}.position`]: errors.positions?.at(index)?.position}}
                                         border={true}
+                                        menuHeight={100}
+                                        callBack={(data) => getPositionDataBySquad({...data , squadId: watch(`positions.${index}.squad`)?.value })}
                                     />
-                                    <Button backgroundColor="var(--error-background)" width="40px" height="40px" onClick={() => handelDelete(index)}>
+                                    <Button backgroundColor="var(--error-background)" width="40px" height="40px" onClick={(e) => handleDelete(e , index)}>
                                         <BsTrash size="18px" color='var(--error-main)'/>
                                     </Button>
                                 </div>
@@ -201,7 +220,7 @@ function EditVolunteer({id , handleClose}) {
                 </div>
             </form>
             <div className={style["add-button"]}>
-                <Button backgroundColor="var(--secondary-dark)" width="202px" height="40px" onClick={handelAdd}>
+                <Button backgroundColor="var(--secondary-dark)" width="202px" height="40px" onClick={() => appendPosition({position: '', squad: '' })}>
                     Add Another Position
                 </Button>
             </div>
