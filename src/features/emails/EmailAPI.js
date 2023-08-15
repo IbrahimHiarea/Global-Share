@@ -39,10 +39,10 @@ export async function getEmailById(id , token , signal){
 
 export async function createEmail({title , body ,recruitmentStatus , cc } , token , signal){
     const newRecruitmentStatus = recruitmentStatus.value.toUpperCase();
-    const newCC = '';
+    const newCC = cc.value;
     return axiosApi.post(
         '/email',
-        {title , body , 'recruitmentStatus':newRecruitmentStatus},
+        {title , body , 'recruitmentStatus':newRecruitmentStatus , 'cc':newCC},
         {
             signal : signal,
             headers: {
@@ -55,10 +55,11 @@ export async function createEmail({title , body ,recruitmentStatus , cc } , toke
 export async function updateEmail(id , values , token , signal){
     const newValues = {};
     for(let key of Object.keys(values)){
-        if(key==='recruitmentStatus'){
+        if(key==='recruitmentStatus')
             newValues[key] = values[key].value.toUpperCase();
-        }
-        else if(key!=='cc')
+        else if(key==='cc')
+            newValues[key] = values[key].value;
+        else
             newValues[key] = values[key];
     }
     return axiosApi.put(

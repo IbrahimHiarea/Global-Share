@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import {createEmail} from '../../EmailSlice';
 import { showMessage } from '../../../snackBar/snackBarSlice';
+import {getAllUsersData} from '../../../../common/utils/selectorAPI'
 
 // import components 
 import InputField from '../../../../common/components/Inputs/InputField/InputField';
@@ -13,6 +14,7 @@ import SelectInputField from "../../../../common/components/Inputs/SelectInputFi
 import SubmitButton from '../../../../common/components/Inputs/SubmitButton/SubmitButton';
 import TextAreaField from '../../../../common/components/Inputs/TextAreaField/TextAreaField'
 import Loader from '../../../../common/components/Loader/Loader';
+import AsyncSelectInputField from '../../../../common/components/Inputs/AsyncSelectInputField/AsyncSelectInputField';
 
 // import icons
 import { IoCloseOutline } from "react-icons/io5";
@@ -30,7 +32,7 @@ function AddEmail({handleClose}) {
             title : '',
             body: '',
             recruitmentStatus : '',
-            cc : null,
+            cc : '',
         }
     })
 
@@ -39,7 +41,6 @@ function AddEmail({handleClose}) {
     const onSubmit = async (values) => {
         try{
             setIsLoading(true);
-            console.log(values);
             await dispatch(createEmail(values)).unwrap();
             dispatch(showMessage({message: 'Email Added successfully' , severity: 1}));
             handleClose();
@@ -82,17 +83,17 @@ function AddEmail({handleClose}) {
                         border={true}
                     />
                     <div className={style.break}></div>
-                    <SelectInputField
+                    <AsyncSelectInputField
                         width='300px'
                         height='40px'
                         name='cc'
                         placeholder='CC'
-                        options={Object.values(recruitmentStatusData)}
+                        defaultOptions={[]}
                         control={control}
                         required={'enter the CC'}
-                        errors={errors}
+                        errors={{[`cc.value`]: errors.cc?.value}}
                         border={true}
-                        isMulti={true}
+                        callBack={(data) => getAllUsersData({...data})}
                     />
                     <InputField 
                         type='text'

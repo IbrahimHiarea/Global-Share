@@ -101,3 +101,25 @@ export async function getQuestionsData(token , signal){
     }
     return options;
 }
+
+export async function getAllUsersData({token , signal}){
+    const options = [];
+    try{
+        const response = await axiosApi.get(
+            `/user?skip=0&take=0&search=`,
+            {
+                signal : signal,
+                headers: {
+                    Authorization : `Bearer ${token}`,
+                }
+            }
+        ); 
+        response.data.data.forEach(user => {
+            options.push({value: user.email , label: user.email});
+        });
+        return options;
+    }catch(error){
+        // console.log('filed to load users option');
+    }
+    return options;
+}
