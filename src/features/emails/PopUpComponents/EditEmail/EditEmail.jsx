@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { useSelector , useDispatch} from 'react-redux';
 import {selectEmailById , updateEmail} from '../../EmailSlice';
 import { showMessage } from '../../../snackBar/snackBarSlice';
+import {getAllUsersData} from '../../../../common/utils/selectorAPI'
 
 // import components 
 import InputField from '../../../../common/components/Inputs/InputField/InputField';
@@ -13,6 +14,7 @@ import SelectInputField from "../../../../common/components/Inputs/SelectInputFi
 import SubmitButton from '../../../../common/components/Inputs/SubmitButton/SubmitButton';
 import TextAreaField from '../../../../common/components/Inputs/TextAreaField/TextAreaField'
 import Loader from '../../../../common/components/Loader/Loader';
+import AsyncSelectInputField from '../../../../common/components/Inputs/AsyncSelectInputField/AsyncSelectInputField';
 
 // import icons
 import { IoCloseOutline } from "react-icons/io5";
@@ -28,26 +30,28 @@ function EditEmail({id , handleClose}) {
     const dispatch = useDispatch();
     const {control , register , formState: {errors , isDirty , dirtyFields} , handleSubmit} = useForm({
         defaultValues:{
-            title : '',
-            body: '',
-            recruitmentStatus : '',
-            cc : null,
+            title: data.title , 
+            body: data.body , 
+            recruitmentStatus: {label: data.recruitmentStatus , value: data.recruitmentStatus} , 
+            cc: data?.cc ? {value: data?.cc , label: data?.cc} : ''
         },
-        values: {title: data.title , body: data.body , recruitmentStatus: {label: data.recruitmentStatus , value: data.recruitmentStatus} , cc: []}
+        values: {
+            title: data.title , 
+            body: data.body , 
+            recruitmentStatus: {label: data.recruitmentStatus , value: data.recruitmentStatus} , 
+            cc: data?.cc ? {value: data?.cc , label: data?.cc} : ''
+        }
     })
 
     const [isLoading , setIsLoading] = useState(false);
 
     const onSubmit = async (values) => {
         setIsLoading(true);
-        if(isDirty || values.image){
+        if(isDirty){
             const changed = {};
-            for(let key of Object.keys(dirtyFields)){
-                if(dirtyFields[key]){
-                    changed[key] = values[key];
-                }
+            for(let key of Object.keys(values)){
+                changed[key] = values[key];
             }
-            if(values.image) changed.image = values.image;
             try{
                 await dispatch(updateEmail({id , ...changed})).unwrap();
                 dispatch(showMessage({message: 'Email Edited successfully' , severity: 1}));
@@ -92,17 +96,17 @@ function EditEmail({id , handleClose}) {
                         border={true}
                     />
                     <div className={style.break}></div>
-                    <SelectInputField
+                    <AsyncSelectInputField
                         width='300px'
                         height='40px'
                         name='cc'
                         placeholder='CC'
-                        options={Object.values(recruitmentStatusData)}
+                        defaultOptions={[]}
                         control={control}
                         required={'enter the CC'}
-                        errors={errors}
+                        errors={{[`cc.value`]: errors.cc?.value}}
                         border={true}
-                        isMulti={true}
+                        callBack={(data) => getAllUsersData({...data})}
                     />
                     <InputField 
                         type='text'

@@ -61,7 +61,7 @@ export async function getPositionDataBySquad({squadId , token , signal}){
         });
         return options;
     }catch(error){
-        // console.log('filed to load position option')
+        // console.log('filed to load position options')
     }
     return options;
 }
@@ -96,11 +96,10 @@ export async function getQuestionsData(token , signal){
             {
                 signal : signal,
                 headers: {
-                    Authorization : `Bearer ${token}`,
+                    Authorization : `Bearer ${token.token}`,
                 }
             }
         ); 
-        // console.log(response);
         response.data.data.forEach(question => {
             options.push({value: question.id , label: question.text.toLowerCase() + ' - ' + question.type.toLowerCase()});
         });
@@ -147,6 +146,27 @@ export async function getMemberData({squadId , token , signal}){
     return options;
 }
 
+export async function getAllUsersData({token , signal}){
+    const options = [];
+    try{
+        const response = await axiosApi.get(
+            `/user?skip=0&take=0&search=`,
+            {
+                signal : signal,
+                headers: {
+                    Authorization : `Bearer ${token}`,
+                }
+            }
+        ); 
+        response.data.data.forEach(user => {
+            options.push({value: user.email , label: user.email});
+        });
+        return options;
+    }catch(error){
+        // console.log('filed to load users option');
+    }
+    return options;
+}
 export async function getAssignableMember({squadId , token , signal}){
     const options = [];
     if(!squadId || squadId==='') return options; 

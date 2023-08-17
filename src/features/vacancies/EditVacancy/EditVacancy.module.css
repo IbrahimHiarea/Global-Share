@@ -68,6 +68,10 @@
   min-height: 100vh;
 }
 
+.edit-vacancy-loader > div{
+  background-color: transparent;
+}
+
 .delete-button{
   margin-top: 9px;
   border-radius: 8px;
