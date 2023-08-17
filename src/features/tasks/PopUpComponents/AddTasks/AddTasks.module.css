@@ -1,6 +1,6 @@
 .add-tasks{
   width: 439px;
-  height: 418px;;
+  height: 425px;
   background: white;
   border-radius: 9px;
   padding: 24px;
@@ -10,11 +10,11 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
 .header h2{
-  color: #232360;
+  color: var(--word-color);
   font-size: 16px;
   font-weight: 700;
   margin: 0;
@@ -38,14 +38,7 @@
     display: none;
 }
 
-.add-tasks form .box:nth-child(3) > div > div > div,
-.add-tasks form .box:nth-child(5) > div > div > div,
-.add-tasks form .box div > input,
-.add-tasks form .box div > textarea{
-  border: 1px solid #E5E5ED;
-}
-
-
-.submit > input{
-  padding: 0;
+.submit label{
+  display: block !important;
+  padding-top: 12px;
 }

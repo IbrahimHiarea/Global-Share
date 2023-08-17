@@ -10,13 +10,19 @@
     border: none;
 }
 
-.reset{
+.bar-buttons{
+    display: flex;
+    gap: 7px;
+    margin-bottom: 18px;
+}
+
+.reset {
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     border-radius: 9px;
-    width: 60px;
+    width: 40px;
     height: 30px;
     background-color: var(--natural-alpha-7);
     -webkit-border-radius: 9px;
@@ -24,10 +30,10 @@
     -ms-border-radius: 9px;
     -o-border-radius: 9px;
     font-size: 14px;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
 }
 
-.reset:hover{
+.reset:hover {
     background-color: var(--error-main);
     color: white;
 }

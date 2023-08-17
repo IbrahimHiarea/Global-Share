@@ -1,57 +1,46 @@
 //import package
 import React from 'react';
+import { format } from 'date-fns';
+
+//import redux
+import { useSelector } from 'react-redux';
+import {selectTaskById} from '../taskSlice';
 
 //import components
-import TaskDetails from '../PopUpComponents/TaskDetails/TaskDetails';
+import PriorityBox from '../../../common/components/StatusBoxes/PriorityBox/PriorityBox';
+import DifficultyBox from '../../../common/components/StatusBoxes/DifficultyBox/DifficultyBox';
 
 // import icons 
 import { BiMessageAlt } from "react-icons/bi"
 
 //import style
 import style from './TaskCard.module.css';
+import DateBox from '../../../common/components/StatusBoxes/DateBox/DateBox';
 
-export const cardStatus = {
-    normal: 'normal',
-    important: 'important',
-    urgent: 'urgent'
-}
 
-function TaskCard ({
-        task,
-        dispatchPopUp
-    }){
+function TaskCard ({taskId, popUpDispatch}){
+    const task = useSelector(state => selectTaskById(state , taskId));
 
-    const {id , priority , title , description , 
-        deadline , difficulty , comments} = task;
 
     const handleClick = () => {
-        dispatchPopUp({
-            type: 'open',
-            payload: <TaskDetails {...task} />
-        })
+        popUpDispatch({type: 'taskDetails' , id: taskId});
     }
 
     return (
         <div className={style['task-card']} onClick={handleClick} >
             <div className={style['card-header']}>
-                <div
-                    style={{backgroundColor: priority.toLowerCase()===cardStatus.important ? 'var(--primary-main)' 
-                            : priority.toLowerCase()===cardStatus.urgent ? 'var(--primary-dark)' : null}}
-                    className={style.status}
-                >
-                    {priority.toLowerCase()}
-                </div>
-                <div className={style.complex}>{difficulty.toLowerCase()}</div>
+                <PriorityBox priority={task?.priority}/>
+                <DifficultyBox difficulty={task?.difficulty}/>
             </div>
             <div className={style['card-body']}>
-                <h3 className={style.title}>{title}</h3>
-                <div className={style.description}>{description}</div>
+                <h3 className={style.title}>{task.title}</h3>
+                <div className={style.description}>{task?.description}</div>
             </div>
             <div className={style['card-footer']}>
-                <div className={style.date}>{deadline}</div>
+                <DateBox date={task?.deadline}/>
                 <div className={style.comments}>
                     <BiMessageAlt  color='#768396' size='15px'></BiMessageAlt>
-                    <div> {comments.length} Comment</div>
+                    <div> {task?.comments?.length} Comment</div>
                 </div>
             </div>
         </div>

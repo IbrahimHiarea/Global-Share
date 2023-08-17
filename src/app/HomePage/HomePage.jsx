@@ -1,10 +1,18 @@
 //import react
 import React from 'react';
 
+import { useDispatch } from 'react-redux';
+import { getTasksBySquad } from '../../features/tasks/taskSlice';
+
 //import style
 import style from './HomePage.module.css';
 
 function HomePage (){
+
+    // const dispatch = useDispatch();
+
+    // dispatch(getTasksBySquad({squadId: 14}));
+
     return (
         <div className={style.home}>
             this is home

@@ -1,14 +1,19 @@
 //import package
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+
+//import redux
+import { useSelector , useDispatch } from 'react-redux';
+import { selectTaskById , selectCommentById, deleteTaskComment, createTaskComment } from '../../taskSlice';
+import { showMessage } from '../../../snackBar/snackBarSlice';
 
 // import components 
 import SubmitButton from '../../../../common/components/Inputs/SubmitButton/SubmitButton';
 import InputField from '../../../../common/components/Inputs/InputField/InputField';
-import { cardStatus }  from '../../TaskCard/TaskCard'
-
-// import MUI 
 import { Avatar } from '@mui/material';
+import DateBox from '../../../../common/components/StatusBoxes/DateBox/DateBox';
+import PriorityBox from '../../../../common/components/StatusBoxes/PriorityBox/PriorityBox';
+import DifficultyBox from '../../../../common/components/StatusBoxes/DifficultyBox/DifficultyBox';
 
 // import Icons 
 import { IoCloseOutline } from "react-icons/io5";
@@ -17,42 +22,18 @@ import { RiSendPlaneLine } from "react-icons/ri";
 //import style
 import style from './TaskDetails.module.css';
 
-function TaskDetails ({ 
-        id, 
-        priority, 
-        title, 
-        description, 
-        deadline,
-        difficulty, 
-        url,
-        comments,
-        close
-    }){
-
-    const { register , formState , handleSubmit } = useForm({
-        defaultValues:{
-            comment: '',
-        }
-    })
-
-    const onSubmit = async (data) => {
-        console.log(data , id);
-    }
-
-    const handleDeleteComment = async (commentId) => {
-        // Task ID  ,  Comment index
-        console.log(commentId);
-    }
+function TaskDetails ({ handleClose ,  taskId }){
+    const task = useSelector(state => selectTaskById(state , taskId));
 
     return (
         <div className={style['task-details']}>
             <div className={style.title}>
-                <h2>{title}</h2>
+                <h2>{task.title}</h2>
                 <IoCloseOutline 
                     size='20px' 
                     color='var(--natural-alpha-1)' 
                     cursor='pointer' 
-                    onClick={close}
+                    onClick={handleClose}
                 />
             </div>
             <div className={style.members}>
@@ -60,97 +41,136 @@ function TaskDetails ({
                     <div>For</div>
                     <div className={style.name}>
                         <Avatar 
-                            src='' 
                             style={{
                                 width: '24px', 
-                                height: '24px'
+                                height: '24px',
+                                fontSize: '15px',
+                                backgroundColor: 'darkcyan',
                             }}
-                        />
-                        <div>Jake</div>
+                        >{task.assignedTo.firstName?.at(0)}</Avatar>
+                        <div>{task.assignedTo.firstName}</div>
                     </div>
                 </div>
                 <div className={style.Assigned}>
                     <div>Assigned by</div>
                     <div className={style.name}>
                         <Avatar 
-                            src='' 
                             style={{
                                 width: '24px', 
-                                height: '24px'
-                                }}
-                        />
-                        <div>Jake</div>
+                                height: '24px',
+                                fontSize: '15px',
+                                backgroundColor: 'cornflowerblue',
+                            }}
+                        >{task.assignedBy.firstName?.at(0)}</Avatar>
+                        <div>{task.assignedBy.firstName}</div>
                     </div>
                 </div>
             </div>
             <div className={style.info}>
-                <div className={style.status}
-                    style={{backgroundColor: priority.toLowerCase()===cardStatus.important ? 'var(--primary-main)' 
-                    : priority.toLowerCase()===cardStatus.urgent ? 'var(--primary-dark)' : null}}
-                >{priority.toLowerCase()}</div>
-                <div className={style.date}>{deadline}</div>
-                <div className={style.complex}>{difficulty.toLowerCase()}</div>
+                <PriorityBox priority={task?.priority}/>
+                <DifficultyBox difficulty={task?.difficulty}/>
+                <DateBox date={task.deadline}/>
             </div>
-            <a className={style.link} href={url}>{url}</a>
-            <div className={style.description}>{description}</div>
-            <div className={style.comments}>
-                <div className={style['comments-box']}>
-                    {
-                        comments?.map((comment , index) => (
-                            // key change
-                            <div key={index} className={style.comment}>
-                                <Avatar 
-                                    src='' 
-                                    style={{
-                                        width: '26px', 
-                                        height: '26px'
-                                    }}
-                                />
-                                <div className={style.text}>{comment}</div>
-                                <div 
-                                    className={style.delete} 
-                                    onClick={() => handleDeleteComment(1)}
-                                >
-                                    <IoCloseOutline 
-                                        size='15px' 
-                                        cursor='pointer' 
-                                        color='var(--natural-alpha-1)' 
-                                    />
-                                </div>
-                            </div>
-                        ))
-                    }
-                </div>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <InputField 
-                        type='text'
-                        name='comment'
-                        placeholder='Add a comment'
-                        width='376px'
-                        height='40px'
-                        control={register('comment' , {
-                                required: true
-                            }
-                        )}
-                    />
-                    <div 
-                        className={style.send}
-                        style={{
-                            pointerEvents: (!formState.isValid ? 'none' : 'auto')
-                        }}
+            <a className={style.link} target="_blank" rel="noreferrer"  href={task.url}>{task.url}</a>
+            <div className={style.description}>{task.description}</div>
+            <CommentBox taskId={taskId} commentsIds={task.comments}/>
+        </div>
+    );
+}
+
+const CommentBox = ({taskId , commentsIds}) => {
+    const { register , formState : {errors , defaultValues} , handleSubmit , reset} = useForm({
+        defaultValues:{
+            content: '',
+        }
+    })
+    const dispatch = useDispatch();
+    const [isLoading , setIsLoading] = useState(false)
+
+
+    const onSubmit = async (values) => {
+        try{
+            setIsLoading(true);
+            await dispatch(createTaskComment({taskId , content: values.content})).unwrap();
+            dispatch(showMessage({message: 'Comment Added successfully' , severity: 1}));
+            reset(defaultValues);
+        }catch(error){
+            dispatch(showMessage({message: error , severity: 2}));
+        }
+        setIsLoading(false);
+    }
+
+    return (    
+        <div className={style.comments}> 
+            <div className={style['comments-box']}>
+                {
+                    commentsIds?.map(commentId => (
+                        <SingleComment key={commentId} commentId={commentId} taskId={taskId}/>
+                    ))
+                }
+            </div>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <InputField 
+                    type='text'
+                    name='content'
+                    placeholder='Add a comment'
+                    width='376px'
+                    height='40px'
+                    errors={errors}
+                    control={register('content' , { required: true })}
+                />
+                <div className={style.submit}>
+                    <SubmitButton 
+                        width='40px' 
+                        height='40px' 
+                        backgroundColor='transparent'
+                        disabled={isLoading}
                     >
-                        <SubmitButton 
-                            width='40px' 
-                            height='40px' 
-                            disabled={!formState.isValid}
-                        />
                         <RiSendPlaneLine 
                             className={style['send-icon']} 
                             color='#768396' 
                             size='20px'
-                        />
-                    </div>
-                </form>
+                            />
+                    </SubmitButton>
+                </div>
+            </form>
+        </div>
+    )
+}
+
+const SingleComment = ({commentId , taskId}) => {
+    const comment = useSelector(state => selectCommentById(state , commentId));
+    const dispatch = useDispatch();
+
+    const handleDeleteComment = async () => {
+        try{
+            await dispatch(deleteTaskComment({id : commentId , taskId})).unwrap();
+            dispatch(showMessage({message: 'comment deleted successfully' , severity: 1}));
+        }catch(error){
+            dispatch(showMessage({message: error , severity: 2}));
+        }
+    }
+
+    return (
+        <div className={style.comment}>
+            <Avatar 
+                style={{
+                    width: '24px', 
+                    height: '24px',
+                    fontSize: '15px',
+                    backgroundColor: 'darkseagreen',
+                }}
+            >{comment.author.firstName?.at(0)}</Avatar>
+            <div className={style['comment-content']}>{comment.content}</div>
+            <div 
+                className={style.delete} 
+                onClick={handleDeleteComment}
+            >
+                <IoCloseOutline 
+                    size='15px' 
+                    cursor='pointer' 
+                    color='var(--natural-alpha-1)' 
+                />
             </div>
         </div>
     );

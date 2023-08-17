@@ -1,16 +1,14 @@
 //import react
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
+
+//import redux
+import { useSelector } from "react-redux";
+import {selectAuthToken} from '../../../../features/auth/AuthSlice'
 
 //import components
 import InputWrapper from '../InputWrapper/InputWrapper';
 import Select , { components }from 'react-select';
-import { Avatar } from "@mui/material";
-
-//import image & icon
-import image from '../../../../assets/images/profileImage/profile.png';
-import image1 from '../../../../assets/images/profileImage/image1.png';
-import image2 from '../../../../assets/images/loginImage/login.png';
 
 //import style
 import style from './MultiSelectInputField.module.css';
@@ -19,17 +17,23 @@ function MultiSelectInputField({
         children, width, height,
         name, options, placeholder,
         control, errors , disabled,
-        required
+        required , callBack
     }){
-    const selectOptions = [].concat( options.map((item) => {
-            return {
-                'value': item, 
-                "label": <Avatar 
-                            alt={item}
-                            src={image}                            
-                        />
-            }
-        }));
+
+    const token = useSelector(selectAuthToken);
+    const [selectOptions , setSelectOptions] = useState([]);
+
+    useEffect(() => {
+        const controller = new AbortController();
+        callBack({
+            token: token, 
+            signal: controller.signal
+        }).then(options => {
+            setSelectOptions(options);
+        }).catch(() => {});
+
+        return () =>  controller.abort(); 
+    } , [callBack , token])
 
     return(
         <InputWrapper name={name} label={children} errors={errors}>
@@ -131,9 +135,9 @@ function MultiSelectInputField({
                             }),
                             menuList: (base) => ({
                                 ...base,
-                                padding: '10px',
+                                // padding: '10px',
                                 display: 'grid',
-                                gridTemplateColumns: 'repeat(3 , 33%)',
+                                gridTemplateColumns: selectOptions.length===0 ? 'repeat(1 , 100%)' : 'repeat(3 , 33%)',
                             }),
                             option: (base , state) => ({
                                 ...base,
@@ -143,8 +147,15 @@ function MultiSelectInputField({
                                 display: 'flex',
                                 justifyContent: 'center',
                                 alignItems: 'center',
+                                border: 'none',
                                 "& div":{
                                     border: state.isSelected ? '3px solid rgba(102, 204, 204, 1)' : '',
+                                },
+                                "&:active":{
+                                    backgroundColor: 'transparent !important'
+                                },
+                                '&:focus-visible':{
+                                    outline: 'none  !important'
                                 }
                             })
                         }}
@@ -169,7 +180,7 @@ const ValueContainer = props => {
                                 textTransform: 'capitalize',
                             }}
                         >
-                            {props.children[0][0]?.props?.data?.value}
+                            {props.children[0][0]?.props?.data?.name}
                         </span>
                         <span
                             style={{

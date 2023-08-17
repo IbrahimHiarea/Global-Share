@@ -14,12 +14,16 @@ function SelectInputField({
         name, options, placeholder,
         control, errors , disabled,
         required , border , menuHeight,
-        isMulti, placement
+        isMulti, placement , readyOptions
     }){
-    const selectOptions = [].concat( options?.map((item) => {
+    
+    let selectOptions = [];
+    if(readyOptions) selectOptions = readyOptions;
+    else{
+        selectOptions = [].concat( options?.map((item) => {
             return {'value': item , "label": item}
         }));
-        
+    }
 
     let borderColor = 'transparent';
     if(border) borderColor = 'var(--border-color)';
@@ -47,7 +51,10 @@ function SelectInputField({
                             dropdownIndicator: (base) => ({
                                 ...base,
                                 color: 'var(--natural-alpha-2)',
-                            
+                                '& svg':{
+                                    width: '15px',
+                                    height: '15px'
+                                }
                             }),
                             indicatorSeparator: (base) => ({
                                 ...base,
@@ -111,7 +118,10 @@ function SelectInputField({
                                 backgroundColor: '',
                                 color: '',
                                 paddingLeft:'20px',
-                                textTransform:'capitalize'
+                                textTransform:'capitalize',
+                                "&:active":{
+                                    backgroundColor: 'transparent !important'
+                                },
                             })
                         }}
                         menuPlacement={placement}

@@ -37,7 +37,8 @@ const initialState = {
         tasksCompleted: 0,
         volunteeredHours: 0,
         position: {},
-    }
+    },
+    profileSquads: [],
 }
 
 //thunks actions
@@ -46,9 +47,7 @@ export const fetchProfileDetails = createAsyncThunk(
     async ( _ , {rejectWithValue , getState , signal}) => {
         try{
             const token = selectAuthToken(getState());
-            // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiYWhtYWQuYWxzaGFoYWwyQGdtYWlsLmNvbSIsImlhdCI6MTY4OTYxNTYyMSwiZXhwIjoxNjkwMjIwNDIxfQ.3YHg0ANmNnP9EX8ueFySgmboTNTC3YLhFZ8-sYBkl3M";
             const response = await profileAPI.fetchProfileDetails(token , signal);
-            console.log(response.data);
             return response.data;
         }
         catch(error){
@@ -78,7 +77,6 @@ export const updateProfileDetails = createAsyncThunk(
     async (data , {rejectWithValue , getState ,  signal}) => {
         try{
             const token = selectAuthToken(getState());
-            // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImVtYWlsIjoiYWhtYWQuYWxzaGFoYWwyQGdtYWlsLmNvbSIsImlhdCI6MTY4ODU3Nzc5NCwiZXhwIjoxNjg5MTgyNTk0fQ.lGrFVOfTWn0pfsGHnOUGpUH-8k6SjuIwWZsJCM4zaXU";
             await profileAPI.updateProfileDetails(data , token , signal);
             return data;
         }
@@ -106,33 +104,32 @@ const profileSlice = createSlice({
                 state.status = status.loading;
             })
             .addCase(fetchProfileDetails.fulfilled , (state , action) => {
-                console.log(action);
                 for(let key of Object.keys(action.payload)){
                     if(action.payload[key]===null)
                         action.payload[key] = "none";
                     if(key==='joinDate') 
                         action.payload[key] = format(new Date(action.payload[key]) , 'yyyy-MM-dd');
                 }
+                action.payload.positions?.forEach(element => {
+                    state.profileSquads.push(element.position.squad);
+                });
                 state.status = status.succeeded;
                 state.data = action.payload;
             })
             .addCase(fetchProfileDetails.rejected , (state , action) =>{
-                console.log(action);
                 state.status = status.failed;
                 state.error = action.payload;
             })
             .addCase(updateProfileDetails.pending , (state , action) => {
                 state.status = status.loading;
             })
-            .addCase(updateProfileDetails.fulfilled , (state , action) => {
-                console.log(action);    
+            .addCase(updateProfileDetails.fulfilled , (state , action) => {  
                 state.status = status.succeeded;
                 for(let key of Object.keys(action.payload)){
                     state.data[key] = action.payload[key];
                 }
             })
             .addCase(updateProfileDetails.rejected , (state , action) => {
-                console.log(action);
                 state.status = status.succeeded;
                 state.error = action.payload;
             })
@@ -144,6 +141,7 @@ export const selectAllProfile = state => state.profile;
 export const selectProfileStatus = state => state.profile.status;
 export const selectProfileError = state => state.profile.error;
 export const selectProfileData = state => state.profile.data;
+export const selectProfileSquads = state => state.profile.profileSquads;
 
 //actions
 

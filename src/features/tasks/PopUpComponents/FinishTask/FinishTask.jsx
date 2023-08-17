@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 
 //import redux
 import { useDispatch } from 'react-redux';
-import { createTaskStatus } from '../../taskSlice';
+import { updateTask } from '../../taskSlice';
 
 // import components 
 import SubmitButton from '../../../../common/components/Inputs/SubmitButton/SubmitButton';
@@ -16,23 +16,28 @@ import { showMessage } from '../../../snackBar/snackBarSlice';
 import { IoCloseOutline } from "react-icons/io5";
 
 //import style
-import style from './AddStatus.module.css';
+import style from './FinishTask.module.css';
 
 
-function AddStatus ({handleClose , squadId}){
+function FinishTask ({handleClose , taskId , taskStatusId , sourceTaskStatusId}){
     const [isLoading , setIsLoading] = useState(false);
     const dispatch = useDispatch();
     const { register , formState: {errors} , handleSubmit } = useForm({
         defaultValues:{
-            name: '',
+            hoursTaken: '',
         }
     })
 
     const onSubmit = async (values) => {
         try{
             setIsLoading(true);
-            await dispatch(createTaskStatus({squadId , name: values?.name})).unwrap();
-            dispatch(showMessage({message: 'Status Added successfully' , severity: 1}));
+            await dispatch(updateTask({
+                hoursTaken: parseInt(values.hoursTaken),
+                id: taskId,
+                statusId: taskStatusId, 
+                sourceStatusId: sourceTaskStatusId,
+            })).unwrap();
+            dispatch(showMessage({message: 'Task Finished successfully' , severity: 1}));
             handleClose();
         }catch(error){
             dispatch(showMessage({message: error , severity: 2}));
@@ -42,16 +47,16 @@ function AddStatus ({handleClose , squadId}){
 
     if(isLoading){
         return (
-            <div className={style['add-status']}>
+            <div className={style['finish-task']}>
                 <Loader transparent={true}/>
             </div>
         );
     }
 
     return (
-        <div className={style['add-status']}>
-            <div className={style['add-status-header']}>
-                <h2>Create New Column</h2>
+        <div className={style['finish-task']}>
+            <div className={style['finish-task-header']}>
+                <h2>Finish Task</h2>
                 <IoCloseOutline 
                     size='20px' 
                     color='var(--natural-alpha-1)' 
@@ -62,22 +67,22 @@ function AddStatus ({handleClose , squadId}){
             <form onSubmit={handleSubmit(onSubmit)}>
                 <InputField 
                     type='text'
-                    name='name'
-                    placeholder='Name'
+                    name='hoursTaken'
+                    placeholder='Taken Hours'
                     width='100%'
                     height='40px'
                     errors={errors}
-                    control={register('name' , {required: 'Please enter status name'})}
+                    control={register('hoursTaken' , {required: 'Please enter the hours'})}
                 />
                 <SubmitButton 
                     width='112px' 
                     height='40px'
                 >
-                    Create
+                    done
                 </SubmitButton>
             </form>
         </div>
     );
 }
 
-export default AddStatus;  
+export default FinishTask; 

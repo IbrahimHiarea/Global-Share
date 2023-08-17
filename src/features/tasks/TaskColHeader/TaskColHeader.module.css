@@ -1,5 +1,5 @@
 .task-header{
-  width: 233px;
+  min-width: 233px;
   height: 54px;
   background-color: white;
   border-radius: 10px;
@@ -11,6 +11,7 @@
   font-size: 15px;
   font-weight: 500;
   color: #232360;
+  text-transform: capitalize;
 }
 
 .icons{
@@ -57,6 +58,7 @@
 }
 
 .add-task{
+  min-width: 233px;
   justify-content: center;
   gap:10px
 }

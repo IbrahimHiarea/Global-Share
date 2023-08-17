@@ -4,6 +4,7 @@ import {
     createAsyncThunk,
     createEntityAdapter
 } from "@reduxjs/toolkit"
+import * as lodash from 'lodash';
 
 //import API
 import * as taskAPI from './TaskAPI';
@@ -23,12 +24,12 @@ const taskStatusAdapter = createEntityAdapter({
 
 const taskAdapter = createEntityAdapter({
     selectId: (task) => task.id,
-    sortComparer: (taskA , taskB) => new Date(taskA.date) - new Date(taskB.date)
+    sortComparer: (taskA , taskB) => new Date(taskA.deadline) - new Date(taskB.deadline)
 });
 
 const commentAdapter = createEntityAdapter({
     selectId: (comment) => comment.id,
-    sortComparer: (commentA , commentB) => new Date(commentA.date) - new Date(commentB.date)
+    sortComparer: (commentA , commentB) => commentA.id - commentB.id
 });
 
 const initialState = {
@@ -36,37 +37,196 @@ const initialState = {
     tasks: taskAdapter.getInitialState(),
     comments: commentAdapter.getInitialState(),
     status: status.idle,
+    paginationStatus: status.idle,
     error: null,
+    searchTerms:{
+        search: undefined,
+        difficulty: undefined,
+        priority: undefined,
+        member: undefined,
+        squadId: undefined,
+    },
+    endTaskStatusIds: []
 }
 
 //thunks actions
-export const fetchTasksBySquad = createAsyncThunk(
-    'task/fetchTasksBySquad',
-    async (squadId , {rejectWithValue , signal , getState}) => {   
-        try{
-            // const token = selectAuthToken(getState());
-            const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImVtYWlsIjoiYWhtYWQuYWxzaGFoYWwyQGdtYWlsLmNvbSIsImlhdCI6MTY4OTE4MzMwNywiZXhwIjoxNjg5Nzg4MTA3fQ.7tII2KAksYX_GbBGfIYmUkKNIEG_VFKjYoos1qNf27g";
-            const response = await taskAPI.fetchTasksBySquad(squadId , token , signal);
-            console.log(response.data);
 
-            const taskStatuses = [] , tasks = [] , comments = [];
-            return {taskStatuses , tasks , comments}
-        }
-        catch(error){
-            console.log(error);
+export const getTasksBySquad = createAsyncThunk(
+    'task/getTasksBySquad',
+    async (data , thunkAPI) => {
+        try{
+            const {auth: {token}} = thunkAPI.getState();
+            const response = await taskAPI.getTasksBySquad(data , 0 , token , thunkAPI.signal);
+            return {searchTerms: data , data: response.data};
+        }catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message) message = error.response.data.message
-            return rejectWithValue(message);
+            if(error?.response?.data?.message){
+                if(typeof error.response.data.message === 'string') 
+                    message = error.response.data.message;
+                else 
+                    message = error.response.data.message[0];
+            }
+            return thunkAPI.rejectWithValue(message);
         }
     },
     {
-        condition: (_, {getState}) => {
-            const { task } = getState()
-            const taskStatus = task.status;
-            if (taskStatus === status.succeeded || taskStatus === status.loading) {
-                return false
+        condition: (data, {getState}) => {
+            const { task : {searchTerms , status , paginationStatus} } = getState()
+            if (status === status.loading || paginationStatus===status.loading || (searchTerms.search===data.search 
+                && searchTerms.difficulty===data.difficulty && searchTerms.priority===data.priority
+                && searchTerms.member===data.member && searchTerms.squadId===data.squadId)) {
+                return false;
             }
         },
+    }
+);
+
+export const getTasksBySquadPage = createAsyncThunk(
+    'task/getTasksBySquadPage',
+    async (data , thunkAPI) => {
+        try{
+            const {auth: {token} , task:{searchTerms}} = thunkAPI.getState();
+            const response = await taskAPI.getTasksBySquad(searchTerms , data.skip , token , thunkAPI.signal);
+            return response.data;
+        }catch(error){
+            let message = "Network connection error";
+            if(error?.response?.data?.message){
+                if(typeof error.response.data.message === 'string') 
+                    message = error.response.data.message;
+                else 
+                    message = error.response.data.message[0];
+            }
+            return thunkAPI.rejectWithValue(message);
+        }
+    },
+    {
+        condition: (data, {getState}) => {
+            const { task : {status , paginationStatus} } = getState()
+            if (status === status.loading || status===status.failed || paginationStatus===status.loading) {
+                return false;
+            }
+        },
+    }
+);
+
+export const createTaskStatus = createAsyncThunk(
+    'task/createTaskStatus',
+    async (data , thunkAPI) => {
+        try{    
+            const {auth: {token}} = thunkAPI.getState();
+            const response = await taskAPI.createStatus(data , token , thunkAPI.signal);
+            return response.data;
+        }catch(error){  
+            let message = "Network connection error";
+            if(error?.response?.data?.message){
+                if(typeof error.response.data.message === 'string') 
+                    message = error.response.data.message;
+                else 
+                    message = error.response.data.message[0];
+            }
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+);
+
+export const deleteTaskStatus = createAsyncThunk(
+    'task/deleteTaskStatus',
+    async(data , thunkAPI) => {
+        try{
+            const {auth: {token}} = thunkAPI.getState();
+            await taskAPI.deleteStatus(data.id , token , thunkAPI.signal);
+            return data.id;
+        }catch(error){
+            let message = "Network connection error";
+            if(error?.response?.data?.message){
+                if(typeof error.response.data.message === 'string') 
+                    message = error.response.data.message;
+                else 
+                    message = error.response.data.message[0];
+            }
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+);
+
+export const createTask = createAsyncThunk(
+    'task/createTask',
+    async (data , thunkAPI) => {
+        try{
+            const {auth: {token}} = thunkAPI.getState();
+            const response = await taskAPI.createTask(data , token , thunkAPI.signal);
+            return response.data;
+        }catch(error){
+            let message = "Network connection error";
+            if(error?.response?.data?.message){
+                if(typeof error.response.data.message === 'string') 
+                    message = error.response.data.message;
+                else 
+                    message = error.response.data.message[0];
+            }
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+);
+
+export const updateTask = createAsyncThunk(
+    'task/updateTask',
+    async (data , thunkAPI) => {
+        try{
+            const {id , sourceStatusId , ...values} = data;
+            const {auth: {token}} = thunkAPI.getState();
+            const response = await taskAPI.updateTask(id , values , token , thunkAPI.signal);
+            return {data: response.data , source: sourceStatusId};
+        }catch(error){
+            let message = "Network connection error";
+            if(error?.response?.data?.message){
+                if(typeof error.response.data.message === 'string') 
+                    message = error.response.data.message;
+                else 
+                    message = error.response.data.message[0];
+            }
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+);
+
+export const createTaskComment = createAsyncThunk(
+    'task/createTaskComment',
+    async (data , thunkAPI) => {
+        try{
+            const {auth: {token , info}} = thunkAPI.getState();
+            const response = await taskAPI.createComment(data , token , thunkAPI.signal);
+            return {comment: response.data , info: info};
+        }catch(error){
+            let message = "Network connection error";
+            if(error?.response?.data?.message){
+                if(typeof error.response.data.message === 'string') 
+                    message = error.response.data.message;
+                else 
+                    message = error.response.data.message[0];
+            }
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+);
+
+export const deleteTaskComment = createAsyncThunk(
+    'task/deleteTaskComment',
+    async (data , thunkAPI) => {
+        try{
+            const {auth: {token}} = thunkAPI.getState();
+            await taskAPI.deleteComment(data.id , token , thunkAPI.signal);
+            return data;
+        }catch(error){
+            let message = "Network connection error";
+            if(error?.response?.data?.message){
+                if(typeof error.response.data.message === 'string') 
+                    message = error.response.data.message;
+                else 
+                    message = error.response.data.message[0];
+            }
+            return thunkAPI.rejectWithValue(message);
+        }
     }
 );
 
@@ -75,30 +235,152 @@ export const fetchTasksBySquad = createAsyncThunk(
 const tasksSlice = createSlice({
     name: 'task',
     initialState,
-    reducers: {},
+    reducers: {
+        resetSearchTerms: (state , _) => {
+            state.searchTerms = {
+                search: undefined,
+                difficulty: undefined,
+                priority: undefined,
+                member: undefined,
+                squadId: undefined,
+            }
+        }
+    },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchTasksBySquad.pending , (state , action) => {
+            .addCase(getTasksBySquad.pending , (state , _) => {
                 state.status = status.loading;
             })
-            .addCase(fetchTasksBySquad.fulfilled , (state , action) => {
-                const {taskStatuses , tasks , comments} = action.payload;
-                taskStatusAdapter.setAll(state.status , taskStatuses);
+            .addCase(getTasksBySquad.fulfilled , (state , action) => {
+                const tasks = [] , comments = [] , statuses = [];
+                state.searchTerms = action.payload.searchTerms;
+                action.payload.data?.forEach((status) => {
+                    if(status.name.toLowerCase()==='done' && status.crucial) state.endTaskStatusIds.push(status.id);
+                    const tempStatus = {...status , tasks: []};
+                    status.tasks?.forEach((task) => {
+                        tasks.push(task);
+                        tempStatus.tasks.push(task.id);
+                    });
+                    statuses.push(tempStatus);
+                }); 
+                tasks?.forEach((task) => {
+                    const tempComments = task.comments;
+                    task.comments = [];
+                    tempComments?.forEach((comment) => {
+                        task.comments.push(comment.id);
+                        comments.push(comment);
+                    })
+                });
+                taskStatusAdapter.setAll(state.taskStatuses , statuses);
                 taskAdapter.setAll(state.tasks , tasks);
                 commentAdapter.setAll(state.comments , comments);
                 state.status = status.succeeded;
             })
-            .addCase(fetchTasksBySquad.rejected , (state , action) =>{
+            .addCase(getTasksBySquad.rejected , (state , action) => {
                 state.error = action.payload;
                 state.status = status.failed;
+            })
+            .addCase(getTasksBySquadPage.pending , (state , _) => {
+                state.paginationStatus = status.loading
+            })
+            .addCase(getTasksBySquadPage.fulfilled , (state , action) => {
+                const tasks = [] , comments = [];
+                action.payload.data?.forEach((status) => {
+                    status.tasks?.forEach((task) => {
+                        state.taskStatuses.entities[status.id].tasks.push(task.id);
+                        tasks.push(task);
+                    });
+                }); 
+                tasks?.forEach((task) => {
+                    const tempComments = task.comments;
+                    task.comments = [];
+                    tempComments?.forEach((comment) => {
+                        task.comments.push(comment.id);
+                        comments.push(comment);
+                    })
+                });
+                taskAdapter.setMany(state.tasks , tasks);
+                commentAdapter.setMany(state.comments , comments);
+                state.paginationStatus = status.succeeded;
+            })
+            .addCase(getTasksBySquadPage.rejected , (state , _) => {
+                state.paginationStatus = status.failed;
+            })
+            .addCase(createTaskStatus.fulfilled , (state , action) => {
+                const taskStatus = action.payload;
+                taskStatus.tasks = [];
+                taskStatusAdapter.upsertOne(state.taskStatuses , taskStatus);
+            })
+            .addCase(deleteTaskStatus.fulfilled , (state , action) => {
+                taskStatusAdapter.removeOne(state.taskStatuses ,  action.payload);
+            })
+            .addCase(createTask.fulfilled , (state , action) => {
+                const task = action.payload;
+                state.taskStatuses.entities[task.statusId].tasks.push(task.id);
+                taskAdapter.upsertOne(state.tasks , task);
+            })
+            .addCase(updateTask.fulfilled , (state , action) => {
+                const task = action.payload.data , comments = [];
+                const tempComments = task.comments;
+                task.comments = [];
+                tempComments?.forEach((comment) => {
+                    task.comments.push(comment.id);
+                    comments.push(comment);
+                })
+                state.taskStatuses.entities[task.statusId].tasks.push(task.id);
+                const temp = state.taskStatuses.entities[action.payload.source].tasks;
+                state.taskStatuses.entities[action.payload.source].tasks = lodash.remove(temp , (item) => item!==parseInt(task.id));
+                taskAdapter.upsertOne(state.tasks , task);
+                commentAdapter.setMany(state.comments , comments);
+            })
+            .addCase(createTaskComment.fulfilled , (state , action) => {
+                const {comment , info} = action.payload;
+                comment.author = {
+                    firstName: info.firstName,
+                    lastName: info.lastName,
+                    middleName: info.middleName,
+                    email: info.email,
+                }
+                state.tasks.entities[comment.taskId].comments.push(comment.id);
+                commentAdapter.upsertOne(state.comments , comment);
+            })
+            .addCase(deleteTaskComment.fulfilled , (state , action) => {
+                const {taskId , id} = action.payload;
+                const temp = state.tasks.entities[taskId].comments;
+                state.tasks.entities[taskId].comments = lodash.remove(temp , (item) => item!==parseInt(id));
+                commentAdapter.removeOne(state.comments , action.payload);
             })
     }
 });
 
 // selectors
+export const{
+    selectAll: selectAllTaskStatus,
+    selectById: selectTaskStatusById,
+    selectTotal: selectTaskStatusCount,
+    selectIds: selectTaskStatusesIds
+} = taskStatusAdapter.getSelectors(state => state.task.taskStatuses);
+
+export const{
+    selectAll: selectAllTask,
+    selectById: selectTaskById,
+    selectTotal: selectTaskCount,
+} = taskAdapter.getSelectors(state => state.task.tasks);
+
+export const{
+    selectAll: selectAllComment,
+    selectById: selectCommentById,
+    selectTotal: selectCommentCount,
+} = commentAdapter.getSelectors(state => state.task.comments);
+
+export const selectTaskStatus = state => state.task.status;
+export const selectTaskError = state => state.task.error;
+export const selectTaskSearchTerms = state => state.task.searchTerms;
+export const selectEndTaskStatusIds = state => state.task.endTaskStatusIds;
+
 
 // actions
-export const {} = tasksSlice.actions;
+export const {resetSearchTerms} = tasksSlice.actions
 
 // reducer
 export default tasksSlice.reducer;

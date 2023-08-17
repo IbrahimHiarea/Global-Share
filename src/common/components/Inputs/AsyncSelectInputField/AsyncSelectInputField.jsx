@@ -66,7 +66,10 @@ function AsyncSelectInputField({
                             dropdownIndicator: (base) => ({
                                 ...base,
                                 color: 'var(--natural-alpha-2)',
-                            
+                                '& svg':{
+                                    width: '15px',
+                                    height: '15px'
+                                }
                             }),
                             indicatorSeparator: (base) => ({
                                 ...base,
@@ -130,7 +133,10 @@ function AsyncSelectInputField({
                                 backgroundColor: '',
                                 color: '',
                                 paddingLeft:'20px',
-                                textTransform:'capitalize'
+                                textTransform:'capitalize',
+                                "&:active":{
+                                    backgroundColor: 'transparent !important'
+                                },
                             })
                         }}
                         menuPlacement={placement}

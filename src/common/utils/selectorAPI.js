@@ -1,6 +1,12 @@
 //import axios
 import axios from 'axios';
 
+//import component
+import { Avatar } from '@mui/material';
+
+//import image & icon
+import avatarImage from '../../assets/images/profileImage/profile2.png';
+
 //import baseURL
 import {baseURL} from '../../common/utils/baseUrl';
 
@@ -11,6 +17,8 @@ const axiosApi = axios.create({
         "Content-type": "application/json",
     },
 });
+
+const randomColor = ['blueviolet' , 'cadetblue' , 'cornflowerblue' , 'darkcyan' , 'darkorchid' , 'grey' , 'purple']
 
 //selector api
 export async function getSquadsData({token , signal}){
@@ -98,9 +106,69 @@ export async function getQuestionsData(token , signal){
         });
         return options;
     }catch(error){
-        console.log('filed to load questions');
+        // console.log('filed to load questions');
     }
     return options;
 }
 
-//TODO :: getPositionData
+export async function getMemberData({squadId , token , signal}){
+    const options = [];
+    if(!squadId || squadId==='') return options; 
+    try{
+        const response = await axiosApi.get(
+            `/user?skip=0&take=0&search=&level=&status=&positions=&squad=${squadId}`,
+            {
+                signal : signal,
+                headers: {
+                    Authorization : `Bearer ${token}`,
+                }
+            }
+        );
+        response.data.data.forEach(user => {
+            options.push({
+                value: user.id, 
+                name: user.firstName, 
+                label: <Avatar 
+                            alt={user.firstName} 
+                            sx={{ 
+                                width: 30, 
+                                height: 30, 
+                                backgroundColor: randomColor.at((user.id)%7)
+                            }} 
+                        >
+                            {user.firstName?.at(0)}
+                        </Avatar>
+            })
+        });
+        return options;
+    }catch(error){
+        // console.log('filed to load member options')
+    }
+    return options;
+}
+
+export async function getAssignableMember({squadId , token , signal}){
+    const options = [];
+    if(!squadId || squadId==='') return options; 
+    try{
+        const response = await axiosApi.get(
+            `/user?skip=0&take=0&squads=${squadId}&search=&level=&status=&positions=`,
+            {
+                signal : signal,
+                headers: {
+                    Authorization : `Bearer ${token}`,
+                }
+            }
+        );
+        response.data.data?.forEach(user => {
+            options.push({
+                value: user.id, 
+                label: user.firstName + " " + user.lastName
+            });
+        });
+        return options;
+    }catch(error){
+        // console.log('filed to load member options')
+    }
+    return options;
+}

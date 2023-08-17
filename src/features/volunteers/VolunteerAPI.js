@@ -16,7 +16,7 @@ const axiosApi = axios.create({
 //volunteer api
 export async function getVolunteers({search , level , status , position ,squad} , skip , token , signal){
     return axiosApi.get(
-        `/user?skip=${skip}&take=10&search=${search}&level=${level}&status=${status}&positions=${position}&squad=${squad}`,
+        `/user?skip=${skip}&take=10&search=${search}&level=${level}&status=${status}&positions=${position}&squads=${squad}`,
         {
             signal : signal,
             headers: {

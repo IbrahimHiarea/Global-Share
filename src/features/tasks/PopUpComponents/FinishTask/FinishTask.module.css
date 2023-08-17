@@ -1,4 +1,4 @@
-.add-status{
+.finish-task {
   width: 336px;
   height: 200px;
   background: white;
@@ -6,22 +6,22 @@
   padding: 24px;
 }
 
-.add-status-header{
+.finish-task-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 13px;
 }
 
-.add-status h2{
+.finish-task h2 {
   margin: 0;
   padding: 0;
   color: var(--word-color);
   font-size: 16px;
-  font-weight: 700px; 
+  font-weight: 700px;
 }
 
-.add-status form{
+.finish-task form {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -29,12 +29,12 @@
   gap: 5px;
 }
 
-.add-status form div:first-child{
+.finish-task form div:first-child {
   margin: 0;
   width: 100%;
 }
 
-.add-status form div:first-child input{
+.finish-task form div:first-child input {
   margin-top: 0;
   font-size: 12px;
   font-weight: 500;
@@ -42,6 +42,6 @@
   padding: 10px 12px;
 }
 
-.add-status form input:last-child{
+.finish-task form input:last-child {
   padding: 12px 30px;
 }

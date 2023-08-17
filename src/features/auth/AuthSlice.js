@@ -17,7 +17,7 @@ const initialState = {
     error: null,
     isAuthorized: false,
     token: null,
-    info: {},
+    info: {}, // id , name , role , firstName , lastName , email , middleName
 }
 
 // thunks actions
@@ -89,12 +89,16 @@ const authSlice = createSlice({
                 state.status = status.loading;
             })
             .addCase(login.fulfilled , (state , action) => {
-                const {firstName , lastName , role , id} = action.payload.user;
+                const {firstName , lastName , role , id , middleName , email} = action.payload.user;
                 state.token = action.payload.token;
                 state.isAuthorized = true;
                 state.info = {
                     id: id,
                     name: firstName + " " + lastName,
+                    firstName: firstName,
+                    lastName: lastName,
+                    middleName: middleName ? middleName : '',
+                    email: email,
                     role: role,
                 }
                 state.status = status.succeeded;
@@ -108,11 +112,15 @@ const authSlice = createSlice({
                 state.status = status.loading;
             })
             .addCase(checkToken.fulfilled , (state , action) => {
-                const {firstName , lastName , role , id} = action.payload;
+                const {firstName , lastName , role , id , middleName , email} = action.payload;
                 state.info = {
                     id: id,
                     name: firstName + " " + lastName,
                     role: role,
+                    firstName: firstName,
+                    lastName: lastName,
+                    middleName: middleName ? middleName : '',
+                    email: email,
                 };
                 state.isAuthorized = true;
                 state.status = status.succeeded;
