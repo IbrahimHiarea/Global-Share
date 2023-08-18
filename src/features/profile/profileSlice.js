@@ -106,7 +106,7 @@ const profileSlice = createSlice({
             .addCase(fetchProfileDetails.fulfilled , (state , action) => {
                 for(let key of Object.keys(action.payload)){
                     if(action.payload[key]===null)
-                        action.payload[key] = "none";
+                        action.payload[key] = "";
                     if(key==='joinDate') 
                         action.payload[key] = format(new Date(action.payload[key]) , 'yyyy-MM-dd');
                 }

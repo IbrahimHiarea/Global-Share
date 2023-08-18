@@ -30,7 +30,7 @@ export async function fetchProfileDetails(token , signal){
 // TODO::
 // resume file sent
 export async function updateProfileDetails({resume , ...data}, token , signal){
-    return axiosApi.post(
+    return axiosApi.put(
         '/user',
         data,
         {

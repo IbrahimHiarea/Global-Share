@@ -60,10 +60,8 @@ function ProfilePage (){
         );
     }
 
+    
     else{
-        
-        const otherPosition = data.positions.map((position) => {return position.position.name}).join(" • ");
-
         return (
             <div className={style['profile-page']}>
                 <div className={style['profile-header']}>
@@ -72,20 +70,19 @@ function ProfilePage (){
                         <div className={style.image}>
                             <Avatar 
                                 src={profileImage}
-                                alt='Ahmad Alshahal' 
+                                alt='profile photo' 
                                 sx={{
                                     width: '137px', 
                                     height: '137px'
                                 }} 
                             />
                         </div>
-
                         <div className={style['header-info']}>
                             <div className={style['header-name']}>
-                                <h2>{`${data.firstName} ${data.middleName} ${data.lastName}`} <span>• {data.arabicFullName}</span></h2>
+                                <h2>{`${data?.firstName} ${data?.middleName} ${data?.lastName}`} <span>• {data?.arabicFullName}</span></h2>
                                 <VolunteerStatus width="70px" height="24px" volunteerStatus={data.gsStatus} />
                             </div>
-                            <h3>Specialist Android Developer <span>• {data.email}</span></h3>
+                            <h3> {(data?.positions ? data?.positions[0].position.gsLevel + ' ' + data?.positions[0].position.gsName : '')} <span>• {data.email}</span></h3>
                         </div>
 
                         <Button 
@@ -106,7 +103,7 @@ function ProfilePage (){
                             icon={<></>}
                         />
                         <div className={style.log}>
-                            {period.map((item) => (
+                            {period?.map((item) => (
                                 <WorkTimeCard 
                                     key={item}
                                     hours={data.volunteeredHours}
@@ -149,9 +146,11 @@ function ProfilePage (){
                                 title="squads"
                                 info={
                                     <div className={style.squads}>
-                                        <IoIosNuclear size={'30px'}></IoIosNuclear>
-                                        <IoIosNuclear size={'30px'}></IoIosNuclear>
-                                        <IoIosNuclear size={'30px'}></IoIosNuclear>
+                                        {
+                                            data?.positions?.map((position) => {
+                                                return <div className={style.squad}>{position?.position?.squad?.gsName}</div>
+                                            })
+                                        }
                                     </div>
                                 }
                                 isLink={false}
@@ -162,7 +161,7 @@ function ProfilePage (){
                                 info={
                                     <a 
                                         className={style.resume} 
-                                        href="https://drive.google.com/u/0/uc?id=0Bx3C5sQdyet7a2dRZTlQSTFmT3RONmhNalZvX04xOC1pd2tj&export=download&resourcekey=0-DhYYRgMXbNKPUEpAh6ZNeQ" 
+                                        href={data?.cv} 
                                         target="_blank" 
                                         download 
                                         rel="noreferrer"
@@ -176,7 +175,7 @@ function ProfilePage (){
                         </div>
                         <BoxInfo
                             title="other positions"
-                            info={otherPosition}
+                            info={data?.positions?.map((position) => {return position.position.gsLevel + ' ' + position.position.gsName}).join(" • ")}
                             isLink={false}
                             icon={<BsYinYang />}
                         />

@@ -104,6 +104,7 @@
 	font-size: 16px;
 	color: var(--natural-4);
 	line-height: 23px;
+	max-width: 250px;
 }
 
 .log > div{
@@ -165,10 +166,18 @@
 
 }
 
-.squads svg{
-	color: var(--primary-dark);
-	cursor: pointer;
-	margin-right: 10px;
+.squads{
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.squad{
+  padding: 4px 6px;
+  border-radius: 4px;
+  background: #E9ECF5;
+  color: var(--word-color);
+  font-size: 12px;
 }
 
 .resume button{
