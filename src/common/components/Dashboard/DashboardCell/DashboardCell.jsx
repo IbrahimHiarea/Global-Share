@@ -10,6 +10,7 @@ import {statusesData , recruitmentStatusData} from '../../../utils/selectorData'
 
 // import style
 import style from './DashboardCell.module.css';
+import { format } from 'date-fns';
 
 export const HeaderCell = ({title}) => {
     return (
@@ -74,7 +75,15 @@ export const VacancyStatusCell = ({vacancyStatus}) => {
 
 export const ColoredCell = ({value}) => {
     return (
-        <div className={style['colored-cell']} >{value.toString()?.toLowerCase()}</div>
+        <div className={style['colored-cell']} >{value?.toString()?.toLowerCase()}</div>
+    );
+}
+
+export const DateCell = ({date}) => {
+    return (
+        <div className={style['date-cell']}>
+            {format(new Date(date) , 'MMM dd, yyyy')}
+        </div>
     );
 }
 

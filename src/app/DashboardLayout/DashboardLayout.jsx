@@ -11,7 +11,6 @@ import Avatar from '@mui/material/Avatar';
 
 //import icon & image
 import profileImage from '../../assets/images/profileImage/profile2.png';
-import {HiHome} from 'react-icons/hi';
 import {FaTasks} from 'react-icons/fa';
 import {BsBookHalf} from 'react-icons/bs';
 import {HiUserGroup} from 'react-icons/hi'
@@ -21,6 +20,8 @@ import {IoIosArrowForward} from 'react-icons/io';
 import {AiFillAppstore} from "react-icons/ai";
 import {MdWork} from "react-icons/md";
 import {BiSpreadsheet} from 'react-icons/bi';
+import {MdViewTimeline} from 'react-icons/md';
+
 
 //import style
 import style from './DashboardLayout.module.css';
@@ -29,14 +30,14 @@ import clsx from 'clsx';
 //static data
 const drawerList = [
     {
-        title: 'home',
-        path: 'home',
-        icon: <HiHome />
-    },
-    {
         title: 'task management',
         path: 'task',
         icon: <FaTasks />
+    },
+    {
+        title: 'hour Log',
+        path: 'hourLog',
+        icon: <MdViewTimeline />
     },
     {
         title: 'volunteer',

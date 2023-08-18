@@ -3,7 +3,7 @@ import React from 'react';
 
 //import components
 import DataTable from 'react-data-table-component';
-import { ColoredCell, HeaderCell, IdCell, NextArrow, NormalCell, PreviousArrow, RecruitmentStatusCell, StatusCell , VacancyStatusCell } from '../DashboardCell/DashboardCell';
+import { ColoredCell, DateCell, HeaderCell, IdCell, NextArrow, NormalCell, PreviousArrow, RecruitmentStatusCell, StatusCell , VacancyStatusCell } from '../DashboardCell/DashboardCell';
 import Button from '../../Inputs/Button/Button';
 
 // import icon & image
@@ -30,6 +30,7 @@ const formatCell = (value , type) => {
     else if(type==='colored') return <ColoredCell value={value} />;
     else if(type==='recruitmentStatus') return <RecruitmentStatusCell recruitmentStatus={value} />;
     else if(type === 'vacancyStatus')  return <VacancyStatusCell vacancyStatus={value} />
+    else if(type ==='date') return <DateCell date={value}/>
     return value;
 }
 
@@ -61,6 +62,7 @@ function DashboardTable ({
             selector: row => row[col.keys[0]],
             format: (row) => {
                 if(col.keys[0]==='firstName') return formatCell(row.firstName+" "+row.lastName , col.type);
+                if(col.keys[0]==='assignedTo') return formatCell(getProp(row , col.keys)+" "+getProp(row , ['assignedTo' , 'lastName']) , col.type);
                 return formatCell(getProp(row , col.keys) , col.type)
             }
         }

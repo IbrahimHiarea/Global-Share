@@ -13,7 +13,7 @@ import squadReducer from '../features/squads/squadSlice';
 import applicationReducer from '../features/application/ApplicationSlice';
 import vacancyReducer from '../features/vacancies/VacancySlice';
 import questionReducer from '../features/question/questionSlice';
-
+import hourLogReducer from  '../features/hourLog/hourLogSlice';
 
 export const store = configureStore({
 	reducer: {
@@ -28,5 +28,6 @@ export const store = configureStore({
 		application: applicationReducer,
 		question: questionReducer,
 		vacancy: vacancyReducer,
+		hourLog: hourLogReducer,
 	},
 });

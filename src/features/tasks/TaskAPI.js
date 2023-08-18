@@ -15,7 +15,7 @@ const axiosApi = axios.create({
 //task api
 export async function getTasks(skip , token , signal){
     return axiosApi.get(
-        `/task?skip=${skip}&take=10`,
+        `/task?skip=${skip}&take=0&difficulty=&priority=&assignedTo=&search=`,
         {
             signal : signal,
             headers: {

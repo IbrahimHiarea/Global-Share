@@ -20,6 +20,7 @@ import AddVacancy from '../features/vacancies/AddVacancy/AddVacancy';
 import EditVacancy from '../features/vacancies/EditVacancy/EditVacancy';
 import QuestionPage from '../features/question/QuestionPage/QuestionPage';
 import ErrorNotFound from '../app/NotFound/ErrorNotFound';
+import HourLogPage from '../features/hourLog/HourLogPage/HourLogPage';
 
 function AllRoute () {
     return (
@@ -45,6 +46,9 @@ function AllRoute () {
 
                 {/* Task sections */}
                 <Route path='task' element = { <TaskPage /> } />
+
+                {/* Hour Log section */}
+                <Route path='hourLog' element={<HourLogPage />} />
 
                 {/* Volunteers section */}
                 <Route path='volunteer' element={<VolunteerPage />} />
