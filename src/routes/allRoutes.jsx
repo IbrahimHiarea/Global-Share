@@ -21,6 +21,8 @@ import EditVacancy from '../features/vacancies/EditVacancy/EditVacancy';
 import QuestionPage from '../features/question/QuestionPage/QuestionPage';
 import ErrorNotFound from '../app/NotFound/ErrorNotFound';
 import HourLogPage from '../features/hourLog/HourLogPage/HourLogPage';
+import JoinUsPage from '../app/HomePage/JoinUs/JoinUsPage/JoinUsPage';
+import JoinUsForm from '../app/HomePage/JoinUs/JoinUsForm/JoinUsForm'
 
 function AllRoute () {
     return (
@@ -32,6 +34,12 @@ function AllRoute () {
 
             {/* Login page */}
             <Route path='/login' element = { <LoginPage /> } />
+
+            {/* JoinUs page */}
+            <Route path='/joinUs/:vacancyId' element = { <JoinUsPage /> } />
+
+            {/* JoinUs Form page */}
+            <Route path='/apply/:vacancyId' element = { <JoinUsForm /> } />
 
             {/* Dashboard page */}
             <Route path='/dashboard/' element = { <DashboardLayout /> }>

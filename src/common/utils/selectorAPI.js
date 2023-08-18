@@ -88,7 +88,7 @@ export async function getRolesData(token , signal){
     return options;
 }
 
-export async function getQuestionsData(token , signal){
+export async function getQuestionsData({token , signal}){
     const options = [];
     try{
         const response = await axiosApi.get(
@@ -96,7 +96,7 @@ export async function getQuestionsData(token , signal){
             {
                 signal : signal,
                 headers: {
-                    Authorization : `Bearer ${token.token}`,
+                    Authorization : `Bearer ${token}`,
                 }
             }
         ); 
