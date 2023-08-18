@@ -245,11 +245,12 @@
 
 .teams-section{
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
   align-items: center;
   gap: 120px;
   flex-direction: column;
   padding: 30px;
+  overflow-y: auto;
 }
 
 .teams-section h1{
@@ -386,7 +387,7 @@
 /********************************************* Join us Section *********************************************/
 
 .join-us-section{
-  min-height: 100vh;
+  height: 100vh;
   background-color: var(--primary-main);
   display: flex;
   align-items: center;
@@ -405,14 +406,15 @@
 }
 
 .vacancy-bar{
-  width: 100%;
+  width: 1400px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding: 0 20px;
   color: white;
   font-size: 20px;
   font-weight: 700;
+  gap: 50px;
+  overflow-x: auto;
 }
 
 .normal-vacancy,
@@ -431,6 +433,8 @@
 
 .vacancy-options{
   width: 100%;
+  height: calc(100vh - 295px);
+  overflow-y: auto;
   background: var(--background-color);
   padding: 100px 50px;
   display: grid;

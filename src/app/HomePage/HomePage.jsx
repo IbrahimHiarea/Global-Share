@@ -43,7 +43,6 @@ function HomePage (){
     })
 
     const [squadId , setSquadId] = useState(0);
-    const [activeVacancy , setActiveVacancy] = useState('');
     const [isLoading , setIsLoading] = useState(false);
     const [isError , setIsError] = useState(false);
 
@@ -86,7 +85,6 @@ function HomePage (){
             setIsError: {setIsError}
         }).then(squads => {
             setSquads(squads);
-            setActiveVacancy(squads[0]?.name)
         }).catch(() => {
             setIsError(true);
         });
@@ -163,73 +161,77 @@ function HomePage (){
             </div>
             <div className={style['teams-section']} id="teams">
                 <h1>Meet Our Squads</h1>
-                <div className={style.squad}>
-                    {
-                        squads.map((squad,index) => {
-                            return <>
-                                <div 
-                                    className={
-                                        clsx(
-                                            style['normal-bar'] ,
-                                            {[style['active-bar']] : squad.isOpen}
-                                        )
-                                    }
-                                    onClick = {() => {
-                                        const newSquads = [...squads];
-                                        newSquads[index].isOpen = !newSquads[index].isOpen;
-                                        setSquads(newSquads);
-                                    }}
-                                >
-                                    <div className={style['bar-icon']}><IoIosNuclear size="70px" color="white"/></div>
-                                    <div className={style['bar-text']}>
-                                        <div>{squad.gsName}</div>
-                                        <IoIosArrowDown size="40px"/>
-                                    </div>
-                                </div>
-                                <div 
-                                    className={
-                                        clsx(
-                                            style['squad-list'] ,
-                                            {[style['squad-active-list']] : squad.isOpen}
-                                        )
-                                    }
-                                >
-                                    {
-                                        squad?.positions?.map((postion) => {
-                                            return <>
+                <div style={{overflowY: 'auto' , width: "100%"}}>
+                    <div className={style.squad}>
+                        {
+                            squads.map((squad,index) => {
+                                if(squad.positions.length > 0){
+                                    return <>
+                                            <div 
+                                                className={
+                                                    clsx(
+                                                        style['normal-bar'] ,
+                                                        {[style['active-bar']] : squad.isOpen}
+                                                    )
+                                                }
+                                                onClick = {() => {
+                                                    const newSquads = [...squads];
+                                                    newSquads[index].isOpen = !newSquads[index].isOpen;
+                                                    setSquads(newSquads);
+                                                }}
+                                            >
+                                                <div className={style['bar-icon']}><IoIosNuclear size="70px" color="white"/></div>
+                                                <div className={style['bar-text']}>
+                                                    <div>{squad.gsName}</div>
+                                                    <IoIosArrowDown size="40px"/>
+                                                </div>
+                                            </div>
+                                            <div 
+                                                className={
+                                                    clsx(
+                                                        style['squad-list'] ,
+                                                        {[style['squad-active-list']] : squad.isOpen}
+                                                    )
+                                                }
+                                            >
                                                 {
-                                                    postion?.users?.map((user) => {
-                                                        return <div 
-                                                            className={
-                                                                clsx(
-                                                                    style['card'] ,
-                                                                    {[style['active-card']] : squad.isOpen}
-                                                                )
+                                                    squad?.positions?.map((position) => {
+                                                        return <>
+                                                            {
+                                                                position?.users?.map((user) => {
+                                                                    return <div 
+                                                                        className={
+                                                                            clsx(
+                                                                                style['card'] ,
+                                                                                {[style['active-card']] : squad.isOpen}
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        <Avatar 
+                                                                            src={user.imgUrl}
+                                                                            variant="rounded"
+                                                                            alt="User Image"
+                                                                            sx={{
+                                                                                width: '80px', 
+                                                                                height: '80px', 
+                                                                                borderRadius: '12px'
+                                                                            }}
+                                                                        ></Avatar>
+                                                                        <div className={style.name}>{user.user.firstName + user.user.lastName}</div>
+                                                                        <div className={style.position}>{squad.positions.name}</div>
+                                                                    </div>
+                                                                })
                                                             }
-                                                        >
-                                                            <Avatar 
-                                                                src={user.imgUrl}
-                                                                variant="rounded"
-                                                                alt="User Image"
-                                                                sx={{
-                                                                    width: '80px', 
-                                                                    height: '80px', 
-                                                                    borderRadius: '12px'
-                                                                }}
-                                                            ></Avatar>
-                                                            <div className={style.name}>{user.user.firstName + user.user.lastName}</div>
-                                                            <div className={style.position}>{squad.positions.name}</div>
-                                                        </div>
+                                                        </>
                                                     })
                                                 }
-                                            </>
-                                        })
-                                    }
-                                </div>
-                            </>
+                                            </div>
+                                        </>
+                                }
 
-                        })
-                    }
+                            })
+                        }
+                    </div>
                 </div>
                 
             </div>
@@ -242,11 +244,10 @@ function HomePage (){
                                 className={
                                     clsx(
                                         style['normal-vacancy'] ,
-                                        {[style['active-vacancy']] : activeVacancy.toLowerCase() === squad.name.toLowerCase()}
+                                        {[style['active-vacancy']] : index === squadId}
                                     )
                                 }
                                 onClick = {() => {
-                                    setActiveVacancy(squad.name)
                                     setSquadId(index);
                                 }}
                             >
@@ -258,11 +259,13 @@ function HomePage (){
                 <div className={style['vacancy-options']}>
                     {
                         squads[squadId]?.positions?.map((position) => {
-                            return <div className={style['vacancy-option']} onClick={() => {
-                                nav(`/joinUs/${position?.vacancies[0]?.id}`);
-                            }}>
-                                {position.name}
-                            </div>
+                            if(position.vacancies.length > 0  && position.vacancies[0]?.isOpen){
+                                return <div className={style['vacancy-option']} onClick={() => {
+                                    nav(`/joinUs/${position?.vacancies[0]?.id}`);
+                                }}>
+                                    {position.name}
+                                </div>
+                            }
                         })
                     }
                 </div>

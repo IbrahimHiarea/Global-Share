@@ -156,22 +156,25 @@ function ProfilePage (){
                                 isLink={false}
                                 icon={<BsPeople/>}
                             />
-                            <BoxInfo
-                                title="resume"
-                                info={
-                                    <a 
-                                        className={style.resume} 
-                                        href={data?.cv} 
-                                        target="_blank" 
-                                        download 
-                                        rel="noreferrer"
-                                    >
-                                        <Button>Click here to download</Button>
-                                    </a>
-                                }
-                                isLink={false}
-                                icon={<BsPen/>}
-                            />
+                            {
+                                data?.cv !== ''  &&  
+                                <BoxInfo
+                                    title="resume"
+                                    info={
+                                        <a 
+                                            className={style.resume} 
+                                            href={data?.cv} 
+                                            target="_blank" 
+                                            download 
+                                            rel="noreferrer"
+                                        >
+                                            <Button>Click here to download</Button>
+                                        </a>
+                                    }
+                                    isLink={false}
+                                    icon={<BsPen/>}
+                                />
+                            }
                         </div>
                         <BoxInfo
                             title="other positions"
