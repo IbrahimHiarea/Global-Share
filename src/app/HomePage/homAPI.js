@@ -22,7 +22,7 @@ export async function getSquadsData({signal , setIsError}){
                 signal : signal,
             }
         ); 
-        response?.data?.squads?.forEach(squad => {
+        response?.data?.data?.forEach(squad => {
             squads.push({
                 gsName: squad.gsName ,
                 name: squad.name ,
