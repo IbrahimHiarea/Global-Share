@@ -16,8 +16,8 @@ function SelectQuestion ({
         <InputWrapper name={name} label={children} errors={errors} maxWidth={width}>
             <div className={style.checkbox}>
                 {
-                    options?.map((option) => {
-                        return <div className={style.option}>
+                    options?.map((option,index) => {
+                        return <div className={style.option} key={`option${index}`}>
                             <label>{option}</label>
                             <input 
                                 id={option}

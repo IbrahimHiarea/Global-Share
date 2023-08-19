@@ -15,7 +15,7 @@ import {showMessage}from '../../../../features/snackBar/snackBarSlice';
 import SubmitButton from '../../../../common/components/Inputs/SubmitButton/SubmitButton';
 import InputField from '../../../../common/components/Inputs/InputField/InputField';
 import TextAreaField from '../../../../common/components/Inputs/TextAreaField/TextAreaField'
-import SplashScreen from '../../../SplashScreen/SplashScreen';
+import Loader from '../../../../common/components/Loader/Loader';
 import SelectQuestion from '../../../../common/components/Inputs/SelectQuestion/SelectQuestion';
 import FileUpload from '../../../../common/components/Inputs/FileUpload/FileUpload';
 import Error from '../../../../common/components/Error/Error';
@@ -43,7 +43,7 @@ function JoinUsForm (){
         }
     });
 
-    const [isLoading , setIsLoading] = useState(false);
+    const [isLoading , setIsLoading] = useState(true);
     const [isError , setIsError] = useState(false);
     const [questions , setQuestions] = useState([]);
 
@@ -119,7 +119,9 @@ function JoinUsForm (){
 
     if(isLoading){
         return(
-            <SplashScreen></SplashScreen>
+            <div style={{display: 'flex' , alignItems:'center' , justifyContent: 'center' , height: '100vh'}}>
+                <Loader></Loader>
+            </div>
         )
     }
 
@@ -135,7 +137,7 @@ function JoinUsForm (){
     return (
         <div className={style['join-us-form']}>
             <div className={style.header}>
-                <a href="home" onClick={() => nav('/home')}>
+                <a href="home" onClick={() => nav('/')}>
                     <div className={style.logo}>
                         <MainLogo/>
                         <TitleLogo/>
@@ -160,7 +162,7 @@ function JoinUsForm (){
                             Email
                         </InputField>
                     {
-                        questions?.questions?.map((question) => {
+                        questions?.questions?.map((question,index) => {
                             if(question.question.type.toLowerCase() === questionTypeData.checkbox  ||  question.question.type.toLowerCase() === questionTypeData.radio){
                                 return <SelectQuestion
                                             width="320px"
@@ -177,6 +179,7 @@ function JoinUsForm (){
                             }
                             else if(question.question.type.toLowerCase() === questionTypeData.short){
                                 return <InputField
+                                        key={`question${index}`}
                                         width="320px"
                                         height="40px"   
                                         type='text'
@@ -191,6 +194,7 @@ function JoinUsForm (){
                                     </InputField>
                             }else if(question.question.type.toLowerCase() === questionTypeData.long){
                                 return <TextAreaField
+                                        key={`question${index}`}
                                         width="320px"
                                         height="140px"
                                         name={`${question.questionId}`}
@@ -203,6 +207,7 @@ function JoinUsForm (){
                                     </TextAreaField>
                             }else{
                                 return <FileUpload
+                                    key={`question${index}`}
                                     name={`files.${question.questionId}.values`}
                                     file={watch(`files.${question.questionId}.values`)}
                                     setValue={setValue}
