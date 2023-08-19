@@ -22,15 +22,16 @@ export async function getSquadsData({signal , setIsError}){
                 signal : signal,
             }
         ); 
-        response.data.data.forEach(squad => {
+        response?.data?.squads?.forEach(squad => {
             squads.push({
                 gsName: squad.gsName ,
                 name: squad.name ,
                 img: squad.imageUrl,
-                positions: squad.positions.map((position) => {
+                positions: squad?.positions?.map((position) => {
                     return position;
                 }),
-                isOpen: false
+                isOpen: false,
+                hasVacancies: squad.hasVacancies
             });
         });
         return squads;

@@ -21,6 +21,7 @@ import Error from '../../common/components/Error/Error';
 // import icons 
 import {ReactComponent as MainLogo } from '../../assets/icons/mainLogo.svg';
 import {ReactComponent as TitleLogo} from '../../assets/icons/title.svg';
+import {ReactComponent as NoData} from '../../assets/icons/noData.svg';
 import { IoIosNuclear , IoIosArrowDown } from "react-icons/io";
 import { BsFacebook , BsInstagram , BsTwitter , BsLinkedin} from "react-icons/bs";
 
@@ -45,7 +46,7 @@ function HomePage (){
     const [squadId , setSquadId] = useState(0);
     const [isLoading , setIsLoading] = useState(false);
     const [isError , setIsError] = useState(false);
-
+    const [hasVacancies , setHasVacancies] = useState(false);
     const [squads , setSquads] = useState([]);
 
     const handleLogin = () => {
@@ -106,6 +107,7 @@ function HomePage (){
             </div>
         )
     }
+
     return (
         <div className={style.home}>
             <div className={style.header}>
@@ -240,35 +242,45 @@ function HomePage (){
                 <div className={style['vacancy-bar']}>
                     {
                         squads?.map((squad,index) => {
-                            return <div 
-                                className={
-                                    clsx(
-                                        style['normal-vacancy'] ,
-                                        {[style['active-vacancy']] : index === squadId}
-                                    )
-                                }
-                                onClick = {() => {
-                                    setSquadId(index);
-                                }}
-                            >
-                                {squad.name}
-                            </div>
-                        })
-                    }
-                </div>
-                <div className={style['vacancy-options']}>
-                    {
-                        squads[squadId]?.positions?.map((position) => {
-                            if(position.vacancies.length > 0  && position.vacancies[0]?.isOpen){
-                                return <div className={style['vacancy-option']} onClick={() => {
-                                    nav(`/joinUs/${position?.vacancies[0]?.id}`);
-                                }}>
-                                    {position.name}
+                            if(squad.hasVacancies){
+                                setHasVacancies(true);
+                                return <div 
+                                    className={
+                                        clsx(
+                                            style['normal-vacancy'] ,
+                                            {[style['active-vacancy']] : index === squadId}
+                                        )
+                                    }
+                                    onClick = {() => {
+                                        setSquadId(index);
+                                    }}
+                                >
+                                    {squad.name}
                                 </div>
                             }
                         })
                     }
                 </div>
+                {
+                    !hasVacancies  ?
+                    <div className={style['no-vacancies']}>
+                        <NoData/>
+                        <div>No Vacancies</div>
+                    </div> : 
+                    <div className={style['vacancy-options']}>
+                        {
+                            squads[squadId]?.positions?.map((position) => {
+                                if(position.vacancies.length > 0  && position.vacancies[0]?.isOpen){
+                                    return <div className={style['vacancy-option']} onClick={() => {
+                                        nav(`/joinUs/${position?.vacancies[0]?.id}`);
+                                    }}>
+                                        {position.name}
+                                    </div>
+                                }
+                            })
+                        }
+                    </div>
+                }
             </div>
             <div className={style['contact-us-section']} id="contactUs">
                 <div>

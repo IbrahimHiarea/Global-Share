@@ -445,6 +445,26 @@
   row-gap: 20px;
 }
 
+.no-vacancies{
+  width: 100%;
+  height: calc(100vh - 245px);
+  background: var(--background-color);
+  padding: 100px 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--primary-main);
+}
+
+.no-vacancies > svg{
+  width: 300px;
+  height: 300px;
+}
+
 .vacancy-option{
   border-radius: 53px;
   display: flex;
