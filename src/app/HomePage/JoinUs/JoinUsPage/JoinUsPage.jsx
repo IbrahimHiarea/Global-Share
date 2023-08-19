@@ -10,7 +10,7 @@ import { getVacancyByIdData } from '../../homAPI'
 
 // import Components 
 import Button from '../../../../common/components/Inputs/Button/Button'
-import SplashScreen from '../../../SplashScreen/SplashScreen';
+import Loader from '../../../../common/components/Loader/Loader';
 import Error from '../../../../common/components/Error/Error';
 
 // import icons 
@@ -24,7 +24,7 @@ function JoinUsPage (){
     const {vacancyId : id} = useParams();
     const nav = useNavigate();
 
-    const [isLoading , setIsLoading] = useState(false);
+    const [isLoading , setIsLoading] = useState(true);
     const [isError , setIsError] = useState(false);
     const [vacancy , setVacancy] = useState([]);
 
@@ -49,17 +49,12 @@ function JoinUsPage (){
 
     if(isLoading){
         return(
-            <SplashScreen></SplashScreen>
+            <div style={{display: 'flex' , alignItems:'center' , justifyContent: 'center' , height: '100vh'}}>
+                <Loader></Loader>
+            </div>
         )
     }
     
-
-    if(isLoading){
-        return(
-            <SplashScreen></SplashScreen>
-        )
-    }
-
     if(isError){
         return (
             <div className={style['error-page']}>
@@ -71,7 +66,7 @@ function JoinUsPage (){
     return (
         <div className={style['join-us-page']}>
             <div className={style.header}>
-                <a href="home" onClick={() => nav('/home')}>
+                <a href="home" onClick={() => nav('/')}>
                     <div className={style.logo}>
                         <MainLogo/>
                         <TitleLogo/>

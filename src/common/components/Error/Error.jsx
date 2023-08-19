@@ -14,7 +14,7 @@ function Error (){
                 width='250px' 
                 height='250px'
             />
-            <p>Something went wrong!! try again</p> 
+            <p>We're sorry, but an unexpected error occurred. Please refresh the page and try again.</p> 
         </div>  
     );
 }

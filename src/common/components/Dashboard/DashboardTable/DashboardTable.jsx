@@ -111,7 +111,7 @@ const EmptyTable = () => {
     return (
         <div className={style['empty-table']}>
             <NoData width='300px' height='300px'/>
-            <p>no result found :(</p>
+            <p>Unfortunately, your query did not yield any results.</p>
         </div>
     );
 }
