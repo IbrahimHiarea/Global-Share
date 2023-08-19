@@ -3,8 +3,20 @@ import React from 'react';
 
 //import components
 import DataTable from 'react-data-table-component';
-import { ColoredCell, DateCell, HeaderCell, IdCell, NextArrow, NormalCell, PreviousArrow, RecruitmentStatusCell, StatusCell , VacancyStatusCell } from '../DashboardCell/DashboardCell';
+import { 
+    ColoredCell, 
+    DateCell, 
+    HeaderCell, 
+    IdCell, 
+    NextArrow,
+    NormalCell, 
+    PreviousArrow, 
+    RecruitmentStatusCell, 
+    StatusCell, 
+    VacancyStatusCell 
+} from '../DashboardCell/DashboardCell';
 import Button from '../../Inputs/Button/Button';
+import { CircularProgress } from '@mui/material';
 
 // import icon & image
 import { BsTrash } from "react-icons/bs";
@@ -13,7 +25,6 @@ import {ReactComponent as NoData} from '../../../../assets/icons/noData.svg';
 
 // import style
 import style from './DashboardTable.module.css';
-import { CircularProgress } from '@mui/material';
 
 function getProp(object , keys){
     let value = object;
@@ -88,11 +99,7 @@ function DashboardTable ({
             progressPending={pending}
             progressComponent={<ProgressTable />}
             pagination
-            paginationComponentOptions={
-                {
-                    noRowsPerPage: true,
-                }
-            }
+            paginationComponentOptions={{ noRowsPerPage: true }}
             paginationPerPage={10}
             paginationIconFirstPage={null}
             paginationIconLastPage={null}
@@ -122,9 +129,7 @@ const ProgressTable = () => {
             <CircularProgress
                 size='35px' 
                 thickness={2} 
-                sx={{
-                    color: 'var(--primary-main)',
-                }}
+                sx={{ color: 'var(--primary-main)' }}
             />
         </div>
     );

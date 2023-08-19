@@ -16,7 +16,6 @@ import { showMessage } from '../../snackBar/snackBarSlice';
 
 //import components
 import DashboardTable from '../../../common/components/Dashboard/DashboardTable/DashboardTable';
-import Error from '../../../common/components/Error/Error';
 import PopUp from '../../../common/components/PopUp/PopUp';
 import DeleteEmail from '../PopUpComponents/DeleteEmail/DeleteEmail';
 import EmailFilterBar from '../EmailFilterBar/EmailFilterBar';
@@ -120,7 +119,6 @@ function EmailPage() {
                 await dispatch(getEmails({search: ''})).unwrap();
             }catch(error){
                 if(error?.name==="ConditionError") return;
-                console.log(error);
                 dispatch(showMessage({message: error , severity: 2}));
             }
         }

@@ -18,7 +18,7 @@ import TextAreaField from '../../../common/components/Inputs/TextAreaField/TextA
 import { Avatar } from '@mui/material';
 
 //import icon & image
-import profileImage from '../../../assets/images/profileImage/profile.png';
+import profileImage from '../../../assets/images/profile.png';
 
 //import style
 import style from './EditProfile.module.css';

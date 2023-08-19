@@ -18,7 +18,7 @@ function DifficultyBox({difficulty , width , height}){
             )}
             style={{width , height}}
         >
-            {difficulty.toLowerCase()}
+            {difficulty?.toLowerCase()}
         </div>
     )
 }

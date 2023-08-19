@@ -13,9 +13,13 @@ import SelectInputField from "../../../../common/components/Inputs/SelectInputFi
 import SubmitButton from '../../../../common/components/Inputs/SubmitButton/SubmitButton';
 import Loader from '../../../../common/components/Loader/Loader';
 import FileUpload from '../../../../common/components/Inputs/FileUpload/FileUpload';
+import AsyncSelectInputField from '../../../../common/components/Inputs/AsyncSelectInputField/AsyncSelectInputField';
 
 // import icons
 import { IoCloseOutline } from "react-icons/io5";
+
+//import static data request
+import {getSquadsData} from '../../../../common/utils/selectorAPI';
 
 //import static data
 import {levelData} from '../../../../common/utils/selectorData'
@@ -41,7 +45,14 @@ function AddPosition({handleClose}) {
     const onSubmit = async (values) => {
         try{
             setIsLoading(true);
-            await dispatch(createPosition({...values , gsLevel: values.gsLevel?.value , squadId: values.squadId?.value})).unwrap();
+            await dispatch(createPosition({
+                name: values.name,
+                gsName: values.gsName,
+                gsLevel: values.gsLevel?.value?.toUpperCase(),
+                weeklyHours: parseInt(values.weeklyHours),
+                squadId: values.squadId?.value,
+                jobDescription: values.jobDescription
+            })).unwrap();
             dispatch(showMessage({message: 'Position Added successfully' , severity: 1}));
             handleClose();
         }catch(error){
@@ -77,9 +88,7 @@ function AddPosition({handleClose}) {
                         placeholder='Name'
                         width='200px'
                         height='40px'
-                        control={register('name' , {
-                            required: 'Please Enter the Name',
-                        })}
+                        control={register('name' , { required: 'Please Enter the Name' })}
                         errors={errors}
                     />
                     <InputField 
@@ -88,9 +97,7 @@ function AddPosition({handleClose}) {
                         placeholder='Gs Name'
                         width='200px'
                         height='40px'
-                        control={register('gsName' , {
-                            required: 'Please Enter The Gs Name',
-                        })}
+                        control={register('gsName' , { required: 'Please Enter The Gs Name' })}
                         errors={errors}
                     />
                 </div>
@@ -136,17 +143,18 @@ function AddPosition({handleClose}) {
                 />
                 <div className={style.buttons}>
                     <div className={style.squad}>
-                        <SelectInputField
+                        <AsyncSelectInputField
                             width='200px'
                             height='40px'
                             name='squadId'
                             placeholder='squad'
-                            options={Object.values(levelData)}
+                            defaultOptions={[]}
                             control={control}
                             required={'enter the squad'}
                             errors={errors}
                             border={true}
                             placement='top'
+                            callBack={(data) => getSquadsData(data)}
                         />
                     </div>
                     <SubmitButton 

@@ -14,6 +14,7 @@ function ErrorNotFound (){
                 width='500px' 
                 height='500px'
             />
+            <p>this page is not found</p>
         </div>  
     );
 }

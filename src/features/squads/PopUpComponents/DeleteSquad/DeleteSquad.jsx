@@ -4,6 +4,7 @@ import React , {useState} from 'react';
 //import redux
 import { useDispatch } from 'react-redux';
 import { deleteSquad } from '../../squadSlice';
+import { showMessage } from '../../../snackBar/snackBarSlice';
 
 //import components
 import ConfirmPopUp from '../../../../common/components/ConfirmPopUp/ConfirmPopUp';
@@ -11,7 +12,6 @@ import Loader from '../../../../common/components/Loader/Loader';
 
 // import style
 import style from './DeleteSquad.module.css';
-import { showMessage } from '../../../snackBar/snackBarSlice';
 
 function DeleteSquad({id , handleClose}){
     const dispatch = useDispatch();
@@ -19,8 +19,8 @@ function DeleteSquad({id , handleClose}){
 
     const setIsConfirmed = async (value) => {
         if(value===true){
-            setIsLoading(true);
             try{
+                setIsLoading(true);
                 await dispatch(deleteSquad({id})).unwrap();
                 dispatch(showMessage({message: 'Squad deleted successfully' , severity: 1}));
             }catch(error){

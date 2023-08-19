@@ -18,7 +18,7 @@ function PriorityBox({priority , width , height}){
             )}
             style={{width , height}}
         >
-            {priority.toLowerCase()}
+            {priority?.toLowerCase()}
         </div>
     )
 }

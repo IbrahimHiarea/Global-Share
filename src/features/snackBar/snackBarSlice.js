@@ -14,7 +14,6 @@ const initialState = {
     isOpen: false,
 }
 
-
 const snackBarSlice = createSlice({
     name: 'snackbar',
     initialState,
@@ -25,7 +24,7 @@ const snackBarSlice = createSlice({
             state.message = message;
             state.severity = Object.values(snackBarStatus)[severity-1];
         },
-        hideMessage: (state , action) => {
+        hideMessage: (state , _) => {
             state.isOpen = false;
         }
     }

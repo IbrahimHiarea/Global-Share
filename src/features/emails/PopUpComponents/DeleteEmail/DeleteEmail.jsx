@@ -14,14 +14,13 @@ import Loader from '../../../../common/components/Loader/Loader';
 import style from './DeleteEmail.module.css'
 
 function DeleteEmail({id , handleClose}) {
-
     const dispatch = useDispatch();
     const [isLoading , setIsLoading] = useState(false);
 
     const setIsConfirmed = async (value) => {
         if(value===true){
-            setIsLoading(true);
             try{
+                setIsLoading(true);
                 await dispatch(deleteEmail({id})).unwrap();
                 dispatch(showMessage({message: 'Email deleted successfully' , severity: 1}));
             }catch(error){

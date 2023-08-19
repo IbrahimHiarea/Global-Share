@@ -38,11 +38,9 @@ export async function getQuestionById(id , token , signal){
 }
 
 export async function createQuestion({text , type , options} , token , signal){
-    const newType = type.toUpperCase();
-    const newOptions = options.map(option => option.value);
     return axiosApi.post(
         '/question',
-        {text , 'type':newType , 'options': newOptions},
+        {text , type , options},
         {
             signal : signal,
             headers: {
@@ -53,16 +51,9 @@ export async function createQuestion({text , type , options} , token , signal){
 }
 
 export async function updateQuestion(id , values , token , signal){
-    const newValues = {};
-    for(let key of Object.keys(values)){
-        if(key==='type') newValues[key] = values[key].toUpperCase();
-        else if(key==='options') newValues[key] = values?.options?.map(option => option.value);
-        else newValues[key] = values[key];
-    }
-    
     return axiosApi.put(
         `/question/${id}`,
-        newValues,
+        values,
         {
             signal : signal,
             headers: {

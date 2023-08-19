@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import {createEmail} from '../../EmailSlice';
 import { showMessage } from '../../../snackBar/snackBarSlice';
-import {getAllUsersData} from '../../../../common/utils/selectorAPI'
 
 // import components 
 import InputField from '../../../../common/components/Inputs/InputField/InputField';
@@ -18,6 +17,9 @@ import AsyncSelectInputField from '../../../../common/components/Inputs/AsyncSel
 
 // import icons
 import { IoCloseOutline } from "react-icons/io5";
+
+//import static data request
+import {getUsersEmail} from '../../../../common/utils/selectorAPI'
 
 //import static data
 import {recruitmentStatusData} from '../../../../common/utils/selectorData'
@@ -31,8 +33,8 @@ function AddEmail({handleClose}) {
         defaultValues:{
             title : '',
             body: '',
-            recruitmentStatus : '',
-            cc : '',
+            recruitmentStatus : null,
+            cc : [],
         }
     })
 
@@ -41,7 +43,12 @@ function AddEmail({handleClose}) {
     const onSubmit = async (values) => {
         try{
             setIsLoading(true);
-            await dispatch(createEmail(values)).unwrap();
+            await dispatch(createEmail({
+                title: values.title,
+                body: values.body,
+                recruitmentStatus: values.recruitmentStatus?.value?.toUpperCase(),
+                cc: values.cc?.map(email => email?.value)?.join(',')
+            })).unwrap();
             dispatch(showMessage({message: 'Email Added successfully' , severity: 1}));
             handleClose();
         }catch(error){
@@ -91,9 +98,10 @@ function AddEmail({handleClose}) {
                         defaultOptions={[]}
                         control={control}
                         required={'enter the CC'}
-                        errors={{[`cc.value`]: errors.cc?.value}}
+                        errors={errors}
                         border={true}
-                        callBack={(data) => getAllUsersData({...data})}
+                        isMulti={true}
+                        callBack={(data) => getUsersEmail({...data})}
                     />
                     <InputField 
                         type='text'
@@ -101,9 +109,7 @@ function AddEmail({handleClose}) {
                         name='title'
                         width='300px'
                         height='40px'  
-                        control={register('title' , {
-                            required: 'Please enter the title',
-                        })}
+                        control={register('title' , { required: 'Please enter the title' })}
                         errors={errors}
                     />
                     <TextAreaField
@@ -111,13 +117,11 @@ function AddEmail({handleClose}) {
                         name='body'
                         width='518px'
                         height='154px'  
-                        control={register('body' , {
-                            required: 'Please enter the body'
-                        })}
+                        control={register('body' , { required: 'Please enter the body' })}
                         errors={errors}
                     />
+                    <p>Hint: Insert [SQUAD], [POSITION], [ORCH_APPOINTLET], or [HR_APPOINTLET] for dynamic emails.</p>
                 </div>
-                
                 <div className={style.buttons}>
                     <SubmitButton 
                         width='157px' 

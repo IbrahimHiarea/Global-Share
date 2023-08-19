@@ -4,9 +4,6 @@ import axios from 'axios';
 //import component
 import { Avatar } from '@mui/material';
 
-//import image & icon
-import avatarImage from '../../assets/images/profileImage/profile2.png';
-
 //import baseURL
 import {baseURL} from '../../common/utils/baseUrl';
 
@@ -21,6 +18,8 @@ const axiosApi = axios.create({
 const randomColor = ['blueviolet' , 'cadetblue' , 'cornflowerblue' , 'darkcyan' , 'darkorchid' , 'grey' , 'purple']
 
 //selector api
+
+//to get all the squad in system
 export async function getSquadsData({token , signal}){
     const options = [];
     try{
@@ -43,6 +42,7 @@ export async function getSquadsData({token , signal}){
     return options;
 }
 
+//to get all the position in a particular squad
 export async function getPositionDataBySquad({squadId , token , signal}){ 
     const options = [];
     if(!squadId || squadId==='') return options; 
@@ -66,7 +66,8 @@ export async function getPositionDataBySquad({squadId , token , signal}){
     return options;
 }
 
-export async function getRolesData(token , signal){
+//to get all the roles in system
+export async function getRolesData({token , signal}){
     const options = [];
     try{
         const response = await axiosApi.get(
@@ -78,9 +79,9 @@ export async function getRolesData(token , signal){
                 }
             }
         ); 
-        // response.data.data.forEach(squad => {
-        //     options.push({value: squad.id , label: squad.gsName});
-        // });
+        response.data.forEach(role => {
+            options.push({value: role.id , label: role.name});
+        });
         return options;
     }catch(error){
         // console.log('filed to load role option');
@@ -88,7 +89,8 @@ export async function getRolesData(token , signal){
     return options;
 }
 
-export async function getQuestionsData(token , signal){
+//to get all the question in system
+export async function getQuestionsData({token , signal}){
     const options = [];
     try{
         const response = await axiosApi.get(
@@ -101,7 +103,10 @@ export async function getQuestionsData(token , signal){
             }
         ); 
         response.data.data.forEach(question => {
-            options.push({value: question.id , label: question.text.toLowerCase() + ' - ' + question.type.toLowerCase()});
+            options.push({
+                value: question.id, 
+                label: question.text?.toLowerCase() + ' - ' + question.type?.toLowerCase()
+            });
         });
         return options;
     }catch(error){
@@ -110,12 +115,13 @@ export async function getQuestionsData(token , signal){
     return options;
 }
 
+//to get all the member in particular squad
 export async function getMemberData({squadId , token , signal}){
     const options = [];
     if(!squadId || squadId==='') return options; 
     try{
         const response = await axiosApi.get(
-            `/user?skip=0&take=0&search=&level=&status=&positions=&squad=${squadId}`,
+            `/user?skip=0&take=0&search=&level=&status=&positions=&squads=${squadId}`,
             {
                 signal : signal,
                 headers: {
@@ -146,11 +152,12 @@ export async function getMemberData({squadId , token , signal}){
     return options;
 }
 
-export async function getAllUsersData({token , signal}){
+//to get all the users email in system
+export async function getUsersEmail({token , signal}){
     const options = [];
     try{
         const response = await axiosApi.get(
-            `/user?skip=0&take=0&search=`,
+            `/user?skip=0&take=0&search=&level=&status=&positions=&squads=`,
             {
                 signal : signal,
                 headers: {
@@ -167,6 +174,8 @@ export async function getAllUsersData({token , signal}){
     }
     return options;
 }
+
+//to get all the member in squad that we can assign task to them
 export async function getAssignableMember({squadId , token , signal}){
     const options = [];
     if(!squadId || squadId==='') return options; 

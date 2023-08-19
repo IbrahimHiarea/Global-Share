@@ -1,5 +1,5 @@
 //import react
-import React, { useEffect, useReducer , useState} from 'react';
+import React, { useEffect , useState} from 'react';
 
 //import redux
 import { useDispatch , useSelector } from 'react-redux';
@@ -57,7 +57,7 @@ function HourLogPage () {
     const status = useSelector(selectHourLogStatus);
     const totalCount = useSelector(selectHourLogTotalCount);
     const resetTable = useSelector(selectHourLogResetTable);
-    const hourLogCount = useSelector(selectHourLogCount)
+    const hourLogCount = useSelector(selectHourLogCount);
 
     const onChangePage = async (page , _) => {
         const skip = (page-1)*10;

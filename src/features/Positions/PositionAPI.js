@@ -39,35 +39,40 @@ export async function getPositionById(id , token , signal){
 }
 
 export async function createPosition({name , gsName , weeklyHours , gsLevel , squadId , jobDescription} , token , signal){
-    //send job file
-    squadId = 11;
+    const formData = new FormData();
+    formData.append('name' , name);
+    formData.append('gsName' , gsName);
+    formData.append('gsLevel' , gsLevel);
+    formData.append('weeklyHours' , weeklyHours);
+    formData.append('squadId' , squadId);
+    formData.append('jobDescription' , jobDescription);
+
     return axiosApi.post(
         '/position',
-        {
-            name, 
-            gsName, 
-            weeklyHours: parseInt(weeklyHours), 
-            gsLevel: gsLevel?.toUpperCase(),
-            squadId,
-        },
+        formData,
         {
             signal : signal,
             headers: {
                 Authorization : `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data'
             }
         }
     );
 }
 
 export async function updatePosition(id, values , token , signal){
-    //check for send file job
+    const formData = new FormData();
+    for(let key of Object.keys(values)){
+        formData.append(key , values[key]);
+    }
     return axiosApi.put(
         `/position/${id}`,
-        values,
+        formData,
         {
             signal : signal,
             headers: {
                 Authorization : `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data'
             }
         }
     )

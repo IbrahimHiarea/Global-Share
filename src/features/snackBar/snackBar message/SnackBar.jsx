@@ -20,7 +20,7 @@ function SnackBar (){
     const dispatch = useDispatch();
     const {isOpen , message , severity} = useSelector(selectAllSnackbar);
 
-    const handleClose = (event, reason) => {
+    const handleClose = (_, reason) => {
         if (reason === 'clickaway') {
             return;
         }

@@ -13,11 +13,11 @@ import Button from '../../../common/components/Inputs/Button/Button'
 import VolunteerStatus from '../../../common/components/StatusBoxes/VolunteerStatus/VolunteerStatus'
 import { Avatar } from '@mui/material';
 
-//import icon
+//import icon & image
 import { HiOutlineMail } from "react-icons/hi";
 import { IoIosNuclear } from "react-icons/io";
 import { BsSend , BsTelephone , BsGift , BsPeople , BsPen , BsYinYang } from "react-icons/bs";
-import profileImage from '../../../assets/images/profileImage/profile.png';
+import profileImage from '../../../assets/images/profile.png';
 
 //import utils
 import { format } from 'date-fns';

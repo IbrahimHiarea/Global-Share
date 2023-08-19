@@ -13,14 +13,13 @@ const axiosApi = axios.create({
 });
 
 //auth api
-export async function loginRequest({username: email , password} , signal){
+export async function loginRequest({email , password} , signal){
     return axiosApi.post( 
         '/auth/login', 
         { email , password }, 
         {signal: signal}
     );
 }
-
 
 export async function checkToken(token , signal){
     return axiosApi.get(

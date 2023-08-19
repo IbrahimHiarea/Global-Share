@@ -50,18 +50,18 @@ export const getSquads = createAsyncThunk(
         } catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
     },
     {
         condition: (data, {getState}) => {
-            const { squad : {searchTerms , status} } = getState()
-            if (status === status.loading || searchTerms.search===data.search) {
+            const { squad : {searchTerms , status : squadStatus} } = getState()
+            if (squadStatus === status.loading || searchTerms.search===data.search) {
                 return false;
             }
         },
@@ -78,10 +78,10 @@ export const getSquadsPage = createAsyncThunk(
         }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -98,10 +98,10 @@ export const createSquad = createAsyncThunk(
         }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -119,10 +119,10 @@ export const updateSquad = createAsyncThunk(
         }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -139,10 +139,10 @@ export const deleteSquad = createAsyncThunk(
         }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -190,11 +190,16 @@ const squadSlice = createSlice({
                 state.error = action.payload;
                 state.status = status.failed;
             })
+            .addCase(createSquad.fulfilled , (state , action) => {
+                squadAdapter.upsertOne(state , action.payload);
+                state.totalCount++;
+            })
             .addCase(updateSquad.fulfilled , (state , action) => {
                 squadAdapter.upsertOne(state , action.payload);
             })
             .addCase(deleteSquad.fulfilled , (state , action) =>{
                 squadAdapter.removeOne(state , action.payload);
+                state.totalCount--;
             })
     }
 });

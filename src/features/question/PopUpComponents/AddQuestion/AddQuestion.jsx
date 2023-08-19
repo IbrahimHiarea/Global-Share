@@ -51,7 +51,11 @@ function AddQuestion({handleClose}){
         }
         try{
             setIsLoading(true);
-            await dispatch(createQuestion({...values , type: values.type.value})).unwrap();
+            await dispatch(createQuestion({
+                text: values.text,
+                type: values.type?.value?.toUpperCase(),
+                options: values.options.map(option => option.value)
+            })).unwrap();
             dispatch(showMessage({message: 'Question Added successfully' , severity: 1}));
             handleClose();
         }catch(error){
@@ -61,7 +65,8 @@ function AddQuestion({handleClose}){
     }
 
     useEffect(() => {
-        if(watch('type')?.value!==questionTypeData.checkbox && watch('type')?.value!==questionTypeData.radio){
+        if(watch('type')?.value!==questionTypeData.checkbox 
+                && watch('type')?.value!==questionTypeData.radio){
             removeOption();
         }
     } , [watch('type')]);
@@ -94,9 +99,7 @@ function AddQuestion({handleClose}){
                         name='text'
                         width='390px'
                         height='75px'  
-                        control={register('text' , {
-                            required: 'Please enter the question'
-                        })}
+                        control={register('text' , { required: 'Please enter the question' })}
                         errors={errors}
                     />
                     <SelectInputField

@@ -43,18 +43,18 @@ export const getPositions = createAsyncThunk(
         } catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
     },
     {
         condition: (data, {getState}) => {
-            const { position : {searchTerms , status} } = getState()
-            if (status === status.loading || (searchTerms.search===data.search
+            const { position : {searchTerms , status: positionStatus} } = getState()
+            if (positionStatus === status.loading || (searchTerms.search===data.search
                 && searchTerms.squad===data.squad && searchTerms.level===data.level)) {
                 return false;
             }
@@ -72,10 +72,10 @@ export const getPositionPage = createAsyncThunk(
         }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -92,10 +92,10 @@ export const createPosition = createAsyncThunk(
         }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -113,10 +113,10 @@ export const updatePosition = createAsyncThunk(
         }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -133,10 +133,10 @@ export const deletePosition = createAsyncThunk(
         }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -186,11 +186,16 @@ const positionSlice = createSlice({
                 state.error = action.payload;
                 state.status = status.failed;
             })
+            .addCase(createPosition.fulfilled , (state , action) => {
+                positionAdapter.upsertOne(state , action.payload);
+                state.totalCount++;
+            })
             .addCase(updatePosition.fulfilled , (state , action) => {
                 positionAdapter.upsertOne(state , action.payload);
             })
             .addCase(deletePosition.fulfilled , (state , action) => {
                 positionAdapter.removeOne(state , action.payload);
+                state.totalCount--;
             })
     }
 })

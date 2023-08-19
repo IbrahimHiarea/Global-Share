@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form';
 import { useSelector , useDispatch} from 'react-redux';
 import {selectEmailById , updateEmail} from '../../EmailSlice';
 import { showMessage } from '../../../snackBar/snackBarSlice';
-import {getAllUsersData} from '../../../../common/utils/selectorAPI'
 
 // import components 
 import InputField from '../../../../common/components/Inputs/InputField/InputField';
@@ -19,6 +18,9 @@ import AsyncSelectInputField from '../../../../common/components/Inputs/AsyncSel
 // import icons
 import { IoCloseOutline } from "react-icons/io5";
 
+//import static data request
+import {getUsersEmail} from '../../../../common/utils/selectorAPI'
+
 //import static data
 import {recruitmentStatusData} from '../../../../common/utils/selectorData'
 
@@ -28,18 +30,18 @@ import style from './EditEmail.module.css';
 function EditEmail({id , handleClose}) {
     const data = useSelector((state) => selectEmailById(state , id));
     const dispatch = useDispatch();
-    const {control , register , formState: {errors , isDirty , dirtyFields} , handleSubmit} = useForm({
+    const {control , register , formState: {errors , isDirty , dirtyFields} , handleSubmit , getValues} = useForm({
         defaultValues:{
-            title: data.title , 
-            body: data.body , 
-            recruitmentStatus: {label: data.recruitmentStatus , value: data.recruitmentStatus} , 
-            cc: data?.cc ? {value: data?.cc , label: data?.cc} : ''
+            title: '' , 
+            body: '', 
+            recruitmentStatus: null, 
+            cc: [],
         },
         values: {
-            title: data.title , 
-            body: data.body , 
-            recruitmentStatus: {label: data.recruitmentStatus , value: data.recruitmentStatus} , 
-            cc: data?.cc ? {value: data?.cc , label: data?.cc} : ''
+            title: data.title, 
+            body: data.body, 
+            recruitmentStatus: {label: data.recruitmentStatus?.toLowerCase() , value: data.recruitmentStatus?.toLowerCase()} , 
+            cc: data.cc?.split(',')?.map(email => ({value: email , label: email}))
         }
     })
 
@@ -49,8 +51,15 @@ function EditEmail({id , handleClose}) {
         setIsLoading(true);
         if(isDirty){
             const changed = {};
-            for(let key of Object.keys(values)){
-                changed[key] = values[key];
+            for(let key of Object.keys(dirtyFields)){
+                if(dirtyFields[key]){
+                    if(key==='recruitmentStatus')
+                        changed[key] = values[key].value?.toUpperCase();
+                    else if(key==='cc')
+                        changed[key] = values[key]?.map(email => email?.value)?.join(',')
+                    else 
+                        changed[key] = values[key];
+                }
             }
             try{
                 await dispatch(updateEmail({id , ...changed})).unwrap();
@@ -104,9 +113,10 @@ function EditEmail({id , handleClose}) {
                         defaultOptions={[]}
                         control={control}
                         required={'enter the CC'}
-                        errors={{[`cc.value`]: errors.cc?.value}}
+                        errors={errors}
                         border={true}
-                        callBack={(data) => getAllUsersData({...data})}
+                        isMulti={true}
+                        callBack={(data) => getUsersEmail({...data})}
                     />
                     <InputField 
                         type='text'
@@ -114,9 +124,7 @@ function EditEmail({id , handleClose}) {
                         name='title'
                         width='300px'
                         height='40px'  
-                        control={register('title' , {
-                            required: 'Please enter the title',
-                        })}
+                        control={register('title' , { required: 'Please enter the title' })}
                         errors={errors}
                     />
                     <TextAreaField
@@ -124,13 +132,11 @@ function EditEmail({id , handleClose}) {
                         name='body'
                         width='518px'
                         height='154px'  
-                        control={register('body' , {
-                            required: 'Please enter the body'
-                        })}
+                        control={register('body' , { required: 'Please enter the body' })}
                         errors={errors}
                     />
+                    <p>Hint: Insert [SQUAD], [POSITION], [ORCH_APPOINTLET], or [HR_APPOINTLET] for dynamic emails.</p>
                 </div>
-                
                 <div className={style.buttons}>
                     <SubmitButton 
                         width='157px' 

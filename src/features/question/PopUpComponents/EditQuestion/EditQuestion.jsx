@@ -41,11 +41,6 @@ function EditQuestion({id , handleClose}){
             type: {value: data?.type?.toLowerCase() , label: data?.type?.toLowerCase()},
             options: data?.options ? data?.options?.map(item => ({value: item})) : [],
         },
-        values: {
-            text: data.text, 
-            type: {value: data?.type?.toLowerCase() , label: data?.type?.toLowerCase()},
-            options: data?.options ? data?.options?.map(item => ({value: item})) : [],
-        }
     });
 
     const {
@@ -69,7 +64,8 @@ function EditQuestion({id , handleClose}){
             const changed = {};
             for(let key of Object.keys(dirtyFields)){
                 if(dirtyFields[key]){
-                    if(key==='type') changed[key] = values[key].value;
+                    if(key==='type') changed[key] = values[key].value?.toUpperCase();
+                    else if(key==='options') changed[key] = values[key]?.map(option => option.value);
                     else changed[key] = values[key];
                 }
             }
@@ -82,8 +78,6 @@ function EditQuestion({id , handleClose}){
                 setIsLoading(false);
             }
         }
-        //TODO:: 
-        // dispatch add action to redux
     }
 
     useEffect(() => {
@@ -120,9 +114,7 @@ function EditQuestion({id , handleClose}){
                         name='text'
                         width='390px'
                         height='75px'  
-                        control={register('text' , {
-                            required: 'Please enter the question'
-                        })}
+                        control={register('text' , { required: 'Please enter the question' })}
                         errors={errors}
                     />
                     <SelectInputField

@@ -38,7 +38,7 @@ const columns = [
     },
     {
         name: 'squad',
-        keys: ['positions' , '0' , 'position' , 'squadId'],
+        keys: ['positions' , '0' , 'position' , 'squad' , 'gsName'],
         type: 'normal'
     },
     {
@@ -129,7 +129,13 @@ function VolunteerPage(){
     useEffect(() => {
         const req = async () => {
             try{
-                await dispatch(getVolunteers({search:'' , level: '' ,status: '' , position: '' , squad: ''})).unwrap();
+                await dispatch(getVolunteers({
+                    search:'', 
+                    level: '',
+                    status: '', 
+                    position: '', 
+                    squad: ''
+                })).unwrap();
             }catch(error){
                 if(error?.name==="ConditionError") return;
                 dispatch(showMessage({message: error , severity: 2}));
@@ -149,7 +155,7 @@ function VolunteerPage(){
                 columns={columns}
                 data={data.slice(curSkip , curSkip+10)}
                 pending={status==='loading' || status==='idle' ? true : false}
-                rowClick={(row) => {console.log(row)}}
+                rowClick={(row) => {}}
                 handleDelete={(row) => popUpDispatch({type:'delete' , id: row.id})}
                 handleEdit={(row) => popUpDispatch({type:'edit' , id: row.id})}
                 onChangePage={onChangePage}

@@ -37,9 +37,9 @@ function EditVolunteer({id , handleClose}) {
             positions: data?.positions?.map(
                     element => ({
                             position: {value: element.position.id , label: element.position.name}, 
-                            squad:{value: element.position.squadId , label: element.position.squadId} //gsName
+                            squad:{value: element.position.squadId , label: element.position.squad.gsName} //gsName
                         })),
-            roleId: {value: data?.roleId , label: data?.roleId}
+            roleId: {value: data.roleId , label: data.roleId},
         },
     });
 
@@ -69,6 +69,8 @@ function EditVolunteer({id , handleClose}) {
             const changed = {};
             for(let key of Object.keys(dirtyFields)){
                 if(dirtyFields[key]){
+                    if(key==='positions') changed[key] = values.positions.map(item => ({positionId: item.position.id}))
+                    if(key==='roleId') changed[key] = values.roleId?.value;
                     changed[key] = values[key];
                 }
             }
@@ -110,9 +112,7 @@ function EditVolunteer({id , handleClose}) {
                         placeholder='First Name'
                         width='200px'
                         height='40px'
-                        control={register('firstName' , {
-                            required: 'Please Enter The First Name',
-                        })}
+                        control={register('firstName' , { required: 'Please Enter The First Name' })}
                         errors={errors}
                     />
                     <InputField 
@@ -121,9 +121,7 @@ function EditVolunteer({id , handleClose}) {
                         placeholder='Last Name'
                         width='200px'
                         height='40px'
-                        control={register('lastName' , {
-                            required: 'Please Enter The Last Name',
-                        })}
+                        control={register('lastName' , { required: 'Please Enter The Last Name' })}
                         errors={errors}
                     />
                 </div>
@@ -165,7 +163,7 @@ function EditVolunteer({id , handleClose}) {
                         errors={errors}
                         border={true}
                         menuHeight={150}
-                        callBack={(data) => getRolesData({...data})}
+                        callBack={(data) => getRolesData(data)}
                     />
                 </div>
                 <div className={style.break}></div>
@@ -210,6 +208,17 @@ function EditVolunteer({id , handleClose}) {
                     }
                 </div>
                 <div className={style.buttons}>
+                    <Button 
+                        backgroundColor="var(--secondary-dark)" 
+                        width="202px" 
+                        height="40px" 
+                        onClick={(e) => {
+                            e.preventDefault();
+                            appendPosition({position: '', squad: '' })
+                        }}
+                    >
+                        Add Another Position
+                    </Button>
                     <SubmitButton 
                         width='157px' 
                         height='40px'
@@ -219,11 +228,6 @@ function EditVolunteer({id , handleClose}) {
                     </SubmitButton>
                 </div>
             </form>
-            <div className={style["add-button"]}>
-                <Button backgroundColor="var(--secondary-dark)" width="202px" height="40px" onClick={() => appendPosition({position: '', squad: '' })}>
-                    Add Another Position
-                </Button>
-            </div>
         </div>
     );
 }

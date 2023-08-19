@@ -22,7 +22,7 @@ import style from './LoginPage.module.css';
 function LoginPage (){
     const {register , formState: {errors} , handleSubmit} = useForm({
         defaultValues:{
-            username: '',
+            email: '',
             password: ''
         }
     });
@@ -31,12 +31,11 @@ function LoginPage (){
     const dispatch = useDispatch();
     const status = useSelector(selectAuthStatus);
 
-    const onError  = (data) => console.log(data);
-    const onSubmit = async (data) => {
+    const onSubmit = async (values) => {
         try{
-            const response = await dispatch(login({...data})).unwrap();
+            const response = await dispatch(login(values)).unwrap();
             localStorage.setItem("token" , response.token);
-            nav('/dashboard/home');
+            nav('/dashboard');
         }catch(error){
             if(error?.name==="ConditionError") return;
             dispatch(showMessage({message: error , severity: 2}));
@@ -45,22 +44,22 @@ function LoginPage (){
 
     return (
         <div className={style['login-page']}>
-            <form className={style.form}  onSubmit={handleSubmit(onSubmit , onError)}>
+            <form className={style.form}  onSubmit={handleSubmit(onSubmit)}>
                 <div className={style.logo}>
                     <MainLogo />
                     <TitleLogo />
                 </div>
                 <InputField
                     type='text'
-                    placeholder='Enter your name'
-                    name={'username'}
+                    placeholder='Enter your email'
+                    name='email'
                     autoFocus
-                    control={register('username' , {
-                            required: 'Please enter your name',
-                            // pattern: {
-                            //     value: /^[a-zA-Z]+([',.-][a-zA-Z]+)*$/,
-                            //     message: "Please enter a valid name"
-                            // } 
+                    control={register('email' , {
+                            required: 'Please enter your email',
+                            pattern: {
+                                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                                message: "please enter a valid email"
+                            },
                         }
                     )}
                     errors={errors}
@@ -71,14 +70,7 @@ function LoginPage (){
                     type='password'
                     placeholder='Enter your password'
                     name='password'
-                    control={register('password' , {
-                            required: 'Please enter your password',
-                            // pattern: {
-                            //     value: /^(?!\s)(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,10}$/,
-                            //     message: 'Please enter a valid password'
-                            // }
-                        }
-                    )}
+                    control={register('password' , { required: 'Please enter your password' })}
                     errors={errors}
                 >
                     Password

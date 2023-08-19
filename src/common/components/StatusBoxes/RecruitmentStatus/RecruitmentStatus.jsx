@@ -13,12 +13,12 @@ function RecruitmentStatus({recruitmentStatus , width , height}){
         <div className={
             clsx(
                 style['status-box'],
-                {[style['status-box-warning']] : recruitmentStatus.toLowerCase()===recruitmentStatusData.applied},
-                {[style['status-box-error']] : recruitmentStatus.toLowerCase()===recruitmentStatusData.refused}
+                {[style['status-box-warning']] : recruitmentStatus?.toLowerCase()===recruitmentStatusData.applied},
+                {[style['status-box-error']] : recruitmentStatus?.toLowerCase()===recruitmentStatusData.refused}
             )}
             style={{width , height}}
         >
-            {recruitmentStatus}
+            {recruitmentStatus?.toLowerCase()}
         </div>
     );
 }

@@ -12,17 +12,20 @@ import InputField from '../../../../common/components/Inputs/InputField/InputFie
 import SelectInputField from "../../../../common/components/Inputs/SelectInputField/SelectInputField";
 import SubmitButton from '../../../../common/components/Inputs/SubmitButton/SubmitButton';
 import Loader from '../../../../common/components/Loader/Loader';
+import FileUpload from '../../../../common/components/Inputs/FileUpload/FileUpload';
+import AsyncSelectInputField from '../../../../common/components/Inputs/AsyncSelectInputField/AsyncSelectInputField';
 
 // import icons
 import { IoCloseOutline } from "react-icons/io5";
+
+//import static data request
+import { getSquadsData } from '../../../../common/utils/selectorAPI';
 
 //import static data
 import {levelData} from '../../../../common/utils/selectorData'
 
 //import style 
 import style from './EditPosition.module.css';
-import TextAreaField from '../../../../common/components/Inputs/TextAreaField/TextAreaField';
-import FileUpload from '../../../../common/components/Inputs/FileUpload/FileUpload';
 
 function EditPosition({id , handleClose}) {
     const dispatch = useDispatch();
@@ -43,7 +46,7 @@ function EditPosition({id , handleClose}) {
             weeklyHours: data.weeklyHours?.toString(), 
             gsLevel: {label: data.gsLevel?.toLowerCase() , value: data.gsLevel?.toLowerCase()},
             jobDescription: null,    
-            squadId: {value: data.squadId , label: data.squad?.name},
+            squadId: {value: data.squadId , label: data.squad?.gsName},
         }
     })
 
@@ -56,7 +59,8 @@ function EditPosition({id , handleClose}) {
             for(let key of Object.keys(dirtyFields)){
                 if(dirtyFields[key]){
                     if(key==='gsLevel') changed[key] = values[key]?.value?.toUpperCase();
-                    if(key==='squadId') changed[key] = values[key]?.value;
+                    else if(key==='squadId') changed[key] = values[key]?.value;
+                    else if(key==='weeklyHours') changed[key] = parseInt(values[key])
                     else changed[key] = values[key];
                 }
             }
@@ -99,9 +103,7 @@ function EditPosition({id , handleClose}) {
                         placeholder='Name'
                         width='185px'
                         height='40px'
-                        control={register('name' , {
-                            required: 'Please Enter the Name',
-                        })}
+                        control={register('name' , { required: 'Please Enter the Name' })}
                         errors={errors}
                     />
                     <InputField 
@@ -110,9 +112,7 @@ function EditPosition({id , handleClose}) {
                         placeholder='Gs Name'
                         width='185px'
                         height='40px'
-                        control={register('gsName' , {
-                            required: 'Please Enter The Gs Name',
-                        })}
+                        control={register('gsName' , { required: 'Please Enter The Gs Name' })}
                         errors={errors}
                     />
                 </div>
@@ -157,17 +157,18 @@ function EditPosition({id , handleClose}) {
                 />
                 <div className={style.buttons}>
                     <div className={style.squad}>
-                        <SelectInputField
+                        <AsyncSelectInputField
                             width='200px'
                             height='40px'
                             name='squadId'
                             placeholder='squad'
-                            options={Object.values(levelData)}
+                            defaultOptions={[]}
                             control={control}
                             required={'enter the squad'}
                             errors={errors}
                             border={true}
                             placement='top'
+                            callBack={(data) => getSquadsData(data)}
                         />
                     </div>
                     <SubmitButton 

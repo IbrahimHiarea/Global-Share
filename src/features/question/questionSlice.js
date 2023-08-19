@@ -39,18 +39,18 @@ export const getQuestions = createAsyncThunk(
         } catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
     },
     {
         condition: (data, {getState}) => {
-            const { question : {searchTerms , status} } = getState()
-            if (status === status.loading || searchTerms.search===data.search) {
+            const { question : {searchTerms , status: questionStatus} } = getState()
+            if (questionStatus === status.loading || searchTerms.search===data.search) {
                 return false;
             }
         },
@@ -67,10 +67,10 @@ export const getQuestionsPage = createAsyncThunk(
         }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -87,10 +87,10 @@ export const createQuestion = createAsyncThunk(
         }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -108,10 +108,10 @@ export const updateQuestion= createAsyncThunk(
         }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -128,10 +128,10 @@ export const deleteQuestion = createAsyncThunk(
         }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -179,11 +179,16 @@ const questionSlice = createSlice({
                 state.error = action.payload;
                 state.status = status.failed;
             })
+            .addCase(createQuestion.fulfilled , (state , action) => {
+                questionAdapter.upsertOne(state , action.payload);
+                state.totalCount++;
+            })
             .addCase(updateQuestion.fulfilled , (state , action) => {
                 questionAdapter.upsertOne(state , action.payload);
             })
             .addCase(deleteQuestion.fulfilled , (state , action) => {
                 questionAdapter.removeOne(state , action.payload);
+                state.totalCount--;
             })
     }
 });

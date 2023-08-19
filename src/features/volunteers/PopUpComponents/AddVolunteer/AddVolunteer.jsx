@@ -60,8 +60,16 @@ function AddVolunteer({handleClose}) {
 
     const onSubmit = async (values) => {
         try{
+
             setIsLoading(true);
-            await dispatch(createVolunteer({...values , roleId: values?.roleId?.value})).unwrap();
+            await dispatch(createVolunteer({
+                firstName: values.firstName,
+                lastName: values.lastName,
+                email: values.email,
+                password: values.password,
+                roleId: values.roleId?.value,
+                positions: values.positions.map(item => ({positionId: item.position.value}))
+            })).unwrap();
             dispatch(showMessage({message: 'Volunteer Added successfully' , severity: 1}));
             handleClose();
         }catch(error){
@@ -97,9 +105,7 @@ function AddVolunteer({handleClose}) {
                         placeholder='First Name'
                         width='200px'
                         height='40px'
-                        control={register('firstName' , {
-                            required: 'Please Enter The First Name',
-                        })}
+                        control={register('firstName' , { required: 'Please Enter The First Name' })}
                         errors={errors}
                     />
                     <InputField 
@@ -108,9 +114,7 @@ function AddVolunteer({handleClose}) {
                         placeholder='Last Name'
                         width='200px'
                         height='40px'
-                        control={register('lastName' , {
-                            required: 'Please Enter The Last Name',
-                        })}
+                        control={register('lastName' , { required: 'Please Enter The Last Name' })}
                         errors={errors}
                     />
                 </div>
@@ -136,9 +140,7 @@ function AddVolunteer({handleClose}) {
                         name='password'
                         width='200px'
                         height='40px'  
-                        control={register('password' , {
-                            required: 'Please enter the password',
-                        })}
+                        control={register('password' , { required: 'Please enter the password' })}
                         errors={errors}
                     />
                 </div>
@@ -154,7 +156,7 @@ function AddVolunteer({handleClose}) {
                         errors={errors}
                         border={true}
                         menuHeight={150}
-                        callBack={(data) => getRolesData({...data})}
+                        callBack={(data) => getRolesData(data)}
                     />
                 </div>
                 <div className={style.break}></div>
@@ -199,6 +201,17 @@ function AddVolunteer({handleClose}) {
                     }
                 </div>
                 <div className={style.buttons}>
+                    <Button 
+                        backgroundColor="var(--secondary-dark)" 
+                        width="202px" 
+                        height="40px" 
+                        onClick={(e) => {
+                            e.preventDefault();
+                            appendPosition({position: null, squad: null })
+                        }}
+                    >
+                        Add Another Position
+                    </Button>
                     <SubmitButton 
                         width='157px' 
                         height='40px'
@@ -208,11 +221,6 @@ function AddVolunteer({handleClose}) {
                     </SubmitButton>
                 </div>
             </form>
-            <div className={style["add-button"]}>
-                <Button backgroundColor="var(--secondary-dark)" width="202px" height="40px" onClick={() => appendPosition({position: null, squad: null })}>
-                    Add Another Position
-                </Button>
-            </div>
         </div>
     );
 }

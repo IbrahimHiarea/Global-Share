@@ -84,9 +84,7 @@ function EditSquad({id , handleClose}){
                         placeholder='Name'
                         width='185px'
                         height='40px'
-                        control={register('name' , {
-                            required: 'Please Enter The Name',
-                        })}
+                        control={register('name' , { required: 'Please Enter The Name' })}
                         errors={errors}
                     />
                     <InputField 
@@ -95,9 +93,7 @@ function EditSquad({id , handleClose}){
                         placeholder='GS Name'
                         width='185px'
                         height='40px'
-                        control={register('gsName' , {
-                            required: 'Please Enter The GS Name',
-                        })}
+                        control={register('gsName' , { required: 'Please Enter The GS Name' })}
                         errors={errors}
                     />
                 </div>
@@ -107,9 +103,7 @@ function EditSquad({id , handleClose}){
                         placeholder='Description..'
                         width='390px'
                         height='120px'
-                        control={register('description' , {
-                            required: 'Please enter the description',
-                        })}
+                        control={register('description' , { required: 'Please enter the description' })}
                         errors={errors}
                     />
                 </div>

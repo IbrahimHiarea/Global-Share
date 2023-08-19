@@ -26,6 +26,8 @@ function AllRoute () {
     return (
         <Routes>
 
+            <Route path="*" element={<ErrorNotFound />}/>
+            
             {/* Home page */}
             <Route index element={ <HomePage /> }/>
             <Route path='/home' element={ <HomePage />}/>
@@ -35,8 +37,6 @@ function AllRoute () {
 
             {/* Dashboard page */}
             <Route path='/dashboard/' element = { <DashboardLayout /> }>
-                {/* Home section */}
-                <Route path='home' element={ <></> }/>
                 
                 {/* Profile sections  */}
                 <Route path='profile/' element={<Outlet />}>
@@ -78,7 +78,6 @@ function AllRoute () {
                 {/* Question section */}
                 <Route path='question' element={<QuestionPage />}/>
 
-                <Route path="*" element={<ErrorNotFound />}/>
             </Route>
         </Routes>
     );  

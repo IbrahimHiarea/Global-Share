@@ -8,3 +8,10 @@
   justify-content: center;
   flex-direction: column;
 }
+
+
+.not-found p{
+  margin-top: -60px;
+  color: var(--word-color);
+  text-transform: capitalize;
+} 

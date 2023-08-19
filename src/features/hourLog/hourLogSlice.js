@@ -32,18 +32,18 @@ export const getHourLog = createAsyncThunk(
         } catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
     },
     {
         condition: (data, {getState}) => {
-            const { hourLog : {searchTerms , status} } = getState()
-            if (status === status.loading || (searchTerms.search===data.search
+            const { hourLog : {searchTerms , status: hourLogStatus} } = getState()
+            if (hourLogStatus === status.loading || (searchTerms.search===data.search
                 && searchTerms.squadId===data.squadId)) {
                 return false;
             }
@@ -61,10 +61,10 @@ export const getHourLogPage = createAsyncThunk(
         }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }

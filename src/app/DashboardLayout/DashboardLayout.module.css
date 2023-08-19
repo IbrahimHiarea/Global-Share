@@ -35,7 +35,8 @@
     z-index: 150;
     border-top-right-radius: 25px;
     border-bottom-right-radius: 25px;
-    padding: 70px 0;
+    /* padding: 70px 0; */
+    padding: 50px 0;
     transition: all 1s;
     -webkit-transition: all 1s;
     -moz-transition: all 1s;
@@ -196,7 +197,6 @@
     gap: 15px;
     padding-left: 20px;
     position: relative;
-    /* color: #5F6388; */
     color: rgba(95, 99, 136, 80%);
     outline: none;  
 }
@@ -352,4 +352,35 @@
 .navbar-link svg{
     width: 20px;
     height: 20px;
+}
+
+.logout{
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    cursor: pointer;
+    text-transform: capitalize;
+    color: rgba(95, 99, 136, 80%);
+    font-weight: 500;
+    font-size: 16px;
+    margin-left: 3px;
+    gap: 15px;
+    margin-top: -4px;
+}
+
+.logout > div{
+    width: auto;
+}
+
+.logout:hover{
+    color: var(--error-main);
+}
+
+.logout svg{
+    fill: rgba(95, 99, 136, 80%);
+}
+
+.logout:hover svg{
+    fill: var(--error-main);
 }

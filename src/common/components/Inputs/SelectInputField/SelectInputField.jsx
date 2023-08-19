@@ -1,10 +1,10 @@
 //import react
 import React from "react";
 import { Controller } from "react-hook-form";
+import Select , { components } from 'react-select';
 
 //import components
 import InputWrapper from '../InputWrapper/InputWrapper';
-import Select , { components } from 'react-select';
 
 //import style
 import style from './SelectInputField.module.css';

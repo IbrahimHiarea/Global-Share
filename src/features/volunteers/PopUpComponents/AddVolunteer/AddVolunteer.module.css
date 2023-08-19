@@ -53,23 +53,10 @@
 
 .buttons{
   display: flex;
-  position: absolute;
-  right: 30px;
-  bottom: 20px;
-}
-
-.buttons input{
-  padding: 0;
-}
-
-.add-button{
-  position: absolute;
-  right: 210px;
-  bottom: 20px;
-}
-
-.add-button button{
-  margin: 0;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 15px;
 }
 
 .add-volunteer-body > div > div label{

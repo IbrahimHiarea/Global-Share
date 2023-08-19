@@ -13,12 +13,12 @@ function VolunteerStatus({volunteerStatus , width , height}){
         <div className={
             clsx(
                 style['status-box'],
-                {[style['status-box-warning']] : volunteerStatus.toLowerCase() === statusesData.freeze},
-                {[style['status-box-error']] : volunteerStatus.toLowerCase() === statusesData.left}
+                {[style['status-box-warning']] : volunteerStatus?.toLowerCase() === statusesData.freeze},
+                {[style['status-box-error']] : volunteerStatus?.toLowerCase() === statusesData.left}
             )}
             style={{width , height}}
         >
-            {volunteerStatus}
+            {volunteerStatus?.toLowerCase()}
         </div>
     );
 }

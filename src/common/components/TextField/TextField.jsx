@@ -4,7 +4,7 @@ import React from 'react';
 //import style
 import style from './TextField.module.css';
 
-function TextField ({children , title , value}){
+function TextField ({title , value}){
     return (
         <div className={style['text-field']}>
             <div className={style.title}>{title}</div>

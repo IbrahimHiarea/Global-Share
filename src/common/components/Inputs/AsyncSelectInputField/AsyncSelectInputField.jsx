@@ -1,6 +1,7 @@
 //import react
 import React, { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
+import Select , { components } from 'react-select';
 
 //import redux
 import { useSelector } from "react-redux";
@@ -8,7 +9,6 @@ import { selectAuthToken } from '../../../../features/auth/AuthSlice';
 
 //import components
 import InputWrapper from '../InputWrapper/InputWrapper';
-import Select , { components } from 'react-select';
 
 //import style
 import style from './AsyncSelectInputField.module.css';

@@ -44,13 +44,16 @@ function VolunteerFilterBar({ handleAdd }){
 
     const handleReset = async () => {
         try{
-            await dispatch(getVolunteers({search: '' , level: '' , squad: '' , position: '' , status: ''})).unwrap();
+            await dispatch(getVolunteers({
+                search: '',
+                level: '', 
+                squad: '', 
+                position: '', 
+                status: ''
+            })).unwrap();
             reset(formState.defaultValues);
         }catch(error){
-            if(error?.name==="ConditionError"){
-                reset(formState.defaultValues);
-                return;
-            }
+            if(error?.name==="ConditionError") return;
             dispatch(showMessage({message: error , severity: 2}));
         }
     }
@@ -99,7 +102,7 @@ function VolunteerFilterBar({ handleAdd }){
                     defaultOptions={[]}
                     control={control}
                     isMulti={true}
-                    callBack={(data) => getSquadsData({...data})}
+                    callBack={(data) => getSquadsData(data)}
                 />
                 <AsyncSelectInputField
                     width='200px'

@@ -1,6 +1,6 @@
 .edit-volunteer{
   width: 526px;
-  height: 550px;
+  height: 610px;
   background-color: white;
   padding: 24px;
   border-radius: 9px;
@@ -53,23 +53,10 @@
 
 .buttons{
   display: flex;
-  position: absolute;
-  right: 30px;
-  bottom: 30px;
-}
-
-.buttons input{
-  padding: 0;
-}
-
-.add-button{
-  position: absolute;
-  right: 210px;
-  bottom: 30px;
-}
-
-.add-button button{
-  margin: 0;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 15px;
 }
 
 .edit-volunteer-body > div > div label{

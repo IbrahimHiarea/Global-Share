@@ -6,11 +6,11 @@
     -moz-border-radius: 9px;
     -ms-border-radius: 9px;
     -o-border-radius: 9px;
-    /* padding: 14px 45px; */
     border: none;
     cursor: pointer;
     width: 300px;
     height: 45px;
+    
     /* inner */
     color: white;
     font-weight: 700;

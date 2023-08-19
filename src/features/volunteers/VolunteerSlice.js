@@ -57,18 +57,18 @@ export const getVolunteers = createAsyncThunk(
         } catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
     },
     {
         condition: (data, {getState}) => {
-            const { volunteer : {searchTerms , status} } = getState()
-            if (status === status.loading || (searchTerms.search===data.search
+            const { volunteer : {searchTerms , volunteerStatus} } = getState()
+            if (volunteerStatus === status.loading || (searchTerms.search===data.search
                 && searchTerms.status===data.status && searchTerms.level===data.level
                 && searchTerms.position===data.position && searchTerms.squad===data.squad)) {
                 return false;
@@ -87,10 +87,10 @@ export const getVolunteerPage = createAsyncThunk(
         }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -107,10 +107,10 @@ export const createVolunteer = createAsyncThunk(
         }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -128,10 +128,10 @@ export const updateVolunteer = createAsyncThunk(
         }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -148,10 +148,10 @@ export const deleteVolunteer= createAsyncThunk(
         }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -204,11 +204,16 @@ const volunteerSlice = createSlice({
                 state.error = action.payload;
                 state.status = status.failed;
             })
+            .addCase(createVolunteer.fulfilled , (state , action) => {
+                volunteerAdapter.upsertOne(state , action.payload);
+                state.totalCount++;
+            })
             .addCase(updateVolunteer.fulfilled , (state , action) => {
                 volunteerAdapter.upsertOne(state , action.payload);
             })
             .addCase(deleteVolunteer.fulfilled , (state, action) => {
                 volunteerAdapter.removeOne(state, action.payload);
+                state.totalCount--
             })
     }
 })

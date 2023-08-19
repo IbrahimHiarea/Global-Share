@@ -41,18 +41,18 @@ export const getEmails = createAsyncThunk(
         } catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
     },
     {
         condition: (data, {getState}) => {
-            const { email : {searchTerms , status} } = getState()
-            if (status === status.loading || searchTerms.search===data.search) {
+            const { email : {searchTerms , emailStatus} } = getState()
+            if (emailStatus === status.loading || searchTerms.search===data.search) {
                 return false;
             }
         },
@@ -69,10 +69,10 @@ export const getEmailsPage = createAsyncThunk(
         }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -89,10 +89,10 @@ export const createEmail = createAsyncThunk(
         }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -110,10 +110,10 @@ export const updateEmail= createAsyncThunk(
         }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -130,10 +130,10 @@ export const deleteEmail = createAsyncThunk(
         }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -182,11 +182,16 @@ const emailSlice = createSlice({
                 state.error = action.payload;
                 state.status = status.failed;
             })
+            .addCase(createEmail.fulfilled , (state , action) => {
+                emailAdapter.upsertOne(state , action.payload);
+                state.totalCount++;
+            })
             .addCase(updateEmail.fulfilled , (state , action) => {
                 emailAdapter.upsertOne(state , action.payload);
             })
             .addCase(deleteEmail.fulfilled , (state , action) => {
                 emailAdapter.removeOne(state , action.payload);
+                state.totalCount--;
             })
     }
 })

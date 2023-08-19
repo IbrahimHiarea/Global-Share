@@ -1,6 +1,7 @@
 //import package
 import React from 'react';
 
+//import icon & image
 import {BsSquareFill , BsSquare} from "react-icons/bs";
 
 //import style

@@ -12,11 +12,15 @@ import InputField from '../../../common/components/Inputs/InputField/InputField'
 import Button from '../../../common/components/Inputs/Button/Button';
 import SelectInputField from '../../../common/components/Inputs/SelectInputField/SelectInputField';
 import SubmitButton from '../../../common/components/Inputs/SubmitButton/SubmitButton';
+import AsyncSelectInputField from '../../../common/components/Inputs/AsyncSelectInputField/AsyncSelectInputField';
 
 //import icons & images
 import { ImPlus } from 'react-icons/im';
 import { FiSearch } from 'react-icons/fi';
 import { RxReset } from 'react-icons/rx';
+
+//import static data request
+import {getSquadsData} from '../../../common/utils/selectorAPI';
 
 //import static data
 import { levelData } from '../../../common/utils/selectorData.js';
@@ -51,7 +55,7 @@ function PositionFilterBar({ handleAdd }) {
         try{
             await dispatch(getPositions({
                 search, 
-                level: level?.map(item => item.value).join(','), 
+                level: level?.map(item => item.value?.toUpperCase()).join(','), 
                 squad: squad?.map(item => item.value).join(',')
             })).unwrap();
         }catch(error){
@@ -72,7 +76,7 @@ function PositionFilterBar({ handleAdd }) {
                     control={register('search')}
                 />
                 <SelectInputField
-                    width='250px'
+                    width='200px'
                     height='40px'
                     name='level'
                     placeholder='All levels'
@@ -80,14 +84,15 @@ function PositionFilterBar({ handleAdd }) {
                     control={control}
                     isMulti={true}
                 />
-                <SelectInputField
-                    width='250px'
+                <AsyncSelectInputField
+                    width='200px'
                     height='40px'
                     name='squad'
                     placeholder='All squads'
-                    options={Object.values(levelData)}
+                    defaultOptions={[]}
                     control={control}
                     isMulti={true}
+                    callBack={(data) => getSquadsData(data)}
                 />
                 <span className={style['bar-buttons']}>
                     <SubmitButton 

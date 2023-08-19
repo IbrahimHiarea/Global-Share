@@ -39,14 +39,16 @@ export async function getVolunteerById(id , token , signal){
 }   
 
 export async function createVolunteer({firstName , lastName , email, password , positions , roleId} , token , signal){
-    const newPositions = [];
-    positions.forEach(element => {
-        newPositions.push({positionId: element.position.value})
-    });
-
     return axiosApi.post(
         '/user',
-        {firstName , lastName , password , email , positions: newPositions , roleId},
+        {
+            firstName, 
+            lastName, 
+            password, 
+            email, 
+            positions, 
+            roleId
+        },
         {
             signal : signal,
             headers: {
@@ -57,22 +59,9 @@ export async function createVolunteer({firstName , lastName , email, password , 
 }
 
 export async function updateVolunteer(id , values , token , signal){
-    const newValues = {};
-    for(let key of Object.keys(values)){
-        if(key==='positions'){
-            const newPositions = [];
-            values[key].forEach(element => {
-                newPositions.push({positionId: element.position.value})
-            });
-            newValues[key] = newPositions;
-        }
-        else newValues[key] = values[key]; 
-    }
-
-    console.log(newValues);
     return axiosApi.put(
         `/user/${id}`,
-        newValues,
+        values,
         {
             signal : signal,
             headers: {

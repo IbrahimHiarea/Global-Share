@@ -7,9 +7,9 @@ import {recruitmentStatusData} from '../../../utils/selectorData.js';
 // import style
 import style from './FeedbackView.module.css';
 
-function FeedbackView({feedback :{id , type , text}}){
+function FeedbackView({feedback :{type , text}}){
     let title = '';
-    switch(type.toLowerCase()){
+    switch(type?.toLowerCase()){
         case recruitmentStatusData.hr_approved:
             title = 'hr feedback';
             break;

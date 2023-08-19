@@ -1,16 +1,17 @@
 //import react
 import React, { useState } from 'react';
 import { useNavigate , Outlet , NavLink } from 'react-router-dom';
+import clsx from 'clsx';
 
 //import redux
-import { useSelector } from 'react-redux';
-import { selectAuthInfo } from '../../features/auth/AuthSlice';
+import { useSelector , useDispatch} from 'react-redux';
+import { selectAuthInfo , logout } from '../../features/auth/AuthSlice';
 
 //import components
 import Avatar from '@mui/material/Avatar';
 
 //import icon & image
-import profileImage from '../../assets/images/profileImage/profile2.png';
+import profileImage from '../../assets/images/profile2.png';
 import {FaTasks} from 'react-icons/fa';
 import {BsBookHalf} from 'react-icons/bs';
 import {HiUserGroup} from 'react-icons/hi'
@@ -20,12 +21,10 @@ import {IoIosArrowForward} from 'react-icons/io';
 import {AiFillAppstore} from "react-icons/ai";
 import {MdWork} from "react-icons/md";
 import {BiSpreadsheet} from 'react-icons/bi';
-import {MdViewTimeline} from 'react-icons/md';
-
+import {MdViewTimeline , MdLogout} from 'react-icons/md';
 
 //import style
 import style from './DashboardLayout.module.css';
-import clsx from 'clsx';
 
 //static data
 const drawerList = [
@@ -77,6 +76,7 @@ const drawerList = [
 ];
 
 function Navbar(){
+    const dispatch = useDispatch();
     const nav = useNavigate();
     const [isOpen , setIsOpen] = useState(false);
     const authInfo = useSelector(selectAuthInfo);
@@ -87,6 +87,11 @@ function Navbar(){
     }
 
     const handleClose = () => setIsOpen(false);
+
+    const handleLogout = async() => {
+        await dispatch(logout()).unwrap();
+        nav('/home');
+    }
 
     const handleInfoClick = () =>{
         nav('profile');
@@ -150,7 +155,7 @@ function Navbar(){
                                     {icon} <span className={clsx(style['navbar-link-title'] , {[style['navbar-link-title-open']] : isOpen})}>{title}</span>
                                 </NavLink>
                                 <span 
-                                    style={{top: `${167 + (57*index)}px`}} 
+                                    style={{top: `${147 + (57*index)}px`}} 
                                     className={clsx(style['navbar-link-alt'])}
                                 >
                                     {title}
@@ -158,6 +163,27 @@ function Navbar(){
                             </li>
                         ))
                     }
+                        <li 
+                            className={clsx(
+                                style['navbar-list-item'] , style.logout)}
+                            onClick={handleLogout}
+                        >
+                            <div className={
+                                clsx(
+                                    style['navbar-link'], 
+                                    {[style['navbar-link-alt-hover']] : !isOpen})
+                            }>
+                                <MdLogout size={20}/> 
+                            </div>
+                            <span 
+                                className={clsx(
+                                    style['navbar-link-title'], 
+                                    {[style['navbar-link-title-open']] : isOpen}
+                                )}
+                            >
+                                logout
+                            </span>
+                        </li>
                     </ul>
                 </div>
             </nav>
