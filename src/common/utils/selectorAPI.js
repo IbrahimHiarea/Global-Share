@@ -98,7 +98,7 @@ export async function getQuestionsData({token , signal}){
             {
                 signal : signal,
                 headers: {
-                    Authorization : `Bearer ${token.token}`,
+                    Authorization : `Bearer ${token}`,
                 }
             }
         ); 

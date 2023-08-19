@@ -30,9 +30,16 @@ export async function fetchProfileDetails(token , signal){
 // TODO::
 // resume file sent
 export async function updateProfileDetails({resume , ...data}, token , signal){
-    return axiosApi.post(
+    console.log(data,resume);
+    const formData = new FormData();
+    for (const key of Object.keys(data)){
+        formData.append(key,data[key]);
+    }
+    formData.append('cv',JSON.stringify(resume));
+    console.log(formData);
+    return axiosApi.put(
         '/user',
-        data,
+        formData,
         {
             signal : signal,
             headers: {
