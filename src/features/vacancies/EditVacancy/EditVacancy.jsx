@@ -129,7 +129,6 @@ function EditVacancy() {
     return (
         <div className={style['edit-vacancy']}>
             <div className={style['edit-vacancy-header']}>
-                <CiSquareChevLeft size="55px" color='#8B909A' cursor="pointer" onClick={() => navigate(-1)}/>
                 <h1>Edit Vacancy</h1>
             </div>
             <form className={style["edit-vacancy-body"]} onSubmit={handleSubmit(onSubmit)}>

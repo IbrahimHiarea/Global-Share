@@ -165,6 +165,7 @@ function JoinUsForm (){
                         questions?.questions?.map((question,index) => {
                             if(question.question.type.toLowerCase() === questionTypeData.checkbox  ||  question.question.type.toLowerCase() === questionTypeData.radio){
                                 return <SelectQuestion
+                                            key={`question${index}`}
                                             width="320px"
                                             name={`${question.questionId}`}
                                             control={register(`${question.questionId}` , {

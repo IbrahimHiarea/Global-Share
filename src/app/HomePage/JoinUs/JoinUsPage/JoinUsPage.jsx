@@ -74,10 +74,10 @@ function JoinUsPage (){
                 </a>
             </div>
             <div className={style['first-section']}>
-                <h1>Executive Assistant</h1>
+                <h1>{vacancy?.position?.name}</h1>
                 <div className={style.info}>
                     <div>
-                        <span>The title, according to GS's terminology: </span> {vacancy?.position?.gsName}
+                        <span>The title, according to GS's terminology: </span> {vacancy?.position?.gsName + ' ' + vacancy?.position?.gsLevel}
                     </div>
                     <div>
                         <span>Location: </span>Online
