@@ -64,7 +64,7 @@ export async function updateVacancy(id , values , token , signal){
                 newValues[key] = values[key];
         }
     }
-    console.log(newValues);
+    
     return axiosApi.put(
         `/vacancy/${id}`,
         newValues,

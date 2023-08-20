@@ -52,16 +52,31 @@
 }
 
 .questions{
-  display: grid;
-  grid-template-columns: repeat(auto-fill , minmax(310px,1fr));
+  /* display: grid;
+  grid-template-columns: repeat(auto-fill , minmax(350px,1fr));
   justify-content: space-around;
   align-items: flex-start;
-  margin-bottom: 40px;
-  /* display: flex;
-  gap: 90px;
-  flex-flow: row;
+  margin-bottom: 40px; */
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.questions > div{
+  display: flex;
+  align-items: center;
   flex-wrap: wrap;
-  align-items: flex-start; */
+  gap: 50px;
+}
+
+.break{
+  width: 100%;
+  height: 2px;
+  background-color: var(--natural-alpha-7);
+}
+
+.form > label{
+  margin-top: 90px;
 }
 
 /* error */

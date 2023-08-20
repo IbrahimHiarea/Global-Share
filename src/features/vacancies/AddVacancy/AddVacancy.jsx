@@ -81,7 +81,6 @@ function AddVacancy() {
     return (
         <div className={style['add-vacancy']}>
             <div className={style['add-vacancy-header']}>
-                <CiSquareChevLeft size="55px" color='#8B909A' cursor="pointer" onClick={() => navigate(-1)}/>
                 <h1>Add Vacancy</h1>
             </div>
             <form className={style["add-vacancy-body"]} onSubmit={handleSubmit(onSubmit)}>
