@@ -1,5 +1,6 @@
 //import react
 import React, { useEffect, useReducer , useState} from 'react';
+import { useNavigate } from 'react-router';
 
 //import redux
 import { useDispatch , useSelector } from 'react-redux';
@@ -103,6 +104,7 @@ const popUpReducer = (state , action) => {
 function VolunteerPage(){
     const [popUpOption , popUpDispatch] = useReducer(popUpReducer , initPopUpOption);
     const dispatch = useDispatch();
+    const nav = useNavigate();
     const [curSkip , setCurSkip] = useState(0);
 
     const data = useSelector(selectAllVolunteer);
@@ -155,7 +157,7 @@ function VolunteerPage(){
                 columns={columns}
                 data={data.slice(curSkip , curSkip+10)}
                 pending={status==='loading' || status==='idle' ? true : false}
-                rowClick={(row) => {}}
+                rowClick={({id}) => nav(`/dashboard/user/${id}`)}
                 handleDelete={(row) => popUpDispatch({type:'delete' , id: row.id})}
                 handleEdit={(row) => popUpDispatch({type:'edit' , id: row.id})}
                 onChangePage={onChangePage}

@@ -45,7 +45,7 @@ function AddStatusButton({ children , popUpDispatch}){
     const {squadId} = useSelector(selectTaskSearchTerms);
 
     const handleClick = () => {
-        popUpDispatch({type: 'addStatus' , id: squadId });
+        popUpDispatch({type: 'addStatus' , id: squadId?.value });
     }
 
     return(

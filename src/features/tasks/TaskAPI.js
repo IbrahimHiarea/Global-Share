@@ -39,7 +39,11 @@ export async function getTaskById(id , token , signal){
 
 export async function getTasksBySquad({search , difficulty , priority , member ,  squadId} , skip , token , signal){
     return axiosApi.get(
-        `/task/squad/${squadId}?skip=${skip}&take=0&difficulty=${difficulty}&priority=${priority}&assignedTo=${member}&search=${search}`,
+        `/task/squad/${squadId?.value}?skip=${skip}&take=0&
+            difficulty=${difficulty?.map(item => item.value?.toUpperCase()).join(',')}&
+            priority=${priority?.map(item => item.value?.toUpperCase()).join(',')}&
+            assignedTo=${member?.map(item => item.value).join(',')}&
+            search=${search}`,
         {
             signal : signal,
             headers: {

@@ -4,8 +4,8 @@ import { useForm } from "react-hook-form";
 
 //import redux
 import { useSelector , useDispatch} from "react-redux";
-import {selectProfileSquads , fetchProfileDetails} from '../../profile/profileSlice';
-import { resetSearchTerms, selectTaskStatus , getTasksBySquad} from "../taskSlice";
+import {selectProfileSquads , getMyProfileDetails } from '../../profile/profileSlice';
+import { resetSearchTerms, selectTaskStatus , getTasksBySquad, selectTaskSearchTerms} from "../taskSlice";
 import { showMessage } from "../../snackBar/snackBarSlice";
 
 //import components
@@ -30,20 +30,27 @@ function TaskFilterBar (){
     const profileSquads = useSelector(selectProfileSquads);
     const squadOption = profileSquads.map(squad => ({value: squad.id , label: squad.gsName}))  ;
     const status = useSelector(selectTaskStatus);
+    const {search , member , priority , difficulty , squadId} = useSelector(selectTaskSearchTerms);
 
-    const {control , register , watch , formState , reset , handleSubmit} = useForm({
+    const {control , register , watch , reset , handleSubmit , setValue} = useForm({
         defaultValues:{
-            search: '',
-            member: [],
-            priority: [],
-            difficulty: [],
-            squadId: null
+            search: search ? search :  '',
+            member: member ? member : [],
+            priority: priority ? priority : [],
+            difficulty: difficulty ? difficulty :  [],
+            squadId: squadId ? squadId : null
         }
     });
 
     const handleReset = () => {
-        dispatch(resetSearchTerms);
-        reset(formState.defaultValues);
+        dispatch(resetSearchTerms());
+        reset({
+            search: '',
+            member: [],
+            priority: [],
+            difficulty: [],
+            squadId: null,
+        });
     }
 
     const onSubmit = async (values) => {
@@ -51,10 +58,10 @@ function TaskFilterBar (){
         try{
             await dispatch(getTasksBySquad({
                 search,
-                member: member?.map(item => item.value).join(','),
-                priority: priority?.map(item => item.value?.toUpperCase()).join(','),
-                difficulty: difficulty?.map(item => item.value?.toUpperCase()).join(','),
-                squadId: squadId?.value
+                member: member,
+                priority: priority,
+                difficulty: difficulty,
+                squadId: squadId,
             })).unwrap();
         }catch(error){
             if(error?.name==="ConditionError") return;
@@ -63,7 +70,28 @@ function TaskFilterBar (){
     }
 
     useEffect(() => {
-        dispatch(fetchProfileDetails());
+        const req = async () => {
+            try{
+                const response = await dispatch(getMyProfileDetails()).unwrap();
+                const {id , gsName} = response.positions[0]?.position?.squad;
+                const squad = {value : id , label : gsName};
+                if(squadId===undefined){
+                    await dispatch(getTasksBySquad({
+                        search: '',
+                        member: [],
+                        priority: [],
+                        difficulty: [],
+                        squadId: squad,
+                    })).unwrap();
+                    setValue('squadId' , squad);
+                }
+            }catch(error){  
+                if(error?.name==="ConditionError") return;
+                if(typeof error !== 'string') dispatch(showMessage({message: 'Network connection error' , severity: 2}));
+                else dispatch(showMessage({message: error , severity: 2}));
+            }
+        }
+        req();
     } , [])
 
     return (

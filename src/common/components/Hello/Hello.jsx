@@ -14,7 +14,7 @@ function Hello (){
                 width='300px' 
                 height='300px'
             />
-            <p>Hello!! please choose squad to see your task</p> 
+            <p>Hello!! choose squad to see your task</p> 
         </div>  
     );
 }

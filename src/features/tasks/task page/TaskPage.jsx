@@ -77,7 +77,7 @@ function TaskPage (){
     const searchTerms = useSelector(selectTaskSearchTerms);
 
     const onDragEnd = async ({source , destination}) => {
-        if(source.droppableId===destination.droppableId) return;
+        if(destination===null || source.droppableId===destination.droppableId) return;
         if(endTaskStatusIds?.indexOf(parseInt(destination.droppableId))!==-1){
             popUpDispatch({type: 'finishTask' , id: source.index , secondId: destination.droppableId , thirdId: source.droppableId})
         }

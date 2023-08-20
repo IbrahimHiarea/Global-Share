@@ -24,7 +24,7 @@ import { recruitmentStatusData } from '../../../../common/utils/selectorData';
 //import style 
 import style from './ApproveAsHR.module.css';
 
-function ApproveAsHR(id , {handleClose}) {
+function ApproveAsHR({id , handleClose}) {
     const dispatch = useDispatch();
     const nav = useNavigate();
     const {register , formState : {errors} , handleSubmit } = useForm({
@@ -38,10 +38,14 @@ function ApproveAsHR(id , {handleClose}) {
     const onSubmit = async (values) => {
         try{
             setIsLoading(true);
-            await dispatch(updateApplication({id , ...values , status: recruitmentStatusData.hr_approved.toUpperCase()})).unwrap();
+            await dispatch(updateApplication({
+                id, 
+                ...values, 
+                status: recruitmentStatusData.hr_approved.toUpperCase(),
+            })).unwrap();
             dispatch(showMessage({message: 'Application approved successfully' , severity: 1}));
             handleClose();
-            nav('/application');
+            nav('/dashboard/application');
         }catch(error){
             dispatch(showMessage({message: error , severity: 2}));
             setIsLoading(false);

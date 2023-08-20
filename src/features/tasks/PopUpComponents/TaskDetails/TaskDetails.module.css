@@ -1,6 +1,6 @@
 .task-details{
   width: 445px;
-  min-height: 495px;
+  min-height: 340px;
   background-color: white;
   border-radius: 9px;
   padding: 24px;
@@ -68,7 +68,7 @@
 .link{
   height: 24px;
   display: block;
-  background: var(--natural-alpha-7);
+  background: var(--natural-alpha-8);
   border-radius: 6px;
   font-size: 12px;
   font-weight: 500;
@@ -79,6 +79,9 @@
   -moz-border-radius: 6px;
   -ms-border-radius: 6px;
   -o-border-radius: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .description{
@@ -93,10 +96,11 @@
 
 .comments{
   width: 100%;
-  min-height: 190px;
-  max-height: 250px;
+  min-height: 65px;
+  max-height: 200px;
   background: var(--primary-white) ;
   padding: 10px;
+  padding-bottom: 5px;
   border-radius: 6px;
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
@@ -113,7 +117,6 @@
   flex-direction: column;
   overflow-y: auto;
   gap: 10px;
-  padding: 10px 0;
 }
 
 .comments .comment{
@@ -139,6 +142,7 @@
 
 .comments form{
   position: relative;
+  padding-top: 10px;
 }
 
 .comments form label,
@@ -149,15 +153,20 @@
 .comments form input{
   border: none;
   padding-right: 40px;
+  font-size: 13px;
+}
+
+.comments form input::placeholder{
+  text-transform: none;
+  font-size: 13px;
 }
 
 .comments form .submit{
   position: absolute;
-  top: 11px;
+  top: 18px;
   right: 7px;
 }
 
 .comments form .submit label{
   display: block !important;
 }
-

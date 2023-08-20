@@ -36,7 +36,10 @@ function ChangeApplicationPosition({id , position , handleClose}) {
     const onSubmit = async (values) => {
         try{
             setIsLoading(true);
-            await dispatch(updateApplication({id , position: values?.position?.value})).unwrap();
+            await dispatch(updateApplication({
+                id, 
+                position: values?.position?.value
+            })).unwrap();
             dispatch(showMessage({message: 'Application Edited successfully' , severity: 1}));
             handleClose();
         }catch(error){

@@ -10,7 +10,7 @@ import style from './InputField.module.css'
 function InputField ({
                 children, type, name,
                 placeholder, autoFocus, width, 
-                height, control, errors , accept
+                height, control, errors , accept , min
             }){
     return(
         <InputWrapper name={name} label={children} errors={errors} maxWidth={width}>
@@ -26,6 +26,7 @@ function InputField ({
                     height,
                     borderColor: errors?.[name] ? 'var(--error-main)' : ''
                 }}
+                min={min ? min : null}
                 {...control}
             />
         </InputWrapper>

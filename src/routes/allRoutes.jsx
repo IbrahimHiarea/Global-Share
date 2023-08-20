@@ -52,6 +52,8 @@ function AllRoute () {
                     <Route path='edit' element = { <EditProfile /> } />
                 </Route>
 
+                <Route path='user/:userId' element={<ProfilePage />} />
+
                 {/* Task sections */}
                 <Route path='task' element = { <TaskPage /> } />
 
@@ -71,7 +73,7 @@ function AllRoute () {
                 <Route path='email' element={<EmailPage />}/>
 
                 {/* Application section */}
-                <Route path='application' element={<Outlet />}>
+                <Route path='application/' element={<Outlet />}>
                     <Route index element={<ApplicationPage />} />
                     <Route path=':applicationId' element={<ApplicationDetails />} />
                 </Route>

@@ -12,7 +12,6 @@ import {
     selectApplicationStatus,
     getApplicationsPage,
     getApplications,
-
 } from '../ApplicationSlice';
 import { showMessage } from '../../snackBar/snackBarSlice';
 

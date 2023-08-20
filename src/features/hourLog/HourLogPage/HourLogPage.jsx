@@ -20,6 +20,7 @@ import DashboardTable from '../../../common/components/Dashboard/DashboardTable/
 
 // import style
 import style from './HourLogPage.module.css';
+import { useNavigate } from 'react-router';
 
 const columns = [
     {
@@ -51,6 +52,7 @@ const columns = [
 
 function HourLogPage () {
     const dispatch = useDispatch();
+    const nav = useNavigate();
     const [curSkip , setCurSkip] = useState(0);
 
     const data = useSelector(selectAllHourLog);
@@ -95,7 +97,7 @@ function HourLogPage () {
                 columns={columns}
                 data={data.slice(curSkip , curSkip+10)}
                 pending={status==='loading' || status==='idle' ? true : false}
-                rowClick={(row) => {}}
+                rowClick={(row) => nav(`/dashboard/user/${row.assignedTo.id}`) }
                 onChangePage={onChangePage}
                 totalCount={totalCount}
                 resetTable={resetTable}

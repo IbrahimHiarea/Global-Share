@@ -38,9 +38,6 @@ export async function getApplicationById(id , token , signal){
 }
 
 export async function updateApplication(id , values , token , signal){
-
-    console.log(values);
-
     return axiosApi.put(
         `/application/${id}`,
         values,

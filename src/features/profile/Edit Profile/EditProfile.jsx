@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 //import redux
 import { useSelector , useDispatch} from 'react-redux';
-import {fetchProfileDetails, selectProfileData, selectProfileStatus , updateProfileDetails} from '../profileSlice';
+import {getMyProfileDetails, selectProfileData, selectProfileStatus , updateProfileDetails} from '../profileSlice';
 import {showMessage} from '../../snackBar/snackBarSlice';
 
 //import components
@@ -18,7 +18,7 @@ import TextAreaField from '../../../common/components/Inputs/TextAreaField/TextA
 import { Avatar } from '@mui/material';
 
 //import icon & image
-import profileImage from '../../../assets/images/profile.png';
+import profileImage from '../../../assets/images/profile2.png';
 
 //import style
 import style from './EditProfile.module.css';
@@ -31,22 +31,50 @@ function EditProfile (){
     const status = useSelector(selectProfileStatus);
     const data = useSelector(selectProfileData);
 
-    const {register , formState: {errors , isDirty , dirtyFields}, 
-            handleSubmit , setValue , watch} = useForm({
-        defaultValues:{ ...data , resume : null },
-        values : {...data , resume : null }
+    const {
+        register, 
+        formState: {errors , isDirty , dirtyFields}, 
+        handleSubmit, 
+        setValue, 
+        watch
+    } = useForm({
+        defaultValues:{ 
+            firstName: '',
+            lastName: '',
+            middleName: '',
+            email: '',
+            additionalEmail: '',
+            arabicFullName: '',
+            joinDate: '',
+            phoneNumber: '',
+            appointlet: '',
+            bio: '',
+            cv: null
+        },
+        values: {
+            firstName: data.firstName,
+            lastName: data.lastName,
+            middleName: data.middleName,
+            email: data.email,
+            additionalEmail: data.additionalEmail,
+            arabicFullName: data.arabicFullName,
+            joinDate: data.joinDate,
+            phoneNumber: data.phoneNumber,
+            appointlet: data.appointlet,
+            bio: data.bio,
+            cv: null
+        }
     })
 
-    const onError  = (values) => console.log(values);
     const onSubmit = async (values) => {
-        if(isDirty || values.resume){
+        if(isDirty || values.cv){
             const changed = {};
             for(let key of Object.keys(dirtyFields)){
                 if(dirtyFields[key]){
                     changed[key] = values[key];
                 }
             }
-            if(values.resume) changed.resume = values.resume;
+            if(values.cv) changed.cv = values.cv;
             try{
                 await dispatch(updateProfileDetails(changed)).unwrap();
                 nav('/dashboard/profile');
@@ -57,13 +85,17 @@ function EditProfile (){
         }
     }
 
-
     useEffect(() => {
-        const promise = dispatch(fetchProfileDetails());
-
-        return () => {
-            promise.abort();
+        const req = async() => {
+            try{
+                await dispatch(getMyProfileDetails()).unwrap();
+            }catch(error){
+                if(error?.name==="ConditionError") return;
+                dispatch(showMessage({message: error , severity: 2}));
+            }
         }
+
+        req();
     }, [])
 
 
@@ -93,16 +125,13 @@ function EditProfile (){
                             <Avatar 
                                 src={profileImage}
                                 alt='Ahmad Alshahal' 
-                                sx={{
-                                    width: '137px', 
-                                    height: '137px'
-                                }} 
+                                sx={{ width: '150px',  height: '150px' , backgroundColor: 'white'}} 
                             />
                         </div>
 
                         <div className={style['header-info']}>
                             <div className={style['header-name']}>
-                                <h2>{`${data.firstName} ${data.middleName} ${data.lastName}`}</h2>
+                                <h2>{`${data?.firstName} ${data?.middleName} ${data?.lastName}`}</h2>
                             </div>
                         </div>
                         <Button 
@@ -117,7 +146,7 @@ function EditProfile (){
                     </div>
                 </div>
 
-                <form className={style['profile-body']} onSubmit={handleSubmit(onSubmit , onError)}>
+                <form className={style['profile-body']} onSubmit={handleSubmit(onSubmit)}>
                     <div className={style.box}>
                         <InputField
                             type='text'
@@ -125,14 +154,7 @@ function EditProfile (){
                             placeholder='First Name'
                             width='233px'
                             height='45px'   
-                            control={register('firstName' , {
-                                    required: 'Please enter your first name',
-                                    pattern: {
-                                        value: /^[A-Za-z]+$/,
-                                        message: "The name don't match the pattern"
-                                    }
-                                }
-                            )}
+                            control={register('firstName' , { required: 'Please enter your first name' })}
                             errors={errors}
                         >
                             First Name
@@ -143,13 +165,7 @@ function EditProfile (){
                             placeholder='Middle name'
                             width='233px'
                             height='45px'   
-                            control={register('middleName' , {
-                                required: 'Please enter your first name',
-                                pattern: {
-                                    value: /^[A-Za-z]+$/,
-                                    message: "The name don't match the pattern"
-                                }
-                            })}
+                            control={register('middleName' , { required: 'Please enter your middle name' })}
                             errors={errors}
                         >
                             Middle name
@@ -160,14 +176,7 @@ function EditProfile (){
                             placeholder='Last name'
                             width='233px'
                             height='45px'   
-                            control={register('lastName' , {
-                                    required: 'Please enter your last name',
-                                    pattern: {
-                                        value: /^[A-Za-z]+$/,
-                                        message: "The name don't match the pattern"
-                                    }
-                                }
-                            )}
+                            control={register('lastName' , { required: 'Please enter your last name' })}
                             errors={errors}
                         >
                             Last name
@@ -178,15 +187,7 @@ function EditProfile (){
                             placeholder='Email'
                             width='233px'
                             height='45px'   
-                            control={register('email' , {
-                                    required: 'Please enter your email',
-                                    pattern: {
-                                        value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                                        message: "The email don't match the pattern"
-                                    },
-                                    disabled: true,
-                                }
-                            )}
+                            control={register('email' , { required: 'Please enter your email', disabled: true })}
                             errors={errors}
                         >
                             Email
@@ -218,13 +219,7 @@ function EditProfile (){
                             placeholder='Full arabic name'
                             width='233px'
                             height='45px'   
-                            control={register('arabicFullName' , {
-                                required: 'Please enter your arabic name',
-                                pattern: {
-                                    value: /^[\u0621-\u064A\s]+$/,
-                                    message: "The name don't match the pattern"
-                                }
-                            })}
+                            control={register('arabicFullName' , { required: 'Please enter your arabic name' })}
                             errors={errors} 
                         >
                             Full arabic name
@@ -234,15 +229,7 @@ function EditProfile (){
                             name='joinDate'
                             width='233px'
                             height='45px'   
-                            control={register('joinDate' , {
-                                    required: 'Please enter your birth date',
-                                    validate: (value) => {
-                                        const date = new Date(value);
-                                        const cur = new Date();
-                                        if(date > cur) return "Date should by start from today";
-                                    }
-                                }
-                            )}
+                            control={register('joinDate' , { required: 'Please enter your birth date' })}
                             errors={errors}
                         >
                             Join Date
@@ -274,9 +261,7 @@ function EditProfile (){
                             placeholder='Appointlet'
                             width='233px'
                             height='45px'   
-                            control={register('appointlet' , {
-                                required: 'Please enter your appointlet link'
-                            })}
+                            control={register('appointlet' , { required: 'Please enter your appointlet link' })}
                             errors={errors}
                         >
                             Appointlet
@@ -289,21 +274,20 @@ function EditProfile (){
                             placeholder='Bio'
                             width='495px'
                             height='126px'
-                            control={register('bio' , {
-                                required: 'Please enter your bio'
-                            })}
+                            control={register('bio' , { required: 'Please enter your bio' })}
                             errors={errors}
                         >
                             Bio
                         </TextAreaField>
                         <FileUpload
-                            name='resume'
-                            file={watch("resume")}
+                            name='cv'
+                            file={watch("cv")}
                             setValue={setValue}
                             width="495px"
                             height='125px'
                             types={['PDF']}
                             required={false}
+                            label={data?.cv ? data?.cv : 'Click to upload or drag and drop PDF (max, 32MB)'}
                         >
                             Resume
                         </FileUpload>
@@ -312,7 +296,7 @@ function EditProfile (){
                         <SubmitButton 
                             width='80px' 
                             height='40px'
-                            disabled={(isDirty===false && watch('resume')===null)}
+                            disabled={(isDirty===false && watch('cv')===null)}
                         >
                             Save
                         </SubmitButton>

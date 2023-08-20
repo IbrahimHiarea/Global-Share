@@ -64,7 +64,7 @@ function LoginPage (){
                     )}
                     errors={errors}
                 >
-                    Name
+                    Email
                 </InputField>
                 <InputField
                     type='password'

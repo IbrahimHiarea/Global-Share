@@ -7,9 +7,6 @@ import * as profileAPI from "./ProfileAPI";
 // import utils
 import { format } from "date-fns";
 
-//import selectors
-import { selectAuthToken } from "../auth/AuthSlice";
-
 //init slice
 const status = {
     idle: 'idle',
@@ -18,54 +15,82 @@ const status = {
     failed: "failed"
 }
 
+const userModel = {
+    id: 0,
+    email: "",
+    phoneNumber: "",
+    firstName: "",
+    lastName: "",
+    additionalEmail: "",
+    middleName: "",
+    arabicFullName: "",
+    appointlet: "",
+    bio: "",
+    gsStatus: "",
+    joinDate: "2000-1-1",
+    tasksCompleted: 0,
+    volunteeredHours: 0,
+    position: {},
+}
+
 const initialState = {
     status: status.idle,
     error: null,
-    data : {
-        id: 0,
-        email: "",
-        phoneNumber: "",
-        firstName: "",
-        lastName: "",
-        additionalEmail: "",
-        middleName: "",
-        arabicFullName: "",
-        appointlet: "",
-        bio: "",
-        gsStatus: "",
-        joinDate: "2000-1-1",
-        tasksCompleted: 0,
-        volunteeredHours: 0,
-        position: {},
-    },
+    data : {},
     profileSquads: [],
 }
 
-//thunks actions
-export const fetchProfileDetails = createAsyncThunk(
-    'profile/fetchProfileDetails',
-    async ( _ , {rejectWithValue , getState , signal}) => {
+//thunk action
+export const getMyProfileDetails = createAsyncThunk(
+    'profile/getMyProfileDetails',
+    async (_ , thunkAPI) => {
         try{
-            const token = selectAuthToken(getState());
-            const response = await profileAPI.fetchProfileDetails(token , signal);
+            const {auth : {token}} = thunkAPI.getState();
+            const response = await profileAPI.getMyProfileDetails(token , thunkAPI.signal);
             return response.data;
-        }
-        catch(error){
+        }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
-            return rejectWithValue(message);
+            return thunkAPI.rejectWithValue(message);
         }
     },
     {
         condition: (_, {getState}) => {
-            const { profile } = getState()
-            const authStatus = profile.status;
-            if (authStatus === status.succeeded || authStatus === status.loading) {
+            const { profile : {status : profileStatus} } = getState()
+            if (profileStatus === status.loading) {
+                return false
+            }
+        },
+    }
+);
+
+export const getProfileDetailsById = createAsyncThunk(
+    'profile/getProfileDetailsById',
+    async (data , thunkAPI) => {
+        try{
+            const {auth : {token}} = thunkAPI.getState();
+            const response = await profileAPI.getProfileDetailsById(data.id , token , thunkAPI.signal);
+            return response.data;
+        }catch(error){
+            let message = "Network connection error";
+            if(error?.response?.data?.message){
+                if(Array.isArray(error.response.data.message))
+                    message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
+            }
+            return thunkAPI.rejectWithValue(message);
+        }
+    },
+    {
+        condition: (_, {getState}) => {
+            const { profile : {status : profileStatus} } = getState()
+            if (profileStatus === status.loading) {
                 return false
             }
         },
@@ -74,23 +99,22 @@ export const fetchProfileDetails = createAsyncThunk(
 
 export const updateProfileDetails = createAsyncThunk(
     'profile/updateProfileDetails',
-    async (data , {rejectWithValue , getState ,  signal}) => {
+    async (data , thunkAPI) => {
         try{
-            const token = selectAuthToken(getState());
-            await profileAPI.updateProfileDetails(data , token , signal);
-            return data;
-        }
-        catch(error){
+            const {auth : {token}} = thunkAPI.getState();
+            const response = await profileAPI.updateMyProfileDetails(data , token , thunkAPI.signal);
+            return response.data;
+        }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
-            return rejectWithValue(message);
+            return thunkAPI.rejectWithValue(message);
         }
-    },  
+    }
 );
 
 //creating profile slice
@@ -100,23 +124,41 @@ const profileSlice = createSlice({
     reducers:{},
     extraReducers: (builder) => {
         builder
-            .addCase(fetchProfileDetails.pending , (state ,action) => {
+            .addCase(getMyProfileDetails.pending , (state , _) => {
                 state.status = status.loading;
             })
-            .addCase(fetchProfileDetails.fulfilled , (state , action) => {
-                for(let key of Object.keys(action.payload)){
-                    if(action.payload[key]===null)
-                        action.payload[key] = "";
-                    if(key==='joinDate') 
-                        action.payload[key] = format(new Date(action.payload[key]) , 'yyyy-MM-dd');
+            .addCase(getMyProfileDetails.fulfilled , (state , action) => {
+                const details = action.payload;
+
+                for(let key of Object.keys(details)){
+                    if(details[key]===null) details[key] = '';
+                    if(key==='joinDate') details[key] = format(new Date(details[key]) , 'yyyy-MM-dd');
                 }
-                action.payload.positions?.forEach(element => {
+                
+                details.positions?.forEach(element => {
                     state.profileSquads.push(element.position.squad);
                 });
+
+                state.data = details;
                 state.status = status.succeeded;
-                state.data = action.payload;
             })
-            .addCase(fetchProfileDetails.rejected , (state , action) =>{
+            .addCase(getMyProfileDetails.rejected , (state , action) => {
+                state.status = status.failed;
+                state.error = action.payload;
+            })
+            .addCase(getProfileDetailsById.pending , (state , action) => {
+                state.status = status.loading;
+            })
+            .addCase(getProfileDetailsById.fulfilled , (state , action) => {
+                const details = action.payload;
+                for(let key of Object.keys(details)){
+                    if(details[key]===null) details[key] = '';
+                    if(key==='joinDate') details[key] = format(new Date(details[key]) , 'yyyy-MM-dd');
+                }   
+                state.data = details;
+                state.status = status.succeeded;
+            })
+            .addCase(getProfileDetailsById.rejected , (state , action) => {
                 state.status = status.failed;
                 state.error = action.payload;
             })
@@ -124,14 +166,17 @@ const profileSlice = createSlice({
                 state.status = status.loading;
             })
             .addCase(updateProfileDetails.fulfilled , (state , action) => {  
+                const details = action.payload;
+                for(let key of Object.keys(details)){
+                    if(details[key]===null) details[key] = '';
+                    if(key==='joinDate') details[key] = format(new Date(details[key]) , 'yyyy-MM-dd');
+                }   
+                state.data = details;
                 state.status = status.succeeded;
-                for(let key of Object.keys(action.payload)){
-                    state.data[key] = action.payload[key];
-                }
             })
             .addCase(updateProfileDetails.rejected , (state , action) => {
-                state.status = status.succeeded;
                 state.error = action.payload;
+                state.status = status.succeeded;
             })
     },
 });

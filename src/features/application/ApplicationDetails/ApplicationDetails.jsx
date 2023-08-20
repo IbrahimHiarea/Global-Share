@@ -89,7 +89,7 @@ function ApplicationDetails(){
     
     const status = useSelector(selectApplicationStatus);
     const data = useSelector(state => selectApplicationById(state , id));
-    
+
     const handlePopUpClose = () => popUpDispatch({type:'close'});
 
     useEffect(() => {
@@ -151,17 +151,17 @@ function ApplicationDetails(){
                 <Masonry className={style['application-questions']} columnsCount={2} gutter='30px'>
                     {
                         data?.answers?.map((answer) => {
-                            if(answer?.question?.type?.toLowerCase()===questionTypeData.long || 
-                                answer?.question?.type?.toLowerCase()===questionTypeData.short){
-                                    return <TextView key={answer?.id} title={answer?.question?.text} answer={answer?.content[0]}/>
+                            if(answer?.question?.question?.type?.toLowerCase()===questionTypeData.long || 
+                                answer?.question?.question?.type?.toLowerCase()===questionTypeData.short){
+                                    return <TextView key={answer?.id} title={answer?.question?.question?.text} answer={answer?.content[0]}/>
                                 }
-                            else if(answer?.question?.type?.toLowerCase()===questionTypeData.radio){
-                                return <RadioView key={answer?.id} title={answer?.question?.text} options={answer?.question?.options} answer={answer?.content[0]} />
+                            else if(answer?.question?.question?.type?.toLowerCase()===questionTypeData.radio){
+                                return <RadioView key={answer?.id} title={answer?.question?.question?.text} options={answer?.question?.question?.options} answer={answer?.content[0]} />
                             }   
-                            else if(answer?.question?.type?.toLowerCase()===questionTypeData.checkbox){
-                                return <CheckboxView key={answer?.id} title={answer?.question?.text} options={answer?.question?.options} answer={answer?.content}/>
+                            else if(answer?.question?.question?.type?.toLowerCase()===questionTypeData.checkbox){
+                                return <CheckboxView key={answer?.id} title={answer?.question?.question?.text} options={answer?.question?.question?.options} answer={answer?.content}/>
                             }
-                            return <FileView key={answer?.id} title={answer?.question?.text} link={answer?.content[0]} name={answer?.content[0]}/>
+                            return <FileView key={answer?.id} title={answer?.question?.question?.text} link={answer?.content[0]} name={answer?.content[0]}/>
                         })
                     }
                 </Masonry>
@@ -177,17 +177,6 @@ function ApplicationDetails(){
                         >
                             refuse
                         </Button>
-                        {data?.status?.toLowerCase()===recruitmentStatusData.applied && 
-                            <Button 
-                                backgroundColor='var(--word-color)'
-                                color='white'
-                                width='150px'
-                                height='40px'
-                                onClick={() => popUpDispatch({type: 'change'})}
-                            >
-                                Change Position
-                            </Button>
-                        }
                         <Button 
                             backgroundColor='var(--secondary-dark)'
                             color='white'

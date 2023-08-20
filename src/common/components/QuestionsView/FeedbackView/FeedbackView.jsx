@@ -22,6 +22,9 @@ function FeedbackView({feedback :{type , text}}){
         case recruitmentStatusData.tech_interview_approved:
             title = 'tech-Interview feedback';
             break;
+        case recruitmentStatusData.done:
+            title = 'recruitment feedback'
+            break;
         default:
             title = '';
     }

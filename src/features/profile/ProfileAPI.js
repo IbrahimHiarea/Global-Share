@@ -14,7 +14,7 @@ const axiosApi = axios.create({
 
 
 //profile api
-export async function fetchProfileDetails(token , signal){
+export async function getMyProfileDetails(token , signal){
     return axiosApi.get(
         '/user/profile',
         {
@@ -26,24 +26,32 @@ export async function fetchProfileDetails(token , signal){
     );
 }
 
+export async function getProfileDetailsById(id , token , signal){
+    return axiosApi.get(
+        `/user/${id}`,
+        {
+            signal : signal,
+            headers: {
+                Authorization : `Bearer ${token}`
+            }
+        }
+    )
+}
 
-// TODO::
-// resume file sent
-export async function updateProfileDetails({resume , ...data}, token , signal){
-    console.log(data,resume);
+export async function updateMyProfileDetails(values, token , signal){
     const formData = new FormData();
-    for (const key of Object.keys(data)){
-        formData.append(key,data[key]);
+    for(let key of Object.keys(values)){
+        formData.append(key , values[key]);
     }
-    formData.append('cv',JSON.stringify(resume));
-    console.log(formData);
+
     return axiosApi.put(
         '/user',
         formData,
         {
             signal : signal,
             headers: {
-                Authorization : `Bearer ${token}`
+                Authorization : `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data',
             }
         }
     );

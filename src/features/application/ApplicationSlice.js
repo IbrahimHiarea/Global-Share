@@ -67,18 +67,18 @@ export const getApplications = createAsyncThunk(
         } catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
     },
     {
         condition: (data, {getState}) => {
-            const { application : {searchTerms , status} } = getState()
-            if (status === status.loading || searchTerms.search===data.search) {
+            const { application : {searchTerms , applicationStatus} } = getState()
+            if (applicationStatus === status.loading || searchTerms.search===data.search) {
                 return false;
             }
         },
@@ -95,10 +95,10 @@ export const getApplicationsPage = createAsyncThunk(
         }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -115,18 +115,18 @@ export const getApplicationById = createAsyncThunk(
         } catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
     },
     {
         condition: (data, {getState}) => {
-            const { application : {status , ids} } = getState()
-            if (status === status.loading || ids.indexOf(parseInt(data.id))!==-1) {
+            const { application : {status} } = getState()
+            if (status === status.loading) {
                 return false;
             }
         },
@@ -145,10 +145,10 @@ export const updateApplication = createAsyncThunk(
         }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }

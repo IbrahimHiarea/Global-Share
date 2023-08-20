@@ -27,6 +27,7 @@ import { IoCloseOutline } from "react-icons/io5";
 
 //import style
 import style from './AddTasks.module.css';
+import { format } from 'date-fns';
 
 
 function AddTasks ({handleClose , taskStatusId}){
@@ -106,6 +107,7 @@ function AddTasks ({handleClose , taskStatusId}){
                         height='40px'
                         control={register('deadline' , { required: 'Please enter task deadLine' })}
                         errors={errors}
+                        min={format(new Date() , 'yyyy-MM-dd')}
                     />
                 </div>
                 <div className={style.box}>
@@ -150,7 +152,7 @@ function AddTasks ({handleClose , taskStatusId}){
                         placeholder='url'
                         width='386px'
                         height='40px'
-                        control={register('url' , { required: 'Please enter url' })}
+                        control={register('url')}
                         errors={errors}
                     />
                 </div>
@@ -162,7 +164,7 @@ function AddTasks ({handleClose , taskStatusId}){
                         placeholder='Assignee'
                         control={control}
                         required='true'
-                        callBack={(data) => getAssignableMember({...data , squadId})}
+                        callBack={(data) => getAssignableMember({...data , squadId: squadId?.value})}
                         defaultOptions={[]}
                         errors={errors}
                         border={true}

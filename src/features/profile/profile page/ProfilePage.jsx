@@ -1,10 +1,16 @@
 //import react
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 //import redux
 import { useSelector , useDispatch} from 'react-redux';
-import {selectProfileStatus , fetchProfileDetails, selectProfileData} from '../profileSlice';
+import {
+    getProfileDetailsById, 
+    getMyProfileDetails, 
+    selectProfileStatus, 
+    selectProfileData
+} from '../profileSlice';
+import {showMessage} from '../../snackBar/snackBarSlice';
 
 //import components
 import Loader from '../../../common/components/Loader/Loader';
@@ -15,9 +21,8 @@ import { Avatar } from '@mui/material';
 
 //import icon & image
 import { HiOutlineMail } from "react-icons/hi";
-import { IoIosNuclear } from "react-icons/io";
 import { BsSend , BsTelephone , BsGift , BsPeople , BsPen , BsYinYang } from "react-icons/bs";
-import profileImage from '../../../assets/images/profile.png';
+import profileImage from '../../../assets/images/profile2.png';
 
 //import utils
 import { format } from 'date-fns';
@@ -25,22 +30,26 @@ import { format } from 'date-fns';
 //import style
 import style from './ProfilePage.module.css';
 
-//static data
-const period = ['all'];
-
 function ProfilePage (){
     const nav = useNavigate();
+    const { userId } = useParams();   
     const dispatch = useDispatch();
 
     const status = useSelector(selectProfileStatus);
     const data = useSelector(selectProfileData);
 
     useEffect(() => {
-        const promise  = dispatch(fetchProfileDetails());
-
-        return () => {
-            promise.abort()
+        const req = async() => {
+            try{
+                if(userId) await dispatch(getProfileDetailsById({id : userId})).unwrap();
+                else await dispatch(getMyProfileDetails()).unwrap();
+            }catch(error){
+                if(error?.name==="ConditionError") return;
+                dispatch(showMessage({message: error , severity: 2}));
+            }
         }
+
+        req();
     }, []);
     
 
@@ -60,133 +69,132 @@ function ProfilePage (){
         );
     }
 
-    
-    else{
-        return (
-            <div className={style['profile-page']}>
-                <div className={style['profile-header']}>
-                    <div className={style['header-background']}></div>
-                    <div className={style['header-content']}>
-                        <div className={style.image}>
-                            <Avatar 
-                                src={profileImage}
-                                alt='profile photo' 
-                                sx={{
-                                    width: '137px', 
-                                    height: '137px'
-                                }} 
-                            />
+    return (
+        <div className={style['profile-page']}>
+            <div className={style['profile-header']}>
+                <div className={style['header-background']}></div>
+                <div className={style['header-content']}>
+                    <div className={style.image}>
+                        <Avatar 
+                            src={profileImage}
+                            alt='profile photo' 
+                            sx={{ width: '150px',  height: '150px' , backgroundColor: 'white'}} 
+                        />
+                    </div>
+                    <div className={style['header-info']}>
+                        <div className={style['header-name']}>
+                            <h2>{`${data?.firstName} ${userId===undefined ? data?.middleName : ''} ${data?.lastName}`} <span>• {data?.arabicFullName}</span></h2>
+                            <VolunteerStatus width="70px" height="24px" volunteerStatus={data?.gsStatus} />
                         </div>
-                        <div className={style['header-info']}>
-                            <div className={style['header-name']}>
-                                <h2>{`${data?.firstName} ${data?.middleName} ${data?.lastName}`} <span>• {data?.arabicFullName}</span></h2>
-                                <VolunteerStatus width="70px" height="24px" volunteerStatus={data.gsStatus} />
-                            </div>
-                            <h3> {(data?.positions ? data?.positions[0].position.gsLevel + ' ' + data?.positions[0].position.gsName : '')} <span>• {data.email}</span></h3>
-                        </div>
-
+                        <h3> {(data?.positions ? data?.positions[0]?.position?.gsLevel?.toLowerCase() + ' ' + data?.positions[0]?.position?.gsName : '')} <span>• {data?.email}</span></h3>
+                    </div>
+                    {userId===undefined &&
                         <Button 
                             width='80px' 
                             height='40px' 
-                            onClick={() => nav('edit')}
+                            onClick={() => nav('/dashboard/profile/edit')}
                         >
                             edit
                         </Button>
-                    </div>
+                    }
                 </div>
-                <div className={style['profile-body']}>
-                    <div className={style['first-body']}>
-                        <BoxInfo
-                            title="about"
-                            info={data.bio}
-                            isLink={false}
-                            icon={<></>}
-                        />
-                        <div className={style.log}>
-                            {period?.map((item) => (
-                                <WorkTimeCard 
-                                    key={item}
-                                    hours={data.volunteeredHours}
-                                    tasks={data.tasksCompleted}
-                                />
-                            ))}
-                        </div>
+            </div>  
+
+            <div className={style['profile-body']}>
+                <div className={style['first-body']}>
+                    <div>
+                        <h4>about</h4>
+                        <div className={style.bio}>{data?.bio}</div>
                     </div>
-                    <div className={style['second-body']}>
-                        <div>
+                    {userId===undefined &&
+                        <div className={style.log}>
+                            <WorkTimeCard 
+                                hours={data?.volunteeredHours}
+                                tasks={data?.tasksCompleted}
+                            />
+                        </div>
+                    }
+                </div>
+                <div className={style['second-body']}>
+                    <div>
+                        <BoxInfo
+                            title="appointlet"
+                            info={data?.appointlet}
+                            isLink={true}
+                            icon={<BsSend/>}
+                            />
+                        <BoxInfo
+                            title="phone number"
+                            info={data?.phoneNumber}
+                            isLink={false}
+                            icon={<BsTelephone/>}
+                            />
+                    </div>
+                    <div>
+                        {userId===undefined && 
                             <BoxInfo
                                 title="additional email"
-                                info={data.additionalEmail}
+                                info={data?.additionalEmail}
                                 isLink={false}
                                 icon={<HiOutlineMail />}
                             />
+                        }
+                        {userId===undefined && 
                             <BoxInfo
-                                title="appointlet"
-                                info={data.appointlet}
-                                isLink={true}
-                                icon={<BsSend/>}
-                            />
-                        </div>
-                        <div>
-                            <BoxInfo
-                                title="phone number"
-                                info={data.phoneNumber}
-                                isLink={false}
-                                icon={<BsTelephone/>}
-                            />
-                            <BoxInfo
-                                title="birth date"
-                                info={format(new Date(data.joinDate) , 'MMM dd, yyyy')}
+                                title="join Date"
+                                info={format(new Date(data?.joinDate) , 'MMM dd, yyyy')}
                                 isLink={false}
                                 icon={<BsGift/>}
                             />
-                        </div>
-                        <div>
+                        }
+                    </div>
+                    <div>
+                        <BoxInfo
+                            title="squads"
+                            info={
+                                <div className={style.squads}>
+                                    {
+                                        data?.positions?.map((position) => (
+                                            <div key={position?.id} className={style.squad}>
+                                                {position?.position?.squad?.gsName}
+                                            </div>
+                                        ))
+                                    }
+                                </div>
+                            }
+                            isLink={false}
+                            icon={<BsPeople/>}
+                        />
+                        {
+                            data?.cv !== ''  &&  
                             <BoxInfo
-                                title="squads"
+                                title="resume"
                                 info={
-                                    <div className={style.squads}>
-                                        {
-                                            data?.positions?.map((position) => {
-                                                return <div className={style.squad}>{position?.position?.squad?.gsName}</div>
-                                            })
-                                        }
-                                    </div>
+                                    <a 
+                                        className={style.resume} 
+                                        href={data?.cv} 
+                                        target="_blank" 
+                                        download 
+                                        rel="noreferrer"
+                                    >
+                                        <Button>Click here to download</Button>
+                                    </a>
                                 }
                                 isLink={false}
-                                icon={<BsPeople/>}
+                                icon={<BsPen/>}
                             />
-                            {
-                                data?.cv !== ''  &&  
-                                <BoxInfo
-                                    title="resume"
-                                    info={
-                                        <a 
-                                            className={style.resume} 
-                                            href={data?.cv} 
-                                            target="_blank" 
-                                            download 
-                                            rel="noreferrer"
-                                        >
-                                            <Button>Click here to download</Button>
-                                        </a>
-                                    }
-                                    isLink={false}
-                                    icon={<BsPen/>}
-                                />
-                            }
-                        </div>
-                        <BoxInfo
-                            title="other positions"
-                            info={data?.positions?.map((position) => {return position.position.gsLevel + ' ' + position.position.gsName}).join(" • ")}
-                            isLink={false}
-                            icon={<BsYinYang />}
-                        />
+                        }
                     </div>
+                    <BoxInfo
+                        title="other positions"
+                        info={data?.positions?.map((position) => {return position?.position?.gsLevel + ' ' + position?.position?.gsName}).join(" • ")}
+                        isLink={false}
+                        icon={<BsYinYang />}
+                    />
                 </div>
             </div>
-        );
-    }
+        </div>
+    );
 }
 
 function WorkTimeCard({hours , tasks}){

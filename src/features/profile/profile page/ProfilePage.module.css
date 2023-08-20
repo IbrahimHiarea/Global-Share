@@ -30,7 +30,7 @@
 	-moz-border-radius: 50%;
 	-ms-border-radius: 50%;
 	-o-border-radius: 50%;
-	border: 8px solid white;
+	/* border: 8px solid white; */
 	margin-top: -88px;
 }
 
@@ -65,12 +65,14 @@
 	font-weight: 500;
 	font-size: 16px;
 	color: var(--word-color);
+	text-transform: capitalize;
 }
 
 .header-info h3 span{
 	font-size: 16px;
 	color: var(--natural-alpha-4);
 	font-weight: 500;
+	text-transform: none;
 }
 
 .profile-body{
@@ -194,4 +196,12 @@
 
 .resume button:hover{
 	color: var(--primary-main);
+}
+
+.bio{
+	font-weight: 500;
+	font-size: 16px;
+	color: var(--natural-4);
+	line-height: 23px;
+	min-height: 150px;
 }

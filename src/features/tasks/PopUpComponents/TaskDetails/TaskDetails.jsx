@@ -1,6 +1,7 @@
 //import package
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router';
 
 //import redux
 import { useSelector , useDispatch } from 'react-redux';
@@ -24,6 +25,7 @@ import style from './TaskDetails.module.css';
 
 function TaskDetails ({ handleClose ,  taskId }){
     const task = useSelector(state => selectTaskById(state , taskId));
+    const nav = useNavigate();
 
     return (
         <div className={style['task-details']}>
@@ -47,6 +49,7 @@ function TaskDetails ({ handleClose ,  taskId }){
                                 fontSize: '15px',
                                 backgroundColor: 'darkcyan',
                             }}
+                            onClick={() => nav(`/dashboard/user/${task.assignedTo.id}`)}
                         >{task.assignedTo.firstName?.at(0)}</Avatar>
                         <div>{task.assignedTo.firstName}</div>
                     </div>
@@ -61,6 +64,7 @@ function TaskDetails ({ handleClose ,  taskId }){
                                 fontSize: '15px',
                                 backgroundColor: 'cornflowerblue',
                             }}
+                            onClick={() => nav(`/dashboard/user/${task.assignedBy.id}`)}
                         >{task.assignedBy.firstName?.at(0)}</Avatar>
                         <div>{task.assignedBy.firstName}</div>
                     </div>
@@ -115,7 +119,7 @@ const CommentBox = ({taskId , commentsIds}) => {
                     name='content'
                     placeholder='Add a comment'
                     width='376px'
-                    height='40px'
+                    height='35px'
                     errors={errors}
                     control={register('content' , { required: true })}
                 />
@@ -140,6 +144,7 @@ const CommentBox = ({taskId , commentsIds}) => {
 
 const SingleComment = ({commentId , taskId}) => {
     const comment = useSelector(state => selectCommentById(state , commentId));
+    const nav = useNavigate();
     const dispatch = useDispatch();
 
     const handleDeleteComment = async () => {
@@ -160,6 +165,7 @@ const SingleComment = ({commentId , taskId}) => {
                     fontSize: '15px',
                     backgroundColor: 'darkseagreen',
                 }}
+                onClick={() => nav(`/dashboard/user/${comment.author.id}`) }
             >{comment.author.firstName?.at(0)}</Avatar>
             <div className={style['comment-content']}>{comment.content}</div>
             <div 

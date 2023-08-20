@@ -61,18 +61,18 @@ export const getTasksBySquad = createAsyncThunk(
         }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
     },
     {
         condition: (data, {getState}) => {
-            const { task : {searchTerms , status , paginationStatus} } = getState()
-            if (status === status.loading || paginationStatus===status.loading || (searchTerms.search===data.search 
+            const { task : {searchTerms , taskStatus , paginationStatus} } = getState()
+            if (taskStatus === status.loading || paginationStatus===status.loading || (searchTerms.search===data.search 
                 && searchTerms.difficulty===data.difficulty && searchTerms.priority===data.priority
                 && searchTerms.member===data.member && searchTerms.squadId===data.squadId)) {
                 return false;
@@ -91,18 +91,18 @@ export const getTasksBySquadPage = createAsyncThunk(
         }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
     },
     {
         condition: (data, {getState}) => {
-            const { task : {status , paginationStatus} } = getState()
-            if (status === status.loading || status===status.failed || paginationStatus===status.loading) {
+            const { task : {taskStatus , paginationStatus} } = getState()
+            if (taskStatus === status.loading || taskStatus===status.failed || paginationStatus===status.loading) {
                 return false;
             }
         },
@@ -119,10 +119,10 @@ export const createTaskStatus = createAsyncThunk(
         }catch(error){  
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -139,10 +139,10 @@ export const deleteTaskStatus = createAsyncThunk(
         }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -159,10 +159,10 @@ export const createTask = createAsyncThunk(
         }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -180,10 +180,10 @@ export const updateTask = createAsyncThunk(
         }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -200,10 +200,10 @@ export const createTaskComment = createAsyncThunk(
         }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -220,10 +220,10 @@ export const deleteTaskComment = createAsyncThunk(
         }catch(error){
             let message = "Network connection error";
             if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -243,7 +243,8 @@ const tasksSlice = createSlice({
                 priority: undefined,
                 member: undefined,
                 squadId: undefined,
-            }
+            };
+            state.status = status.idle;
         }
     },
     extraReducers: (builder) => {
@@ -252,64 +253,36 @@ const tasksSlice = createSlice({
                 state.status = status.loading;
             })
             .addCase(getTasksBySquad.fulfilled , (state , action) => {
-                const tasks = [] , comments = [] , statuses = [];
                 state.searchTerms = action.payload.searchTerms;
-                action.payload.data?.forEach((status) => {
-                    if(status.name.toLowerCase()==='done' && status.crucial) state.endTaskStatusIds.push(status.id);
-                    const tempStatus = {...status , tasks: []};
-                    status.tasks?.forEach((task) => {
-                        tasks.push(task);
-                        tempStatus.tasks.push(task.id);
-                    });
-                    statuses.push(tempStatus);
-                }); 
-                tasks?.forEach((task) => {
-                    const tempComments = task.comments;
-                    task.comments = [];
-                    tempComments?.forEach((comment) => {
-                        task.comments.push(comment.id);
-                        comments.push(comment);
+                
+                commentAdapter.removeAll(state.comments);
+                taskAdapter.removeAll(state.tasks)
+                taskStatusAdapter.removeAll(state.taskStatuses);
+
+                action.payload.data?.forEach(taskStatus => {
+                    if(taskStatus.name?.toLowerCase()==='done' && taskStatus.crucial) state.endTaskStatusIds.push(taskStatus.id);
+                    const tasks = taskStatus.tasks.map(task => task);
+                    const taskIds = taskStatus.tasks.map(task => task.id);
+                    taskStatusAdapter.setOne(state.taskStatuses , {...taskStatus , tasks: taskIds});
+                    tasks?.forEach(task => {
+                        const comments = task.comments?.map(comment => comment);
+                        const commentIds = task.comments?.map(comment => comment.id);
+                        commentAdapter.setMany(state.comments , comments);
+                        taskAdapter.setOne(state.tasks , {...task , comments: commentIds});
                     })
                 });
-                taskStatusAdapter.setAll(state.taskStatuses , statuses);
-                taskAdapter.setAll(state.tasks , tasks);
-                commentAdapter.setAll(state.comments , comments);
+
                 state.status = status.succeeded;
             })
             .addCase(getTasksBySquad.rejected , (state , action) => {
                 state.error = action.payload;
                 state.status = status.failed;
             })
-            .addCase(getTasksBySquadPage.pending , (state , _) => {
-                state.paginationStatus = status.loading
-            })
-            .addCase(getTasksBySquadPage.fulfilled , (state , action) => {
-                const tasks = [] , comments = [];
-                action.payload.data?.forEach((status) => {
-                    status.tasks?.forEach((task) => {
-                        state.taskStatuses.entities[status.id].tasks.push(task.id);
-                        tasks.push(task);
-                    });
-                }); 
-                tasks?.forEach((task) => {
-                    const tempComments = task.comments;
-                    task.comments = [];
-                    tempComments?.forEach((comment) => {
-                        task.comments.push(comment.id);
-                        comments.push(comment);
-                    })
-                });
-                taskAdapter.setMany(state.tasks , tasks);
-                commentAdapter.setMany(state.comments , comments);
-                state.paginationStatus = status.succeeded;
-            })
-            .addCase(getTasksBySquadPage.rejected , (state , _) => {
-                state.paginationStatus = status.failed;
-            })
+            .addCase(getTasksBySquadPage.pending , () => {})
+            .addCase(getTasksBySquadPage.fulfilled , () => {})
+            .addCase(getTasksBySquadPage.rejected , () => {})
             .addCase(createTaskStatus.fulfilled , (state , action) => {
-                const taskStatus = action.payload;
-                taskStatus.tasks = [];
-                taskStatusAdapter.upsertOne(state.taskStatuses , taskStatus);
+                taskStatusAdapter.upsertOne(state.taskStatuses , {...(action.payload) , tasks: []});
             })
             .addCase(deleteTaskStatus.fulfilled , (state , action) => {
                 taskStatusAdapter.removeOne(state.taskStatuses ,  action.payload);
@@ -320,18 +293,15 @@ const tasksSlice = createSlice({
                 taskAdapter.upsertOne(state.tasks , task);
             })
             .addCase(updateTask.fulfilled , (state , action) => {
-                const task = action.payload.data , comments = [];
-                const tempComments = task.comments;
-                task.comments = [];
-                tempComments?.forEach((comment) => {
-                    task.comments.push(comment.id);
-                    comments.push(comment);
-                })
-                state.taskStatuses.entities[task.statusId].tasks.push(task.id);
-                const temp = state.taskStatuses.entities[action.payload.source].tasks;
-                state.taskStatuses.entities[action.payload.source].tasks = lodash.remove(temp , (item) => item!==parseInt(task.id));
+                const {data: task , source} = action.payload;
+                const {data: {statusId : destination}}  = action.payload;
+                delete task.comments;
+                
+                state.taskStatuses.entities[destination].tasks.push(task.id);
+                const temp = state.taskStatuses.entities[source].tasks;
+                state.taskStatuses.entities[source].tasks = lodash.remove(temp , (item) => item!==parseInt(task.id));
+                
                 taskAdapter.upsertOne(state.tasks , task);
-                commentAdapter.setMany(state.comments , comments);
             })
             .addCase(createTaskComment.fulfilled , (state , action) => {
                 const {comment , info} = action.payload;
@@ -348,7 +318,7 @@ const tasksSlice = createSlice({
                 const {taskId , id} = action.payload;
                 const temp = state.tasks.entities[taskId].comments;
                 state.tasks.entities[taskId].comments = lodash.remove(temp , (item) => item!==parseInt(id));
-                commentAdapter.removeOne(state.comments , action.payload);
+                commentAdapter.removeOne(state.comments , action.payload.id);
             })
     }
 });
