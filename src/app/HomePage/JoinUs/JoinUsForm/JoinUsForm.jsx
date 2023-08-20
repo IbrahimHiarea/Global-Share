@@ -148,80 +148,127 @@ function JoinUsForm (){
                 <h1>Join Our Squads</h1>
                 <form className={style.form}  onSubmit={handleSubmit(onSubmit)}>
                     <div className={style.questions}>
-                        <InputField
-                            width="320px"
-                            height="40px"   
-                            type='email'
-                            name='email'
-                            control={register(`email` , {
-                                    required: 'Please enter your email',
-                                }
-                            )}
-                            errors={errors}
-                        >
-                            Email
-                        </InputField>
-                    {
-                        questions?.questions?.map((question,index) => {
-                            if(question.question.type.toLowerCase() === questionTypeData.checkbox  ||  question.question.type.toLowerCase() === questionTypeData.radio){
-                                return <SelectQuestion
+                        <div>
+                            <InputField
+                                width="320px"
+                                height="40px"   
+                                type='email'
+                                name='email'
+                                control={register(`email` , {
+                                        required: 'Please enter your email',
+                                    }
+                                )}
+                                errors={errors}
+                            >
+                                Email
+                            </InputField>
+                            {
+                                questions?.questions?.map((question,index) =>{
+                                    if(question.question.type.toLowerCase() === questionTypeData.short){
+                                        return <InputField
+                                                key={`question${index}`}
+                                                width="320px"
+                                                height="40px"   
+                                                type='text'
+                                                name={`${question.questionId}`}
+                                                control={register(`${question.questionId}` , {
+                                                        required: 'Please enter the answer',
+                                                    }
+                                                )}
+                                                errors={errors}
+                                            >
+                                                {`${question.question.text}`}
+                                            </InputField>
+                                    }
+                                })
+                            }
+                        </div>
+                        <div className={style.break}></div>
+                        <div>
+                            {
+                                questions?.questions?.map((question,index) =>{
+                                    if(question.question.type.toLowerCase() === questionTypeData.radio){
+                                        return <SelectQuestion
+                                                    key={`question${index}`}
+                                                    width="320px"
+                                                    name={`${question.questionId}`}
+                                                    control={register(`${question.questionId}` , {
+                                                        required: 'Please choose one'
+                                                    })}
+                                                    errors={errors}
+                                                    type={`${question.question.type.toLowerCase()}`}
+                                                    options={question.question.options}
+                                                >
+                                                    {`${question.question.text}`}
+                                                </SelectQuestion>
+                                    }
+                                })
+                            }
+                        </div>
+                        <div className={style.break}></div>
+                        <div>
+                            {
+                                questions?.questions?.map((question,index) =>{
+                                    if(question.question.type.toLowerCase() === questionTypeData.checkbox){
+                                        return <SelectQuestion
+                                                    key={`question${index}`}
+                                                    width="320px"
+                                                    name={`${question.questionId}`}
+                                                    control={register(`${question.questionId}` , {
+                                                        required: 'Please choose at least one'
+                                                    })}
+                                                    errors={errors}
+                                                    type={`${question.question.type.toLowerCase()}`}
+                                                    options={question.question.options}
+                                                >
+                                                    {`${question.question.text}`}
+                                                </SelectQuestion>
+                                    }
+                                })
+                            }
+                        </div>
+                        <div className={style.break}></div>
+                        <div>
+                            {
+                                questions?.questions?.map((question,index) =>{
+                                    if(question.question.type.toLowerCase() === questionTypeData.long){
+                                        return <TextAreaField
+                                                key={`question${index}`}
+                                                width="320px"
+                                                height="140px"
+                                                name={`${question.questionId}`}
+                                                control={register(`${question.questionId}` , {
+                                                    required: 'Please enter the answer'
+                                                })}
+                                                errors={errors}
+                                            >
+                                                {`${question.question.text}`}
+                                            </TextAreaField>
+                                    }
+                                })
+                            }
+                        </div>
+                        <div className={style.break}></div>
+                        <div>
+                            {
+                                questions?.questions?.map((question,index) =>{
+                                    if(question?.question?.type?.toLowerCase() === questionTypeData.file){
+                                        return <FileUpload
                                             key={`question${index}`}
+                                            name={`files.${question.questionId}.values`}
+                                            file={watch(`files.${question.questionId}.values`)}
+                                            setValue={setValue}
                                             width="320px"
-                                            name={`${question.questionId}`}
-                                            control={register(`${question.questionId}` , {
-                                                required: (question.question.type.toLowerCase() === questionTypeData.checkbox ? 'Please enter at least one' : 'Please chose one')
-                                            })}
-                                            errors={errors}
-                                            type={`${question.question.type.toLowerCase()}`}
-                                            options={question.question.options}
+                                            height='40px'
+                                            row={true}
+                                            required={true}
                                         >
                                             {`${question.question.text}`}
-                                        </SelectQuestion>
+                                        </FileUpload>
+                                    }
+                                })
                             }
-                            else if(question.question.type.toLowerCase() === questionTypeData.short){
-                                return <InputField
-                                        key={`question${index}`}
-                                        width="320px"
-                                        height="40px"   
-                                        type='text'
-                                        name={`${question.questionId}`}
-                                        control={register(`${question.questionId}` , {
-                                                required: 'Please enter the answer',
-                                            }
-                                        )}
-                                        errors={errors}
-                                    >
-                                        {`${question.question.text}`}
-                                    </InputField>
-                            }else if(question.question.type.toLowerCase() === questionTypeData.long){
-                                return <TextAreaField
-                                        key={`question${index}`}
-                                        width="320px"
-                                        height="140px"
-                                        name={`${question.questionId}`}
-                                        control={register(`${question.questionId}` , {
-                                            required: 'Please enter the answer'
-                                        })}
-                                        errors={errors}
-                                    >
-                                        {`${question.question.text}`}
-                                    </TextAreaField>
-                            }else{
-                                return <FileUpload
-                                    key={`question${index}`}
-                                    name={`files.${question.questionId}.values`}
-                                    file={watch(`files.${question.questionId}.values`)}
-                                    setValue={setValue}
-                                    width="320px"
-                                    height='40px'
-                                    row={true}
-                                    required={true}
-                                >
-                                    {`${question.question.text}`}
-                                </FileUpload>
-                            }
-                        })
-                    }
+                        </div>
                     </div>
                     <SubmitButton 
                         width='157px' 
