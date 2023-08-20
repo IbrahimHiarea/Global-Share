@@ -118,12 +118,10 @@ function HomePage (){
     return (
         <div className={style.home}>
             <div className={style.header}>
-                <a href="home">
-                    <div className={style.logo}>
+                    <div className={style.logo} onClick={() => nav('/home')}>
                         <MainLogo/>
                         <TitleLogo/>
                     </div>
-                </a>
                 <ul className={style['main-vav']}>
                     <li><a href="" style={{fontWeight: '900'}}>Home</a></li>
                     <li><a href="#about">About</a></li>
@@ -254,7 +252,7 @@ function HomePage (){
                                             {[style['active-vacancy']] : index === squadId}
                                         )
                                     }
-                                    key={`squad${squad.id}`}
+                                    key={`squad${squad.gsName}`}
                                     onClick = {() => {
                                         setSquadId(index);
                                     }}

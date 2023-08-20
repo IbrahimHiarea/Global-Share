@@ -48,6 +48,7 @@ function TaskDetails ({ handleClose ,  taskId }){
                                 height: '24px',
                                 fontSize: '15px',
                                 backgroundColor: 'darkcyan',
+                                cursor: 'pointer',
                             }}
                             onClick={() => nav(`/dashboard/user/${task.assignedTo.id}`)}
                         >{task.assignedTo.firstName?.at(0)}</Avatar>
@@ -63,6 +64,7 @@ function TaskDetails ({ handleClose ,  taskId }){
                                 height: '24px',
                                 fontSize: '15px',
                                 backgroundColor: 'cornflowerblue',
+                                cursor: 'pointer',
                             }}
                             onClick={() => nav(`/dashboard/user/${task.assignedBy.id}`)}
                         >{task.assignedBy.firstName?.at(0)}</Avatar>
@@ -164,6 +166,7 @@ const SingleComment = ({commentId , taskId}) => {
                     height: '24px',
                     fontSize: '15px',
                     backgroundColor: 'darkseagreen',
+                    cursor: 'pointer',
                 }}
                 onClick={() => nav(`/dashboard/user/${comment.author.id}`) }
             >{comment.author.firstName?.at(0)}</Avatar>

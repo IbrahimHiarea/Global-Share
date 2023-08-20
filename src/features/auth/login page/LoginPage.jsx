@@ -35,7 +35,7 @@ function LoginPage (){
         try{
             const response = await dispatch(login(values)).unwrap();
             localStorage.setItem("token" , response.token);
-            nav('/dashboard');
+            nav('/dashboard/task');
         }catch(error){
             if(error?.name==="ConditionError") return;
             dispatch(showMessage({message: error , severity: 2}));

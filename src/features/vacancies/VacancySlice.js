@@ -4,6 +4,7 @@ import {
     createEntityAdapter,
     createSlice 
 } from '@reduxjs/toolkit';
+import {logout} from '../auth/AuthSlice';
 
 //import API
 import * as vacancyAPI from './VacancyAPI';
@@ -47,7 +48,11 @@ export const getVacancies = createAsyncThunk(
             return {search : data.search , ...(response.data)};
         } catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(typeof error.response.data.message === 'string') 
                     message = error.response.data.message;
                 else 
@@ -75,7 +80,11 @@ export const getVacanciesPage = createAsyncThunk(
             return response.data;
         }catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(typeof error.response.data.message === 'string') 
                     message = error.response.data.message;
                 else 
@@ -95,7 +104,11 @@ export const getVacancyById = createAsyncThunk(
             return response.data;
         } catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(typeof error.response.data.message === 'string') 
                     message = error.response.data.message;
                 else 
@@ -106,7 +119,6 @@ export const getVacancyById = createAsyncThunk(
     },
 );
 
-
 export const createVacancy = createAsyncThunk(
     `vacancy/createVacancy`,
     async (data , thunkAPI) => {
@@ -116,7 +128,11 @@ export const createVacancy = createAsyncThunk(
             return response.data;
         }catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(typeof error.response.data.message === 'string') 
                     message = error.response.data.message;
                 else 
@@ -137,7 +153,11 @@ export const updateVacancy= createAsyncThunk(
             return response.data;
         }catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(typeof error.response.data.message === 'string') 
                     message = error.response.data.message;
                 else 
@@ -157,7 +177,11 @@ export const deleteVacancy = createAsyncThunk(
             return data.id;
         }catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(typeof error.response.data.message === 'string') 
                     message = error.response.data.message;
                 else 

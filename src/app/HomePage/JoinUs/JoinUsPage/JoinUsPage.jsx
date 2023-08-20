@@ -66,12 +66,10 @@ function JoinUsPage (){
     return (
         <div className={style['join-us-page']}>
             <div className={style.header}>
-                <a href="home" onClick={() => nav('/')}>
-                    <div className={style.logo}>
-                        <MainLogo/>
-                        <TitleLogo/>
-                    </div>
-                </a>
+                <div className={style.logo} onClick={() => nav('/home')}>
+                    <MainLogo/>
+                    <TitleLogo/>
+                </div>
             </div>
             <div className={style['first-section']}>
                 <h1>{vacancy?.position?.name}</h1>

@@ -4,6 +4,7 @@ import {
     createSlice,
     createEntityAdapter
 } from "@reduxjs/toolkit";
+import {logout} from '../auth/AuthSlice';
 
 //import API
 import * as volunteerAPI from './VolunteerAPI';
@@ -56,7 +57,11 @@ export const getVolunteers = createAsyncThunk(
             return {search: data , ...(response.data)};
         } catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
                 else 
@@ -86,7 +91,11 @@ export const getVolunteerPage = createAsyncThunk(
             return response.data;
         }catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
                 else 
@@ -106,7 +115,11 @@ export const createVolunteer = createAsyncThunk(
             return response.data;
         }catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
                 else 
@@ -127,7 +140,11 @@ export const updateVolunteer = createAsyncThunk(
             return response.data;
         }catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
                 else 
@@ -147,7 +164,11 @@ export const deleteVolunteer= createAsyncThunk(
             return data.id;
         }catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
                 else 
@@ -157,6 +178,20 @@ export const deleteVolunteer= createAsyncThunk(
         }
     }
 );
+
+export const getRoles = createAsyncThunk(
+    'volunteer/getRoles',
+    async (_ , thunkAPI) => {
+        try{
+            const {auth : {token}} = thunkAPI.getState();
+            const response = await volunteerAPI.getRoles(token , thunkAPI.signal);
+            return response.data;
+        }catch(error){
+            let message = "Network connection error";
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+)
 
 
 //create slice
@@ -173,7 +208,8 @@ const volunteerSlice = createSlice({
             squad: undefined
         },
         totalCount: 0,
-        resetTable: false
+        resetTable: false,
+        roles: []
     }),
     reducers: {},
     extraReducers: (builder) => {
@@ -215,6 +251,12 @@ const volunteerSlice = createSlice({
                 volunteerAdapter.removeOne(state, action.payload);
                 state.totalCount--
             })
+            .addCase(getRoles.fulfilled , (state , action) => {
+                state.roles = [];
+                action.payload.forEach(role => {
+                    state.roles.push({value: role.id , label: role.name});
+                });
+            })
     }
 })
 
@@ -228,6 +270,7 @@ export const selectVolunteerStatus = state => state.volunteer.status;
 export const selectVolunteerError = state => state.volunteer.error;
 export const selectVolunteerTotalCount = state => state.volunteer.totalCount;
 export const selectVolunteerResetTable = state => state.volunteer.resetTable;
+export const selectVolunteerRoles = state => state.volunteer.roles;
 
 //actions
 

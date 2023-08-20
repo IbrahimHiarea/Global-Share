@@ -1,5 +1,6 @@
 //import redux
 import { createAsyncThunk , createSlice } from "@reduxjs/toolkit";
+import {logout} from '../auth/AuthSlice';
 
 //import API
 import * as profileAPI from "./ProfileAPI";
@@ -50,7 +51,11 @@ export const getMyProfileDetails = createAsyncThunk(
             return response.data;
         }catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
                 else 
@@ -78,7 +83,11 @@ export const getProfileDetailsById = createAsyncThunk(
             return response.data;
         }catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
                 else 
@@ -106,7 +115,11 @@ export const updateProfileDetails = createAsyncThunk(
             return response.data;
         }catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
                 else 
@@ -135,6 +148,7 @@ const profileSlice = createSlice({
                     if(key==='joinDate') details[key] = format(new Date(details[key]) , 'yyyy-MM-dd');
                 }
                 
+                state.profileSquads = [];
                 details.positions?.forEach(element => {
                     state.profileSquads.push(element.position.squad);
                 });

@@ -4,6 +4,7 @@ import {
     createEntityAdapter,
     createSlice 
 } from '@reduxjs/toolkit';
+import {logout} from '../auth/AuthSlice';
 
 //import API
 import * as applicationAPI from './ApplicationAPI';
@@ -66,7 +67,11 @@ export const getApplications = createAsyncThunk(
             return {search : data.search , ...(response.data)};
         } catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
                 else 
@@ -94,7 +99,11 @@ export const getApplicationsPage = createAsyncThunk(
             return response.data;
         }catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
                 else 
@@ -114,7 +123,11 @@ export const getApplicationById = createAsyncThunk(
             return response.data;
         } catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
                 else 
@@ -133,7 +146,6 @@ export const getApplicationById = createAsyncThunk(
     }
 );
 
-
 export const updateApplication = createAsyncThunk(
     'application/updateApplication',
     async (data , thunkAPI) => {
@@ -144,7 +156,11 @@ export const updateApplication = createAsyncThunk(
             return response.data;
         }catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
                 else 
@@ -197,7 +213,9 @@ const applicationSlice = createSlice({
                 state.status = status.failed;
             })
             .addCase(updateApplication.fulfilled , (state , action) => {
-                applicationAdapter.upsertOne(state , action.payload);
+                const data = action.payload;
+                delete data.answers;
+                applicationAdapter.upsertOne(state , data);
             })
             .addCase(getApplicationById.pending , (state , _) => {
                 state.status = status.loading;

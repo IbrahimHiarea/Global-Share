@@ -10,7 +10,7 @@ function CheckboxView ({title , options , answer}){
     return (
         <div className={style.checkbox}>
             <h2>{title}?</h2>
-            <div className={style.options}>
+            <div className={style['options']}>
                 {
                     options?.map((opt , index) => (
                         <div key={opt+index} className={style.option}>

@@ -5,6 +5,7 @@ import {
     createEntityAdapter
 } from "@reduxjs/toolkit"
 import * as lodash from 'lodash';
+import {logout} from '../auth/AuthSlice';
 
 //import API
 import * as taskAPI from './TaskAPI';
@@ -60,7 +61,11 @@ export const getTasksBySquad = createAsyncThunk(
             return {searchTerms: data , data: response.data};
         }catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
                 else 
@@ -90,7 +95,11 @@ export const getTasksBySquadPage = createAsyncThunk(
             return response.data;
         }catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
                 else 
@@ -118,7 +127,11 @@ export const createTaskStatus = createAsyncThunk(
             return response.data;
         }catch(error){  
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
                 else 
@@ -138,7 +151,11 @@ export const deleteTaskStatus = createAsyncThunk(
             return data.id;
         }catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
                 else 
@@ -158,7 +175,11 @@ export const createTask = createAsyncThunk(
             return response.data;
         }catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
                 else 
@@ -179,7 +200,11 @@ export const updateTask = createAsyncThunk(
             return {data: response.data , source: sourceStatusId};
         }catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
                 else 
@@ -199,7 +224,11 @@ export const createTaskComment = createAsyncThunk(
             return {comment: response.data , info: info};
         }catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
                 else 
@@ -219,7 +248,11 @@ export const deleteTaskComment = createAsyncThunk(
             return data;
         }catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
                 else 

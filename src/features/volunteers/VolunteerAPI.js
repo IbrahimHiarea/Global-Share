@@ -82,3 +82,15 @@ export async function deleteVolunteer(id , token , signal){
         }
     )
 }
+
+export async function getRoles(token , signal){
+    return axiosApi.get(
+        `/role?skip=0&take=0`,
+        {
+            signal : signal,
+            headers: {
+                Authorization : `Bearer ${token}`,
+            }
+        }
+    );
+}

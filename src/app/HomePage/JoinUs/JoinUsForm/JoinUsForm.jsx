@@ -137,12 +137,10 @@ function JoinUsForm (){
     return (
         <div className={style['join-us-form']}>
             <div className={style.header}>
-                <a href="home" onClick={() => nav('/')}>
-                    <div className={style.logo}>
-                        <MainLogo/>
-                        <TitleLogo/>
-                    </div>
-                </a>
+                <div className={style.logo} onClick={() => nav('/home')}>
+                    <MainLogo/>
+                    <TitleLogo/>
+                </div>
             </div>
             <div className={style.body}>
                 <h1>Join Our Squads</h1>

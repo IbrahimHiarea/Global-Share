@@ -1,10 +1,10 @@
 // import react
-import React , { useState }  from 'react';
+import React , { useEffect, useState }  from 'react';
 import { useForm , useFieldArray } from 'react-hook-form';
 
 //import redux
 import { useSelector , useDispatch} from 'react-redux';
-import {selectVolunteerById , updateVolunteer } from '../../VolunteerSlice';
+import {getRoles, selectVolunteerById , selectVolunteerRoles, updateVolunteer } from '../../VolunteerSlice';
 import { showMessage } from '../../../snackBar/snackBarSlice';
 
 // import components 
@@ -27,6 +27,8 @@ import style from './EditVolunteer.module.css';
 function EditVolunteer({id , handleClose}) {
     const dispatch = useDispatch();
     const data = useSelector((state) => selectVolunteerById(state , id));
+    const roles = useSelector(selectVolunteerRoles);
+    const label = roles.filter(item => item.value===data.roleId);
 
     const {setError, control , register , formState: {errors , isDirty , dirtyFields} , handleSubmit , watch } = useForm({
         defaultValues:{
@@ -39,8 +41,11 @@ function EditVolunteer({id , handleClose}) {
                             position: {value: element.position.id , label: element.position.name}, 
                             squad:{value: element.position.squadId , label: element.position.squad.gsName} //gsName
                         })),
-            roleId: {value: data.roleId , label: data.roleId},
+            roleId: label?.at(0),
         },
+        values:{
+            roleId: label?.at(0)
+        }
     });
 
     const { 
@@ -84,6 +89,10 @@ function EditVolunteer({id , handleClose}) {
             }
         }
     }
+
+    useEffect(() => {
+        dispatch(getRoles());
+    } , [])
 
     if(isLoading===true){
         return (

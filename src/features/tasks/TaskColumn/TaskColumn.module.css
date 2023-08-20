@@ -6,7 +6,7 @@
 .task-column-body{
 	min-height: 400px;
 	max-height: 700px;
-	overflow: auto;		
+	overflow: hidden;		
 }
 
 .task-column-body::-webkit-scrollbar {

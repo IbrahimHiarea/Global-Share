@@ -4,6 +4,7 @@ import {
     createSlice,
     createEntityAdapter
 } from "@reduxjs/toolkit";
+import {logout} from '../auth/AuthSlice';
 
 //import API
 import * as positionAPI from './PositionAPI';
@@ -42,7 +43,11 @@ export const getPositions = createAsyncThunk(
             return {search: data , ...(response.data)};
         } catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
                 else 
@@ -71,7 +76,11 @@ export const getPositionPage = createAsyncThunk(
             return response.data;
         }catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
                 else 
@@ -91,7 +100,11 @@ export const createPosition = createAsyncThunk(
             return response.data;
         }catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
                 else 
@@ -112,7 +125,11 @@ export const updatePosition = createAsyncThunk(
             return response.data;
         }catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
                 else 
@@ -132,7 +149,11 @@ export const deletePosition = createAsyncThunk(
             return data.id;
         }catch(error){
             let message = "Network connection error";
-            if(error?.response?.data?.message){
+            if(error?.response?.data?.statusCode===401) {
+                message = error?.response?.data?.message;
+                thunkAPI.dispatch(logout());
+            }
+            else if(error?.response?.data?.message){
                 if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
                 else 

@@ -128,7 +128,6 @@ function VacancyPage(){
                 await dispatch(getVacancies({search: ''})).unwrap();
             }catch(error){
                 if(error?.name==="ConditionError") return;
-                console.log(error);
                 dispatch(showMessage({message: error , severity: 2}));
             }
         }
@@ -147,7 +146,7 @@ function VacancyPage(){
                 pending={status==='loading' || status==='idle' ? true : false}
                 rowClick={(row) => {console.log(row)}}
                 handleDelete={(row) => popUpDispatch({type:'delete' , id: row.id})}
-                handleEdit={(row) => nav(`${row.id}/edit`)}
+                handleEdit={(row) => nav(`edit/${row.id}`)}
                 onChangePage={onChangePage}
                 totalCount={totalCount}
                 resetTable={resetTable}

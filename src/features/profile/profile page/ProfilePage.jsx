@@ -11,6 +11,7 @@ import {
     selectProfileData
 } from '../profileSlice';
 import {showMessage} from '../../snackBar/snackBarSlice';
+import { selectAuthInfo } from '../../auth/AuthSlice';
 
 //import components
 import Loader from '../../../common/components/Loader/Loader';
@@ -37,9 +38,14 @@ function ProfilePage (){
 
     const status = useSelector(selectProfileStatus);
     const data = useSelector(selectProfileData);
+    const info = useSelector(selectAuthInfo);
 
     useEffect(() => {
         const req = async() => {
+            if(userId!==undefined && parseInt(userId)===info.id){
+                nav('/dashboard/profile' , { replace: true });
+                return;
+            }
             try{
                 if(userId) await dispatch(getProfileDetailsById({id : userId})).unwrap();
                 else await dispatch(getMyProfileDetails()).unwrap();

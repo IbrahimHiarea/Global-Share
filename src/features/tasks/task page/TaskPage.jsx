@@ -1,10 +1,16 @@
 //import react
-import React, { useEffect , useReducer} from 'react';
+import React, { useReducer} from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
 
 //import redux
 import { useSelector , useDispatch} from 'react-redux';
-import { selectTaskStatusesIds , updateTask , selectEndTaskStatusIds, selectTaskStatus, selectTaskSearchTerms} from '../taskSlice';
+import { 
+    selectTaskStatusesIds, 
+    updateTask, 
+    selectEndTaskStatusIds, 
+    selectTaskStatus, 
+    selectTaskSearchTerms
+} from '../taskSlice';
 import { showMessage } from '../../snackBar/snackBarSlice';
 
 // import components 
