@@ -9,7 +9,7 @@ import style from './CheckboxView.module.css';
 function CheckboxView ({title , options , answer}){
     return (
         <div className={style.checkbox}>
-            <h2>{title}?</h2>
+            <h2>{title}</h2>
             <div className={style['options']}>
                 {
                     options?.map((opt , index) => (

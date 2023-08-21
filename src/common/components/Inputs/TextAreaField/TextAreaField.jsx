@@ -13,7 +13,7 @@ function TextAreaField ({
             height, control, errors
     }){
     return (
-        <InputWrapper name={name} label={children} errors={errors}>
+        <InputWrapper name={name} label={children} errors={errors} maxWidth={width}>
             <textarea 
                 id={name}   
                 className={style['text-area']}
