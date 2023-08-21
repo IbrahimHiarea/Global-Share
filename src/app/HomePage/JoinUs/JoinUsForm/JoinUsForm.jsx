@@ -61,10 +61,13 @@ function JoinUsForm (){
                 }
                 else if(key === 'files'){
                     values[key].forEach((file,index) => {
-                        newValues.files.push({
-                            questionId: index,
-                            content: file
+                        newValues.answers.push({
+                            questionId: parseInt(index),
+                            content: []
                         })
+                    })
+                    values[key].forEach((file) => {
+                        newValues.files.push(file.values);
                     })
                 }
                 else{
@@ -181,7 +184,6 @@ function JoinUsForm (){
                                 })
                             }
                         </div>
-                        <div className={style.break}></div>
                         <div>
                             {
                                 questions?.questions?.map((question,index) =>{
@@ -203,7 +205,6 @@ function JoinUsForm (){
                                 })
                             }
                         </div>
-                        <div className={style.break}></div>
                         <div>
                             {
                                 questions?.questions?.map((question,index) =>{
@@ -225,7 +226,6 @@ function JoinUsForm (){
                                 })
                             }
                         </div>
-                        <div className={style.break}></div>
                         <div>
                             {
                                 questions?.questions?.map((question,index) =>{
@@ -246,7 +246,6 @@ function JoinUsForm (){
                                 })
                             }
                         </div>
-                        <div className={style.break}></div>
                         <div>
                             {
                                 questions?.questions?.map((question,index) =>{

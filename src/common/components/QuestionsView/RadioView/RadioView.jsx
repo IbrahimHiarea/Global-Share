@@ -10,7 +10,7 @@ import style from './RadioView.module.css';
 function RadioView({ title , options , answer}){
     return (
         <div className={style.radio}>
-            <h2>{title}?</h2>
+            <h2>{title}</h2>
             <div className={style['options']}>
                 {
                     options?.map((opt , index) =>(
