@@ -51,9 +51,25 @@ function UploadBox({ file , width , height , label , row}){
 
     return (
         <>
-            <div className={style["upload-content"]} style={{width , height , flexDirection: row ? "row" : 'column' , justifyContent: row ? 'flex-start' : 'center' , alignItems: 'center'}}>
+            <div 
+                className={style["upload-content"]} 
+                style={{
+                    width, 
+                    height,
+                    flexDirection: (row===true ? "row" : 'column'),  
+                    alignItems: 'center',
+                }}>
                 <AiOutlineCloudUpload size={'25px'} color="#232360"  opacity={.9}/>
-                <div>{newLabel}</div>          
+                <div
+                    style={{
+                        flexDirection: (row===true ? "row" : 'column'), 
+                        justifyContent: (row===true ? 'flex-start' : 'center'), 
+                        whiteSpace: (row===true ? 'nowrap' : 'normal'),
+                        height: (row===true ? '15px' : '')
+                    }}
+                >
+                    {newLabel}
+                </div>          
             </div>
         </>
     );

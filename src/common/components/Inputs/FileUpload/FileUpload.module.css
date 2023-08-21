@@ -22,12 +22,13 @@
 }
 
 .upload-content div{
-    /* width: 100%; */
-    /* height: 100%; */
-    overflow: hidden;
-    text-overflow: ellipsis;
+    width: 100%;
     display: flex;
     justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .upload-label{

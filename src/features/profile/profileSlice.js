@@ -160,7 +160,7 @@ const profileSlice = createSlice({
                 state.status = status.failed;
                 state.error = action.payload;
             })
-            .addCase(getProfileDetailsById.pending , (state , action) => {
+            .addCase(getProfileDetailsById.pending , (state , _) => {
                 state.status = status.loading;
             })
             .addCase(getProfileDetailsById.fulfilled , (state , action) => {
@@ -176,7 +176,7 @@ const profileSlice = createSlice({
                 state.status = status.failed;
                 state.error = action.payload;
             })
-            .addCase(updateProfileDetails.pending , (state , action) => {
+            .addCase(updateProfileDetails.pending , (state , _) => {
                 state.status = status.loading;
             })
             .addCase(updateProfileDetails.fulfilled , (state , action) => {  

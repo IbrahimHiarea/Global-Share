@@ -39,11 +39,20 @@ function EditVolunteer({id , handleClose}) {
             positions: data?.positions?.map(
                     element => ({
                             position: {value: element.position.id , label: element.position.name}, 
-                            squad:{value: element.position.squadId , label: element.position.squad.gsName} //gsName
+                            squad:{value: element.position.squadId , label: element.position.squad.gsName}
                         })),
             roleId: label?.at(0),
         },
         values:{
+            firstName: data?.firstName,
+            lastName: data?.lastName,
+            email: data?.email,
+            password: '',
+            positions: data?.positions?.map(
+                    element => ({
+                            position: {value: element.position.id , label: element.position.name}, 
+                            squad:{value: element.position.squadId , label: element.position.squad.gsName}
+                        })),
             roleId: label?.at(0)
         }
     });

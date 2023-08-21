@@ -1,13 +1,17 @@
 // import react
-import React , { useRef, useState }  from 'react';
+import React , { useState }  from 'react';
 import { useForm , useFieldArray } from 'react-hook-form';
 import {useNavigate} from "react-router-dom"
 
 //import redux
 import { useDispatch } from 'react-redux';
-import {createVacancy} from '../VacancySlice';
+import { createVacancy } from '../VacancySlice';
 import { showMessage } from '../../snackBar/snackBarSlice';
-import {getSquadsData , getQuestionsData , getPositionDataBySquad} from '../../../common/utils/selectorAPI'
+import {
+    getSquadsData, 
+    getQuestionsData, 
+    getPositionDataBySquad
+} from '../../../common/utils/selectorAPI'
 
 // import components 
 import Button from '../../../common/components/Inputs/Button/Button';
@@ -17,7 +21,6 @@ import Loader from '../../../common/components/Loader/Loader';
 import AsyncSelectInputField from '../../../common/components/Inputs/AsyncSelectInputField/AsyncSelectInputField';
 
 // import icons
-import { CiSquareChevLeft } from "react-icons/ci";
 import { BsTrash } from "react-icons/bs";
 
 //import style 

@@ -23,7 +23,7 @@ import { Avatar } from '@mui/material';
 //import icon & image
 import { HiOutlineMail } from "react-icons/hi";
 import { BsSend , BsTelephone , BsGift , BsPeople , BsPen , BsYinYang } from "react-icons/bs";
-import profileImage from '../../../assets/images/profile2.png';
+import profileImage from '../../../assets/images/profile.png';
 
 //import utils
 import { format } from 'date-fns';
@@ -112,14 +112,12 @@ function ProfilePage (){
                         <h4>about</h4>
                         <div className={style.bio}>{data?.bio}</div>
                     </div>
-                    {userId===undefined &&
-                        <div className={style.log}>
-                            <WorkTimeCard 
-                                hours={data?.volunteeredHours}
-                                tasks={data?.tasksCompleted}
-                            />
-                        </div>
-                    }
+                    <div className={style.log}>
+                        <WorkTimeCard 
+                            hours={data?.volunteeredHours}
+                            tasks={data?.tasksCompleted}
+                        />
+                    </div>
                 </div>
                 <div className={style['second-body']}>
                     <div>

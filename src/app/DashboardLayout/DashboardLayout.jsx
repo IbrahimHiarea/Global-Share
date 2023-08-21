@@ -11,7 +11,7 @@ import { selectAuthInfo , logout } from '../../features/auth/AuthSlice';
 import Avatar from '@mui/material/Avatar';
 
 //import icon & image
-import profileImage from '../../assets/images/profile2.png';
+import profileImage from '../../assets/images/profile.png';
 import {FaTasks} from 'react-icons/fa';
 import {BsBookHalf} from 'react-icons/bs';
 import {HiUserGroup} from 'react-icons/hi'

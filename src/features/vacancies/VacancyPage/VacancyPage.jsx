@@ -16,12 +16,10 @@ import {
 import { showMessage } from '../../snackBar/snackBarSlice';
 
 //import components
-import Error from '../../../common/components/Error/Error';
 import VacancyFilterBar from '../VacancyFilterBar/VacancyFilterBar';
 import DashboardTable from '../../../common/components/Dashboard/DashboardTable/DashboardTable';
 import PopUp from '../../../common/components/PopUp/PopUp';
 import DeleteVacancy from '../PopUpComponents/DeleteVacancy/DeleteVacancy'
-import EditVacancy from '../EditVacancy/EditVacancy';
 
 //import style
 import style from './VacancyPage.module.css';
@@ -71,17 +69,6 @@ const popUpReducer = (state , action) => {
             isOpen: true,
             index: 0
         }
-        case 'edit': return {
-            ...initPopUpOption,
-            id: action.id,
-            isOpen: true,
-            index: 1,
-        }
-        case 'add': return {
-            ...initPopUpOption,
-            isOpen: true,
-            index: 2,
-        }
         case 'close': return {
             ...state,
             isOpen: false
@@ -94,6 +81,7 @@ const popUpReducer = (state , action) => {
 function VacancyPage(){
     const [popUpOption , popUpDispatch] = useReducer(popUpReducer , initPopUpOption);
     const dispatch = useDispatch();
+    const nav = useNavigate();
     const [curSkip , setCurSkip] = useState(0);
 
     const data = useSelector(selectAllVacancy);
@@ -102,12 +90,8 @@ function VacancyPage(){
     const resetTable = useSelector(selectVacancyResetTable);
     const vacancyCount = useSelector(selectVacancyCount);
 
-    const nav = useNavigate();
 
-    const handleAdd = () => {
-        popUpDispatch({type:'add'});
-        nav('/dashboard/vacancy/add');
-    }
+    const handleAdd = () => nav('/dashboard/vacancy/add');
 
     const onChangePage = async (page , _) => {
         const skip = (page-1)*10;
@@ -144,7 +128,7 @@ function VacancyPage(){
                 columns={columns}
                 data={data.slice(curSkip , curSkip+10)}
                 pending={status==='loading' || status==='idle' ? true : false}
-                rowClick={(row) => {console.log(row)}}
+                rowClick={(row) => {}}
                 handleDelete={(row) => popUpDispatch({type:'delete' , id: row.id})}
                 handleEdit={(row) => nav(`edit/${row.id}`)}
                 onChangePage={onChangePage}

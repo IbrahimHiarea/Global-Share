@@ -53,18 +53,18 @@ export const getVacancies = createAsyncThunk(
                 thunkAPI.dispatch(logout());
             }
             else if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
     },
     {
         condition: (data, {getState}) => {
-            const { vacancy : {searchTerms , status} } = getState()
-            if (status === status.loading || searchTerms.search===data.search) {
+            const { vacancy : {searchTerms , vacancyStatus} } = getState()
+            if (vacancyStatus === status.loading || searchTerms.search===data.search) {
                 return false;
             }
         },
@@ -85,10 +85,10 @@ export const getVacanciesPage = createAsyncThunk(
                 thunkAPI.dispatch(logout());
             }
             else if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -109,10 +109,10 @@ export const getVacancyById = createAsyncThunk(
                 thunkAPI.dispatch(logout());
             }
             else if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -133,10 +133,10 @@ export const createVacancy = createAsyncThunk(
                 thunkAPI.dispatch(logout());
             }
             else if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -158,10 +158,10 @@ export const updateVacancy= createAsyncThunk(
                 thunkAPI.dispatch(logout());
             }
             else if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -182,10 +182,10 @@ export const deleteVacancy = createAsyncThunk(
                 thunkAPI.dispatch(logout());
             }
             else if(error?.response?.data?.message){
-                if(typeof error.response.data.message === 'string') 
-                    message = error.response.data.message;
-                else 
+                if(Array.isArray(error.response.data.message))
                     message = error.response.data.message[0];
+                else 
+                    message = error.response.data.message;
             }
             return thunkAPI.rejectWithValue(message);
         }
@@ -234,11 +234,16 @@ const vacancySlice = createSlice({
                 state.error = action.payload;
                 state.status = status.failed;
             })
+            .addCase(createVacancy.fulfilled , (state , action) => {
+                vacancyAdapter.upsertOne(state , action.payload);
+                state.totalCount++;
+            })
             .addCase(updateVacancy.fulfilled , (state , action) => {
                 vacancyAdapter.upsertOne(state , action.payload);
             })
             .addCase(deleteVacancy.fulfilled , (state , action) => {
                 vacancyAdapter.removeOne(state , action.payload);
+                state.totalCount--;
             })
             .addCase(getVacancyById.pending , (state , _) => {
                 state.status = status.loading;

@@ -38,8 +38,8 @@ export async function getVacancyById(id , token , signal){
 }
 
 export async function createVacancy({ effect , brief , tasks , required , preferred , positionId , questionsIds }, token , signal){
-    const newPositionId = positionId.value;
-    const newQuestionsIds = questionsIds.map((question) => {return question.value.value});
+    const newPositionId = positionId?.value;
+    const newQuestionsIds = questionsIds?.map((question) => {return question?.value?.value});
     return axiosApi.post(
         '/vacancy',
         { effect , brief , tasks , required , preferred , 'positionId':newPositionId , 'questionsIds':newQuestionsIds },
@@ -57,9 +57,9 @@ export async function updateVacancy(id , values , token , signal){
     for(let key of Object.keys(values)){
         if(key !== 'squad'){
             if(key==='positionId')
-                newValues[key] = values[key].value;
+                newValues[key] = values[key]?.value;
             else if(key==='questionsIds')
-                newValues[key] = values[key].map((question) => {return question.value.value});
+                newValues[key] = values[key]?.map((question) => {return question?.value?.value});
             else
                 newValues[key] = values[key];
         }
