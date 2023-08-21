@@ -19,7 +19,6 @@ import AsyncSelectInputField from '../../../common/components/Inputs/AsyncSelect
 import Error from '../../../common/components/Error/Error';
 
 // import icons
-import { CiSquareChevLeft } from "react-icons/ci";
 import { BsTrash } from "react-icons/bs";
 
 //import style 
@@ -28,6 +27,7 @@ import style from './EditVacancy.module.css';
 function EditVacancy() {
     const {vacancyId : id} = useParams();
     const dispatch = useDispatch();
+    const nav = useNavigate();
 
     const status = useSelector(selectVacancyStatus);
     const data = useSelector(state => selectVacancyById(state , id));
@@ -40,9 +40,9 @@ function EditVacancy() {
             tasks: data?.tasks,
             required: data?.required,
             preferred: data?.preferred,
-            positionId: {value: data?.positionId , label: data?.position.name},
-            squad: {value: data?.position.squad.id , label: data?.position.squad.name},
-            questionsIds: data?.questions ? data?.questions?.map((question) => {return {value : {value: question.question.id , label: question.question.text.toLowerCase() + ' - ' + question.question.type.toLowerCase()}}}) : [],
+            positionId: {value: data?.positionId , label: data?.position?.name},
+            squad: {value: data?.position?.squad?.id , label: data?.position?.squad?.name},
+            questionsIds: data?.questions ? data?.questions?.map((question) => {return {value : {value: question?.question?.id , label: question?.question?.text?.toLowerCase() + ' - ' + question?.question?.type?.toLowerCase()}}}) : [],
         },
         values: {
             effect: data?.effect,
@@ -50,9 +50,9 @@ function EditVacancy() {
             tasks: data?.tasks,
             required: data?.required,
             preferred: data?.preferred,
-            positionId: {value: data?.positionId , label: data?.position.name},
-            squad: {value: data?.position.squad.id , label: data?.position.squad.name},
-            questionsIds: data?.questions ? data?.questions?.map((question) => {return {value : {value: question.question.id , label: question.question.text.toLowerCase() + ' - ' + question.question.type.toLowerCase()}}}) : [],
+            positionId: {value: data?.positionId , label: data?.position?.name},
+            squad: {value: data?.position?.squad?.id , label: data?.position?.squad?.name},
+            questionsIds: data?.questions ? data?.questions?.map((question) => {return {value : {value: question?.question?.id , label: question?.question?.text?.toLowerCase() + ' - ' + question?.question?.type?.toLowerCase()}}}) : [],
         }
     });
     
@@ -61,7 +61,6 @@ function EditVacancy() {
         control, 
     });
 
-    const navigate = useNavigate();
 
     const [isLoading , setIsLoading] = useState(false);
 
@@ -71,7 +70,7 @@ function EditVacancy() {
 
     const handelAdd = () => {
         append({
-            value: '',
+            value: null,
         });
     }
 
@@ -100,8 +99,7 @@ function EditVacancy() {
             try{
                 await dispatch(updateVacancy({id , ...changed})).unwrap();
                 dispatch(showMessage({message: 'Vacancy Edited successfully' , severity: 1}));
-                setIsLoading(false);
-                navigate(-1);
+                nav('dashboard/vacancy');
             }catch(error){
                 dispatch(showMessage({message: error , severity: 2}));
                 setIsLoading(false);
@@ -141,7 +139,7 @@ function EditVacancy() {
                         defaultOptions={[]}
                         control={control}
                         required={'enter the squad'}
-                        errors={{[`squad.value`]: errors.squad?.value}}
+                        errors={errors}
                         border={true}
                         callBack={(data) => getSquadsData({...data})}
                     />
@@ -153,7 +151,7 @@ function EditVacancy() {
                         defaultOptions={[]}
                         control={control}
                         required={'enter the position'}
-                        errors={{[`positionId.value`]: errors.positionId?.value}}
+                        errors={errors}
                         border={true}
                         callBack={(data) => getPositionDataBySquad({...data , squadId: watch(`squad`)?.value })}
                     />
@@ -165,9 +163,7 @@ function EditVacancy() {
                         placeholder='Brief'
                         width='386px'
                         height='120px'
-                        control={register('brief' , {
-                            required: 'Please enter the brief',
-                        })}
+                        control={register('brief' , { required: 'Please enter the brief' })}
                         errors={errors}
                     />
                     <TextAreaField 
@@ -175,9 +171,7 @@ function EditVacancy() {
                         placeholder='Tasks'
                         width='386px'
                         height='120px'
-                        control={register('tasks' , {
-                            required: 'Please enter the tasks',
-                        })}
+                        control={register('tasks' , { required: 'Please enter the tasks' })}
                         errors={errors}
                     />
                 </div>
@@ -187,9 +181,7 @@ function EditVacancy() {
                         placeholder='Required Qualifications'
                         width='386px'
                         height='120px'
-                        control={register('required' , {
-                            required: 'Please enter the Required Qualifications',
-                        })}
+                        control={register('required' , { required: 'Please enter the Required Qualifications' })}
                         errors={errors}
                     />
                     <TextAreaField 
@@ -197,9 +189,7 @@ function EditVacancy() {
                         placeholder='Preferred Qualifications'
                         width='386px'
                         height='120px'
-                        control={register('preferred' , {
-                            required: 'Please enter the Preferred Qualifications',
-                        })}
+                        control={register('preferred' , { required: 'Please enter the Preferred Qualifications' })}
                         errors={errors}
                     />
                 </div>
@@ -209,9 +199,7 @@ function EditVacancy() {
                         placeholder='Effect'
                         width='796px'
                         height='110px'
-                        control={register('effect' , {
-                            required: 'Please enter the effect',
-                        })}
+                        control={register('effect' , { required: 'Please enter the effect' })}
                         errors={errors}
                     />
                 </div>

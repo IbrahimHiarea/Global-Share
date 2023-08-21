@@ -84,8 +84,8 @@ function EditVolunteer({id , handleClose}) {
             for(let key of Object.keys(dirtyFields)){
                 if(dirtyFields[key]){
                     if(key==='positions') changed[key] = values.positions.map(item => ({positionId: item.position.id}))
-                    if(key==='roleId') changed[key] = values.roleId?.value;
-                    changed[key] = values[key];
+                    if(key==='roleId') changed[key] = values[key]?.value;
+                    else changed[key] = values[key];
                 }
             }
             try{

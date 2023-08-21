@@ -28,6 +28,7 @@ import style from './AddVacancy.module.css';
 
 function AddVacancy() {
     const dispatch = useDispatch();
+    const nav = useNavigate();
     const {control , watch , register , formState : {errors} , handleSubmit } = useForm({
         defaultValues:{
             effect: '',
@@ -35,7 +36,7 @@ function AddVacancy() {
             tasks: '',
             required: '',
             preferred: '',
-            positionId: 0,
+            positionId: null,
             squad: null,
             questionsIds: [], //questions Id
         }
@@ -46,8 +47,6 @@ function AddVacancy() {
         control, 
     });
 
-    const navigate = useNavigate();
-
     const [isLoading , setIsLoading] = useState(false);
 
     const handelDelete = (index) => {
@@ -56,7 +55,7 @@ function AddVacancy() {
 
     const handelAdd = () => {
         append({
-            value: '',
+            value: null,
         });
     }
 
@@ -65,8 +64,7 @@ function AddVacancy() {
             setIsLoading(true);
             await dispatch(createVacancy(values)).unwrap();
             dispatch(showMessage({message: 'Vacancy Added successfully' , severity: 1}));
-            setIsLoading(false);
-            navigate(-1);
+            nav('/dashboard/vacancy');
         }catch(error){
             dispatch(showMessage({message: error , severity: 2}));
             setIsLoading(false);
@@ -96,7 +94,7 @@ function AddVacancy() {
                         defaultOptions={[]}
                         control={control}
                         required={'enter the squad'}
-                        errors={{[`squad.value`]: errors.squad?.value}}
+                        errors={errors}
                         border={true}
                         callBack={(data) => getSquadsData({...data})}
                     />
@@ -108,7 +106,7 @@ function AddVacancy() {
                         defaultOptions={[]}
                         control={control}
                         required={'enter the position'}
-                        errors={{[`positionId.value`]: errors.positionId?.value}}
+                        errors={errors}
                         border={true}
                         callBack={(data) => getPositionDataBySquad({...data , squadId: watch(`squad`)?.value })}
                     />
@@ -120,9 +118,7 @@ function AddVacancy() {
                         placeholder='Brief'
                         width='386px'
                         height='120px'
-                        control={register('brief' , {
-                            required: 'Please enter the brief',
-                        })}
+                        control={register('brief' , { required: 'Please enter the brief' })}
                         errors={errors}
                     />
                     <TextAreaField 
@@ -130,9 +126,7 @@ function AddVacancy() {
                         placeholder='Tasks'
                         width='386px'
                         height='120px'
-                        control={register('tasks' , {
-                            required: 'Please enter the tasks',
-                        })}
+                        control={register('tasks' , { required: 'Please enter the tasks' })}
                         errors={errors}
                     />
                 </div>
@@ -142,9 +136,7 @@ function AddVacancy() {
                         placeholder='Required Qualifications'
                         width='386px'
                         height='120px'
-                        control={register('required' , {
-                            required: 'Please enter the Required Qualifications',
-                        })}
+                        control={register('required' , { required: 'Please enter the Required Qualifications' })}
                         errors={errors}
                     />
                     <TextAreaField 
@@ -152,9 +144,7 @@ function AddVacancy() {
                         placeholder='Preferred Qualifications'
                         width='386px'
                         height='120px'
-                        control={register('preferred' , {
-                            required: 'Please enter the Preferred Qualifications',
-                        })}
+                        control={register('preferred' , { required: 'Please enter the Preferred Qualifications' })}
                         errors={errors}
                     />
                 </div>
@@ -164,9 +154,7 @@ function AddVacancy() {
                         placeholder='Effect'
                         width='796px'
                         height='110px'
-                        control={register('effect' , {
-                            required: 'Please enter the effect',
-                        })}
+                        control={register('effect' , { required: 'Please enter the effect' })}
                         errors={errors}
                     />
                 </div>
