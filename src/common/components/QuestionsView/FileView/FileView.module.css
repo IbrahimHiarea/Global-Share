@@ -38,4 +38,7 @@
     align-items: center;
     gap: 15px;
     cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }

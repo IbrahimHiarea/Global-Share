@@ -8,7 +8,7 @@ function TextView ({ title , answer }){
     
     return (
         <div className={style.text}>
-            <h2>{title}?</h2>
+            <h2>{title}</h2>
             <div>{answer}</div>
         </div>
     );
