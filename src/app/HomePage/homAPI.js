@@ -90,8 +90,6 @@ export async function getQuestionsByVacancyIdData({vacancyId , signal , setIsErr
 }
 
 export async function createApply({values , signal}){
-    console.log(values);
-    console.log(values['files']);
     const formData = new FormData();
     formData.append('vacancyId' , values['vacancyId']);
     formData.append('email' , values['email']);
