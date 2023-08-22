@@ -46,7 +46,7 @@ function AllRoute () {
             <Route path='/apply/:vacancyId' element = { <JoinUsForm /> } />
 
             {/* Login page */}
-            <Route element = {<ProtectedRoute to='/dashboard' check={() => !isAuth} />}>
+            <Route element = {<ProtectedRoute to='/dashboard/task' check={() => !isAuth} />}>
                 <Route path='/login' element = { <LoginPage /> } />
             </Route>
 
