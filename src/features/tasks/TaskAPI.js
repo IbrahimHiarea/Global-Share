@@ -38,12 +38,14 @@ export async function getTaskById(id , token , signal){
 }
 
 export async function getTasksBySquad({search , difficulty , priority , member ,  squadId} , skip , token , signal){
+    const newSquad = squadId?.value;
+    const newDifficulty = difficulty?.map(item => item.value?.toUpperCase()).join(','); 
+    const newPriority = priority?.map(item => item.value?.toUpperCase()).join(',');
+    const newMember = member?.map(item => item.value).join(',');
+    const newSearch = search
+
     return axiosApi.get(
-        `/task/squad/${squadId?.value}?skip=${skip}&take=0&
-            difficulty=${difficulty?.map(item => item.value?.toUpperCase()).join(',')}&
-            priority=${priority?.map(item => item.value?.toUpperCase()).join(',')}&
-            assignedTo=${member?.map(item => item.value).join(',')}&
-            search=${search}`,
+        `/task/squad/${newSquad}?skip=${skip}&take=0&difficulty=${newDifficulty}&priority=${newPriority}&assignedTo=${newMember}&search=${newSearch}`,
         {
             signal : signal,
             headers: {

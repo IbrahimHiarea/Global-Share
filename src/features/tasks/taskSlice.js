@@ -339,6 +339,7 @@ const tasksSlice = createSlice({
             .addCase(createTaskComment.fulfilled , (state , action) => {
                 const {comment , info} = action.payload;
                 comment.author = {
+                    id: info.id,
                     firstName: info.firstName,
                     lastName: info.lastName,
                     middleName: info.middleName,
