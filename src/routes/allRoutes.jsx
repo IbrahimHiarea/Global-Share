@@ -13,7 +13,7 @@ import EditProfile from '../features/profile/Edit Profile/EditProfile';
 import LoginPage from '../features/auth/login page/LoginPage';
 import HomePage from '../app/HomePage/HomePage';
 import DashboardLayout from '../app/DashboardLayout/DashboardLayout';
-import TaskPage from '../features/tasks/Task page/TaskPage';
+import TaskPage from '../features/tasks/task page/TaskPage';
 import VolunteerPage from '../features/volunteers/VolunteerPage/VolunteerPage';
 import SquadPage from '../features/squads/SquadPage/SquadPage';
 import PositionPage from '../features/Positions/PositionPage/PositionPage';
@@ -27,7 +27,7 @@ import QuestionPage from '../features/question/QuestionPage/QuestionPage';
 import ErrorNotFound from '../app/NotFound/ErrorNotFound';
 import HourLogPage from '../features/hourLog/HourLogPage/HourLogPage';
 import JoinUsPage from '../app/HomePage/JoinUs/JoinUsPage/JoinUsPage';
-import JoinUsForm from '../app/HomePage/JoinUs/JoinUsForm/JoinUsForm'
+import JoinUsForm from '../app/HomePage/JoinUs/JoinUsForm/JoinUsForm';
 
 function AllRoute () {
     const isAuth = useSelector(selectIsAuthorized);
