@@ -20,15 +20,14 @@ The Global Share ERP System consists of several interconnected components that w
 
 6. Task Management Subsystem: Enables volunteers to view department boards and tasks, create new tasks, assign tasks to other members, track task progress, set priorities, filter and sort tasks, and add comments and attachments.
 
-For a detailed description of the functional requirements, please refer to the [Functional Requirements](#functional-requirements) section in the original document.
 
 ## Release
 - Feel free to try it from [Here]().
 - Note : 
-  1. The server take time to trun on so be patient please.
-  2. To login use 
-      username : ibrahim@gs.com
-      password : 12345678 
+  1. The server take time to turn on so be patient please.
+  2. To login use :
+    - username : ibrahim@gs.com
+    - password : 12345678 
 
 ## Technologies Used
 The Global Share ERP System is built using the following technologies:
@@ -44,4 +43,15 @@ The Global Share ERP System is built using the following technologies:
 Please note that the above information is a general overview of the Global Share ERP System. The actual implementation and technical details may vary based on the specific needs and decisions made by the development team.
 
 ## Preview
-![Home](https://drive.google.com/file/d/1U6CHqFW9qq9PcNQTgdjmpH97VvYRQH6N/view?usp=sharing)
+![Home]()
+![Login]()
+![Profile]()
+![Tasks]()
+![Hour Log]()
+![Volunteers]()
+![Squads]()
+![Positions]()
+![Emails]()
+![Applications]()
+![Vacancies]()
+![Questions]()
