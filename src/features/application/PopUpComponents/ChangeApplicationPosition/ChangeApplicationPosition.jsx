@@ -21,7 +21,7 @@ import { HiOutlineMail } from "react-icons/hi";
 import {levelData} from '../../../../common/utils/selectorData'
 
 //import style 
-import style from './ChangeApplicationPosition.module.css';
+import style from './ChangeAppPosition.module.css';
 
 function ChangeApplicationPosition({id , position , handleClose}) {
     const dispatch = useDispatch();
