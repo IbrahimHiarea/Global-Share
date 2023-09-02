@@ -1,6 +1,7 @@
 # Global Share ERP System
 
-The Global Share ERP System is an innovative web-based application designed to streamline volunteer recruitment, management, and reward systems. It incorporates task management, recruitment, and gamification features to enhance employee engagement, promote effective communication, and drive organizational excellence. This README file serves as a comprehensive guide to the system, outlining its features, functionality, and technical details.
+The Global Share ERP System is an innovative web-based application designed to streamline volunteer recruitment, management, and reward systems. It incorporates task management, recruitment. 
+This README file serves as a comprehensive guide to the system, outlining its features, functionality, and technical details.
 
 ## Introduction
 The purpose of the Global Share ERP System is to address the challenges faced by organizations in managing employee tasks, recruiting the right talent, and promoting employee engagement. By providing a comprehensive suite of tools, the system aims to streamline HR processes, facilitate effective communication, and foster a culture of excellence. This document serves as a baseline for the development team, providing a clear understanding of the project's goals and objectives.
@@ -16,8 +17,8 @@ The Global Share ERP System consists of several interconnected components that w
 
 4. Dashboards: A dedicated section for managing the organization's structure, including squads, positions, and volunteer positions.
 
-5. Performance & Gamification Subsystem: Conducts performance evaluations, tracks KPIs and competencies, and provides progress reports. Rewards or penalties, such as hearts or yellow/red cards, can be assigned to volunteers.
-
+5. Performance Subsystem: Conducts performance evaluations, tracks KPIs and competencies, and provides progress reports.
+   
 6. Task Management Subsystem: Enables volunteers to view department boards and tasks, create new tasks, assign tasks to other members, track task progress, set priorities, filter and sort tasks, and add comments and attachments.
 
 
